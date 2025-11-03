@@ -17,7 +17,9 @@ const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const getInventory = () => __awaiter(void 0, void 0, void 0, function* () {
-    return yield prisma_1.default.inventory.findMany({});
+    return yield prisma_1.default.inventory.findMany({
+        orderBy: [{ productId: "asc" }, { rawId: "asc" }],
+    });
 });
 const getInventoryById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma_1.default.inventory.findFirst({
