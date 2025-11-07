@@ -10,5 +10,7 @@ router.get("/", SubCategoryControllers.getSubCategory);
 router.get("/:id", SubCategoryControllers.getSubCategoryById);
 
 router.put("/:id", SubCategoryControllers.updateSubCategory);
+ 
+router.delete("/:id", )
 
 export const SubCategoryRouter = router;
