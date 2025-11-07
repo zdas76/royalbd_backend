@@ -50,9 +50,22 @@ const updateUnit = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+// delete unit controller
+const deleteUnit = catchAsync(async (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  await UnitService.deleteUnit(id);
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: `Unit is deleted Successfully`,
+    data: null,
+  });
+})
+
 export const UnitControllers = {
   createUnit,
   getAllUnit,
   getUnitById,
   updateUnit,
+  deleteUnit
 };

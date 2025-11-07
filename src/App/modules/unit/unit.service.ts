@@ -46,9 +46,22 @@ const updateUnit = async (id: number, payload: Unit) => {
   });
   return result;
 };
+
+// delete unit
+const deleteUnit = async (id: number) => {
+  const result = await prisma.unit.delete({
+    where: {
+      id: id
+    }
+  });
+  return result;
+}
+
+
 export const UnitService = {
   createUnit,
   getAllUnit,
   getUnitById,
   updateUnit,
+  deleteUnit
 };

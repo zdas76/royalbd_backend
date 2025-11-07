@@ -11,4 +11,6 @@ route.get("/:id", UnitControllers.getUnitById);
 
 route.put("/:id", UnitControllers.updateUnit);
 
+route.delete("/:id", UnitControllers.deleteUnit)
+
 export const UnitRoute = route;
