@@ -11,6 +11,6 @@ router.get("/:id", SubCategoryControllers.getSubCategoryById);
 
 router.put("/:id", SubCategoryControllers.updateSubCategory);
  
-router.delete("/:id", )
+router.delete("/:id", SubCategoryControllers.deleteSubCategory)
 
 export const SubCategoryRouter = router;
