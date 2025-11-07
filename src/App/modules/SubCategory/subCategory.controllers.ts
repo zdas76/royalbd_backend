@@ -6,7 +6,6 @@ import { SubCagetoryService } from "./subCategory.service";
 
 const createSubCategory = catchAsync(async (req: Request, res: Response) => {
   const result = await SubCagetoryService.createSubCategoryToDB(req.body);
-
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -38,12 +37,13 @@ const getSubCategoryById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateSubCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await SubCagetoryService.subCategoryUpdate(req.body);
+  const id = parseInt(req.params.id);
+  const result = await SubCagetoryService.subCategoryUpdate(req.body, id);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Category updated Successfully",
+    message: `${result.subCategoryName} is updated Successfully`,
     data: result,
   });
 });

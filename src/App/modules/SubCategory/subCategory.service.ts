@@ -5,7 +5,6 @@ import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/AppError";
 
 const createSubCategoryToDB = async (payLoad: SubCategory) => {
-  console.log(payLoad)
   const subCategory = await prisma.subCategory.findFirst({
     where: {
       subCategoryName: payLoad.subCategoryName,
@@ -36,15 +35,16 @@ const getSubCategory = async (): Promise<SubCategory[] | SubCategory> => {
   return result;
 };
 
-const subCategoryUpdate = async (payLoad: SubCategory) => {
+const subCategoryUpdate = async (payLoad: Partial<SubCategory>, id: number) => {
+
   const subCategory = await prisma.subCategory.findFirst({
     where: {
-      subCategoryName: payLoad.subCategoryName,
+      id: id,
     },
   });
 
   if (!subCategory) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "This Name already used");
+    throw new AppError(StatusCodes.BAD_REQUEST, "This Field is not founed");
   }
 
   const result = await prisma.subCategory.update({
@@ -55,7 +55,6 @@ const subCategoryUpdate = async (payLoad: SubCategory) => {
       subCategoryName: payLoad.subCategoryName,
     },
   });
-
   return result;
 };
 
