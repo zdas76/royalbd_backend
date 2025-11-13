@@ -39,7 +39,7 @@ const getLogCategoryById = async (id: number) => {
 };
 
 const updateLogCategoryById = async (id: number, payLoad: LogCategory) => {
-  console.log(payLoad);
+
   const result = await prisma.logCategory.update({
     where: {
       id,

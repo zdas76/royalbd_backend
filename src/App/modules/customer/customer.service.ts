@@ -1,7 +1,7 @@
 import prisma from "../../../shared/prisma";
 
 const getCustomer = async (contact: string) => {
-  console.log(contact);
+
   const result = await prisma.customer.findMany({
     where: {
       contactNumber: {

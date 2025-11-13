@@ -5,7 +5,6 @@ import { StatusCodes } from "http-status-codes";
 import { TcreateProduct } from "./product.type";
 
 const createProduct = async (payload: TcreateProduct) => {
-  console.log(payload);
 
   const isExist = await prisma.product.findFirst({
     where: {
