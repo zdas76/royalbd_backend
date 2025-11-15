@@ -33,7 +33,6 @@ const getCategory = async (): Promise<Category[]> => {
 const categoryUpdate = async (id: number, payLoad: Category) => {
   console.log(payLoad, id, "category update");
 
-
   const category = await prisma.category.findFirst({
     where: {
       id: id,
