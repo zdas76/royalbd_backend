@@ -38,7 +38,6 @@ const getAccountsItemFromDB = async (payLoad: string) => {
     const filer = JSON.parse(payLoad).map((id: string) => {
       return { accountMainPillerId: id };
     });
-    console.log(filer);
     filerValue = {
       OR: filer,
     };

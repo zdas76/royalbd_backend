@@ -77,7 +77,6 @@ const updateUserById = (id, payload) => __awaiter(void 0, void 0, void 0, functi
     return result;
 });
 const deleteUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(id);
     const result = yield prisma_1.default.user.update({
         where: {
             id: id,
