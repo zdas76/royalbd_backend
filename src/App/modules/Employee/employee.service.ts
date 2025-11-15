@@ -131,7 +131,7 @@ const updateEmployeeById = async (id: number, payload: Partial<Employee>) => {
 };
 
 const deleteEmployeeById = async (id: number) => {
-  console.log(id);
+
   const result = await prisma.employee.update({
     where: {
       id: id,

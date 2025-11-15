@@ -46,9 +46,31 @@ const updateUnit = async (id: number, payload: Unit) => {
   });
   return result;
 };
+
+// delete unit
+const deleteUnit = async (id: number) => {
+  const existUnit = await prisma.unit.findUnique({
+    where: {
+      id: id
+    }
+  });
+
+  if (!existUnit) {
+    throw new AppError(StatusCodes.NOT_FOUND, "Unit not found");
+  }
+  const result = await prisma.unit.delete({
+    where: {
+      id: id
+    }
+  });
+  return result;
+}
+
+
 export const UnitService = {
   createUnit,
   getAllUnit,
   getUnitById,
   updateUnit,
+  deleteUnit
 };

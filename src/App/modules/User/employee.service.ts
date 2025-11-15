@@ -9,7 +9,6 @@ import { Request } from "express";
 const creatUserToDB = async (req: Request): Promise<Partial<User>> => {
   req.body.photo = req?.file?.filename;
 
-  console.log(req.body);
   const hashedPassword = bcrypt.hashSync(
     req.body.password,
     parseInt(config.hash_round as any)
@@ -78,7 +77,7 @@ const updateUserById = async (id: number, payload: Partial<User>) => {
 };
 
 const deleteUserById = async (id: number) => {
-  console.log(id);
+
   const result = await prisma.user.update({
     where: {
       id: id,

@@ -84,18 +84,19 @@ model User {
 }
 
 model Employee {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique @db.VarChar(30)
-  name         String   @db.VarChar(50)
-  nid          String?  @db.VarChar(20)
-  dob          DateTime @db.Date
+  id           Int          @id @default(autoincrement())
+  email        String?       @unique @db.VarChar(30)
+  name         String       @db.VarChar(50)
+  nid          String?      @db.VarChar(20)
+  dob          DateTime     @db.Date
+  employeeType EmployeeType @default(employee)
   workingPlase String?
   photo        String?
   address      String
-  mobile       String   @db.VarChar(14)
-  status       Status   @default(ACTIVE)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  mobile       String       @db.VarChar(14)
+  status       Status       @default(ACTIVE)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
 
   @@index([email])
   @@map("employees")
@@ -393,4 +394,9 @@ enum PaymentType {
   PAID
   DUE
   PARTIAL
+}
+
+enum EmployeeType {
+  Wroker
+  employee
 }

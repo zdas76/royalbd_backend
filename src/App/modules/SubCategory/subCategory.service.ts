@@ -68,7 +68,6 @@ const getCategorybyId = async (payLoad: SubCategory) => {
   if (!subCategory) {
     throw new AppError(StatusCodes.BAD_REQUEST, "This Name already used");
   }
-
   const result = await prisma.subCategory.findFirstOrThrow({
     where: {
       id: payLoad.id,
@@ -77,10 +76,21 @@ const getCategorybyId = async (payLoad: SubCategory) => {
 
   return result;
 };
+// delete subcategory
+const deleteSubService = async (id: number) => {
+  const deleteResult = await prisma.subCategory.delete({
+    where: {
+      id: Number(id),
+    }
+  });
+  return deleteResult;
+};
+
 
 export const SubCagetoryService = {
   createSubCategoryToDB,
   getSubCategory,
   subCategoryUpdate,
   getCategorybyId,
+  deleteSubService
 };

@@ -162,7 +162,7 @@ const updatePartyById = async (id: number, payload: Partial<Party>) => {
 };
 
 const deletePartyById = async (id: number) => {
-  console.log(id);
+ 
   const isExist = await prisma.party.findFirst({
     where: {
       id: id,

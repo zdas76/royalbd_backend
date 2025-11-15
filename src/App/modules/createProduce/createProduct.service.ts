@@ -100,7 +100,6 @@ const createProductInfo = async (payLoad: any) => {
     },
   });
 
-  console.log(getCreatedProduct);
 
   return getCreatedProduct;
 };

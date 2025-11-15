@@ -127,7 +127,6 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
     return voucher;
 });
 const getVoucherByid = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(id);
     const voucher = yield prisma_1.default.transactionInfo.findFirst({
         where: {
             id,

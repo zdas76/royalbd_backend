@@ -38,7 +38,8 @@ const getCategoryById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
-  const result = await CagetoryService.categoryUpdate(req.body);
+  const id = parseInt(req.params.id);
+  const result = await CagetoryService.categoryUpdate(id, req.body);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,

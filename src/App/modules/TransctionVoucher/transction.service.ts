@@ -117,7 +117,7 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
 };
 
 const getVoucherByid = async (id: number) => {
-  console.log(id);
+
   const voucher = await prisma.transactionInfo.findFirst({
     where: {
       id,

@@ -38,7 +38,6 @@ const getVoucherbyVoucherNo = (0, catchAsync_1.default)((req, res) => __awaiter(
 }));
 const getVoucherbyid = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = Number(req.params.id);
-    console.log(id);
     const result = yield transction_service_1.VoucherService.getVoucherByid(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
