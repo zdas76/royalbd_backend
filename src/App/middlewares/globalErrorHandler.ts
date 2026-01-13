@@ -47,11 +47,6 @@ const globalErrorHandler = (
       },
     ];
   }
-  console.log({
-    success: false,
-    message,
-    error,
-  });
 
   res.status(statusCode).json({
     success: false,

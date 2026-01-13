@@ -21,7 +21,7 @@ import { createProductRoute } from "../modules/createProduce/createProduct.route
 import { LogtoRawRoute } from "../modules/LogtoRowMaterial/logToRaw.route";
 import { ReportRouter } from "../modules/Reports/report.route";
 import { VoucherRoute } from "../modules/TransctionVoucher/transction.route";
-import { UserRoute } from "../modules/User/employee.route";
+import { UserRoute } from "../modules/User/user.route";
 
 const router = express.Router();
 

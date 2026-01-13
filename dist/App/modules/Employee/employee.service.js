@@ -137,7 +137,6 @@ const updateEmployeeById = (id, payload) => __awaiter(void 0, void 0, void 0, fu
     return result;
 });
 const deleteEmployeeById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(id);
     const result = yield prisma_1.default.employee.update({
         where: {
             id: id,

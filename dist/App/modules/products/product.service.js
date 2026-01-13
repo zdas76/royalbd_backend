@@ -17,7 +17,7 @@ const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_codes_1 = require("http-status-codes");
 const createProduct = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(payload);
+
     const isExist = yield prisma_1.default.product.findFirst({
         where: {
             name: payload.name,

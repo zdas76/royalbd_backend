@@ -50,7 +50,6 @@ const loginUser = async (payLoad: { email: string; password: string }) => {
     config.jwt.refresh_token_secret as Secret,
     config.jwt.refresh_token_expires_in as string
   );
-
   return {
     accessToken,
     refreshToken,
@@ -185,10 +184,9 @@ const resetPassword = async (
     payLoad.passWord,
     parseInt(config.hash_round as string)
   );
-
   await prisma.user.update({
     where: {
-      email: userData.email,
+      email: userData.email!,
       status: Status.ACTIVE,
     },
     data: {
