@@ -156,7 +156,7 @@ const updatePartyById = (id, payload) => __awaiter(void 0, void 0, void 0, funct
     return result;
 });
 const deletePartyById = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(id);
+
     const isExist = yield prisma_1.default.party.findFirst({
         where: {
             id: id,

@@ -20,7 +20,7 @@ const config_1 = __importDefault(require("../../../config"));
 const creatUserToDB = (req) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     req.body.photo = (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.filename;
-    console.log(req.body);
+
     const hashedPassword = bcryptjs_1.default.hashSync(req.body.password, parseInt(config_1.default.hash_round));
     const createUser = yield prisma_1.default.user.create({
         data: {

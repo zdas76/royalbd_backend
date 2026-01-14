@@ -10,7 +10,6 @@ route.post(
   upload.single("photo"),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = userValidaton.createEmployee.parse(JSON.parse(req.body.data));
-
     return EmployeeControllers.createEmployee(req, res, next);
   }
 );

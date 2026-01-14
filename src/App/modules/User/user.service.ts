@@ -6,8 +6,7 @@ import { IPaginationOptions } from "../../interfaces/pagination";
 import { paginationHelper } from "../../../helpars/paginationHelpers";
 import { Request } from "express";
 
-const creatUserToDB = async (req: Request): Promise<Partial<User>> => {
-  req.body.photo = req?.file?.filename;
+const creatUserToDB = async (req: Request) => {
 
   const hashedPassword = bcrypt.hashSync(
     req.body.password,
@@ -19,7 +18,6 @@ const creatUserToDB = async (req: Request): Promise<Partial<User>> => {
       email: req.body.email,
       password: hashedPassword,
       name: req.body.name,
-      photo: req.body.photo,
       mobile: req.body.mobile,
     },
   });

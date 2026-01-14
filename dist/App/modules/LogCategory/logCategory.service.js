@@ -44,7 +44,7 @@ const getLogCategoryById = (id) => __awaiter(void 0, void 0, void 0, function* (
     return result;
 });
 const updateLogCategoryById = (id, payLoad) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(payLoad);
+
     const result = yield prisma_1.default.logCategory.update({
         where: {
             id,
