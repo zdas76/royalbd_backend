@@ -21,14 +21,12 @@ const globalErrorHandler = (
     statusCode = simplifedError?.statusCode;
     message = simplifedError?.message;
     error = simplifedError.errorSources;
-  } else if (err instanceof Prisma.PrismaClientValidationError) {
+  } else if (err.code === "P2025") {
     message = "Validation Error";
     error = err.message;
-  } else if (err instanceof Prisma.PrismaClientKnownRequestError) {
-    if (err.code === "P2002") {
-      message = "Duplicate error";
-      error = err.meta;
-    }
+  } else if (err.code === "P2002") {
+    message = "Duplicate error";
+    error = err.meta;
   } else if (err instanceof AppError) {
     statusCode = err?.statusCode;
     message = err?.message;
