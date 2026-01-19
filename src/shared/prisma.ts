@@ -1,6 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaMariaDb } from "@prisma/adapter-mariadb";
+import { PrismaClient } from "../../generated/prisma/client";
+import * as dotenv from "dotenv";
+
+dotenv.config();
+
+const adapter = new PrismaMariaDb({
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME,
+  connectionLimit: 5,
+});
 
 const prisma = new PrismaClient({
+  adapter,
   log: [
     {
       emit: "event",
@@ -21,25 +34,15 @@ const prisma = new PrismaClient({
   ],
 });
 
-// prisma.$on("query", (e) => {
-//   console.log("-------------------------------------------");
-//   console.log("Query: " + e.query);
-//   console.log("-------------------------------------------");
-//   console.log("Params: " + e.params);
-//   console.log("-------------------------------------------");
-//   console.log("Duration: " + e.duration + "ms");
-//   console.log("-------------------------------------------");
-// });
-
-prisma.$on("warn", (e) => {
+prisma.$on("warn", (e: any) => {
   console.log(e);
 });
 
-prisma.$on("info", (e) => {
+prisma.$on("info", (e: any) => {
   console.log(e);
 });
 
-prisma.$on("error", (e) => {
+prisma.$on("error", (e: any) => {
   console.log(e);
 });
 
