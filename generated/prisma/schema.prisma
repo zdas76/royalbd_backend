@@ -1,0 +1,405 @@
+datasource db {
+  provider = "mysql"
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "debian-openssl-1.1.x"]
+  previewFeatures = ["relationJoins"]
+  output          = "../generated/prisma"
+}
+
+model Category {
+  id           Int           @id @default(autoincrement())
+  categoryName String        @unique @db.VarChar(200)
+  subCategory  SubCategory[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("categoris")
+}
+
+model SubCategory {
+  id              Int       @id @default(autoincrement())
+  subCategoryName String    @unique @db.VarChar(200)
+  categoryId      Int
+  category        Category  @relation(fields: [categoryId], references: [id])
+  product         Product[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([categoryId])
+  @@map("sub_categoris")
+}
+
+model Unit {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(20)
+  RawMaterial RawMaterial[]
+  Product     Product[]
+  createdAt   DateTime      @default(now())
+  updateAt    DateTime      @updatedAt
+
+  @@map("units")
+}
+
+model AccountMainPiller {
+  id           Int            @id @default(autoincrement())
+  pillerName   String
+  pillerId     String         @unique @db.VarChar(2)
+  accountsItem AccountsItem[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  @@map("account_pillers")
+}
+
+model AccountsItem {
+  id                  Int               @id @default(autoincrement())
+  accountsItemName    String
+  accountMainPillerId String            @db.VarChar(2)
+  accountsItemId      String            @db.VarChar(4)
+  journal             Journal[]
+  accountsPiler       AccountMainPiller @relation(fields: [accountMainPillerId], references: [pillerId])
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@map("account_items")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(30)
+  password  String
+  name      String   @db.VarChar(50)
+  photo     String?
+  mobile    String   @db.VarChar(14)
+  role      UserRole @default(USER)
+  status    Status   @default(ACTIVE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@map("user")
+}
+
+model Employee {
+  id           Int          @id @default(autoincrement())
+  email        String?      @unique @db.VarChar(30)
+  name         String       @db.VarChar(50)
+  nid          String?      @db.VarChar(20)
+  dob          DateTime     @db.Date
+  employeeType EmployeeType @default(employee)
+  workingPlase String?
+  photo        String?
+  address      String
+  mobile       String       @db.VarChar(14)
+  status       Status       @default(ACTIVE)
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@index([email])
+  @@map("employees")
+}
+
+model Party {
+  id            Int         @id @default(autoincrement())
+  name          String      @db.VarChar(50)
+  contactNo     String      @db.VarChar(15)
+  address       String      @db.VarChar(200)
+  partyType     PartyType
+  openingDate   DateTime?   @default(now())
+  openingAmount Float?      @default(0.00)
+  isDeleted     Boolean     @default(false)
+  journals      Journal[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  inventories   Inventory[]
+
+  @@map("parties")
+}
+
+model Product {
+  id            Int         @id @default(autoincrement())
+  name          String      @db.VarChar(100)
+  description   String      @db.VarChar(250)
+  subCategoryId Int
+  minPrice      Int?
+  size          String?
+  openingDate   DateTime
+  amount        Float
+  quantity      Float
+  unitPrice     Float
+  unitId        Int
+  itemType      ItemType    @default(PRODUCT)
+  isDeleted     Boolean     @default(false)
+  status        Status      @default(ACTIVE)
+  unit          Unit        @relation(fields: [unitId], references: [id])
+  subCategory   SubCategory @relation(fields: [subCategoryId], references: [id])
+  inventory     Inventory[]
+  createdAt     DateTime    @default(now())
+  updateAt      DateTime    @updatedAt
+
+  @@index([subCategoryId, name])
+  @@map("products")
+}
+
+model RawMaterial {
+  id          Int         @id @default(autoincrement())
+  name        String      @db.VarChar(50)
+  description String?     @db.VarChar(250)
+  unitId      Int
+  openingDate DateTime
+  unitPrice   Float
+  amount      Float
+  quantity    Float
+  itemType    ItemType    @default(RAW_MATERIAL)
+  isDeleted   Boolean     @default(false)
+  status      Status      @default(ACTIVE)
+  unit        Unit        @relation(fields: [unitId], references: [id])
+  inventory   Inventory[]
+  createdAt   DateTime    @default(now())
+  updateAt    DateTime    @updatedAt
+
+  @@map("raw_materials")
+}
+
+model Customer {
+  id            Int         @id @default(autoincrement())
+  name          String?
+  contactNumber String      @unique
+  address       String?
+  status        Status      @default(ACTIVE)
+  journals      Journal[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  inventories   Inventory[]
+
+  @@map("customers")
+}
+
+model BankAccount {
+  id              Int               @id @default(autoincrement())
+  bankName        String
+  branceName      String?
+  accountNumber   String
+  status          Status            @default(ACTIVE)
+  bankTransaction BankTransaction[]
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@unique([bankName, accountNumber])
+  @@map("bank_accounts")
+}
+
+model BankTransaction {
+  id              Int              @id @default(autoincrement())
+  date            DateTime
+  bankAccountId   Int
+  transectionId   Int?
+  debitAmount     Int?
+  creditAmount    Int?
+  isClosing       Boolean          @default(false)
+  bankAccount     BankAccount      @relation(fields: [bankAccountId], references: [id])
+  transactionInfo TransactionInfo? @relation(fields: [transectionId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@map("bank_transactions")
+}
+
+model Inventory {
+  id            Int          @id @default(autoincrement())
+  date          DateTime
+  productId     Int?
+  rawId         Int?
+  transactionId Int?
+  partyId       Int?
+  customerId    Int?
+  unitPrice     Float        @default(0.00)
+  quantityAdd   Float?       @default(0.00)
+  quantityLess  Float?       @default(0.00)
+  discount      Float?       @default(0.00)
+  debitAmount   Float?       @default(0.00)
+  creditAmount  Float?       @default(0.00)
+  isClosing     Boolean      @default(false)
+  status        Status       @default(PENDING)
+  logToRaw      LogToRaw[]
+  product       Product?     @relation(fields: [productId], references: [id])
+  raWMaterial   RawMaterial? @relation(fields: [rawId], references: [id])
+  party         Party?       @relation(fields: [partyId], references: [id])
+  customer      Customer?    @relation(fields: [customerId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  @@index([productId, rawId])
+  @@map("inventories")
+}
+
+model TransactionInfo {
+  id               Int                @id @default(autoincrement())
+  voucherNo        String             @unique
+  invoiceNo        String?
+  date             DateTime?
+  voucherType      VoucherType
+  bankTransaction  BankTransaction[]
+  journal          Journal[]
+  logOrderItem     LogOrderItem[]
+  logOrdByCategory LogOrdByCategory[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+
+  @@index([voucherNo, voucherType])
+  @@map("transaction_info")
+}
+
+model Journal {
+  id              Int              @id @default(autoincrement())
+  transectionId   Int?
+  accountsItemId  Int?
+  partyId         Int?
+  customerId      Int?
+  date            DateTime         @db.Date
+  creditAmount    Float?           @default(0.00)
+  debitAmount     Float?           @default(0.00)
+  narration       String?
+  isClosing       Boolean          @default(false)
+  transactionInfo TransactionInfo? @relation(fields: [transectionId], references: [id])
+  accountsItem    AccountsItem?    @relation(fields: [accountsItemId], references: [id])
+  party           Party?           @relation(fields: [partyId], references: [id])
+  customer        Customer?        @relation(fields: [customerId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([accountsItemId])
+  @@map("journals")
+}
+
+model LogCategory {
+  id               Int                @id @default(autoincrement())
+  name             String             @unique @db.VarChar(50)
+  isDeleted        Boolean            @default(false)
+  logGrades        LogGrades[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  logOrdByCategory LogOrdByCategory[]
+
+  @@map("logcategories")
+}
+
+model LogGrades {
+  id          Int         @id @default(autoincrement())
+  categoryId  Int
+  gradeName   String      @db.VarChar(50)
+  minRadius   Float       @db.Float()
+  maxRadius   Float       @db.Float()
+  unitPrice   Float       @db.Float()
+  status      Status      @default(ACTIVE)
+  logCategory LogCategory @relation(fields: [categoryId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@map("logGrades")
+}
+
+model LogOrderItem {
+  id              Int             @id @default(autoincrement())
+  transectionId   Int
+  logGradeId      Int
+  radis           Float
+  height          Float
+  quantity        Float
+  u_price         Float
+  amount          Float
+  transactionInfo TransactionInfo @relation(fields: [transectionId], references: [id])
+
+  @@index([logGradeId])
+  @@map("log_Order_Items")
+}
+
+model LogOrdByCategory {
+  id              Int              @id @default(autoincrement())
+  transectionId   Int?
+  logCategoryId   Int
+  date            DateTime
+  unitPrice       Float
+  quantityAdd     Float?
+  quantityLess    Float?
+  debitAmount     Float?
+  creditAmount    Float?
+  status          Status           @default(PENDING)
+  logToRaw        LogToRaw[]
+  logCategory     LogCategory      @relation(fields: [logCategoryId], references: [id])
+  transactionInfo TransactionInfo? @relation(fields: [transectionId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([logCategoryId])
+  @@map("log_order_by_category")
+}
+
+model LogToRaw {
+  id               Int              @id @default(autoincrement())
+  voucherNo        String           @unique
+  date             DateTime
+  inventoryId      Int
+  logCategoryId    Int
+  logOrdByCategory LogOrdByCategory @relation(fields: [logCategoryId], references: [id])
+  inventory        Inventory        @relation(fields: [inventoryId], references: [id])
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  @@map("log_to_raw")
+}
+
+enum ItemType {
+  PRODUCT
+  RAW_MATERIAL
+}
+
+enum VoucherType {
+  SALES
+  PURCHASE
+  RECEIPT
+  PAYMENT
+  JOURNAL
+  CONTRA
+  LOGORADES
+  CREATEPRODUCT
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum Status {
+  ACTIVE
+  DELETED
+  PUSH
+  BLOCK
+  PENDING
+  CHECKED
+  CLOSED
+  CONVERTED
+}
+
+enum PartyType {
+  VENDOR
+  CUSTOMER
+  SUPPLIER
+}
+
+enum PaymentType {
+  PAID
+  DUE
+  PARTIAL
+}
+
+enum EmployeeType {
+  wroker
+  employee
+}
