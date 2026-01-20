@@ -206,6 +206,18 @@ exports.Prisma.PartyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.WorkerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  phone: 'phone',
+  nid: 'nid',
+  address: 'address',
+  workingPlace: 'workingPlace',
+  dob: 'dob',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ProductScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -431,6 +443,14 @@ exports.Prisma.PartyOrderByRelevanceFieldEnum = {
   address: 'address'
 };
 
+exports.Prisma.WorkerOrderByRelevanceFieldEnum = {
+  name: 'name',
+  phone: 'phone',
+  nid: 'nid',
+  address: 'address',
+  workingPlace: 'workingPlace'
+};
+
 exports.Prisma.ProductOrderByRelevanceFieldEnum = {
   name: 'name',
   description: 'description',
@@ -527,6 +547,7 @@ exports.Prisma.ModelName = {
   User: 'User',
   Employee: 'Employee',
   Party: 'Party',
+  Worker: 'Worker',
   Product: 'Product',
   RawMaterial: 'RawMaterial',
   Customer: 'Customer',

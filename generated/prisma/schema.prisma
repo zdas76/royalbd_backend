@@ -119,6 +119,19 @@ model Party {
   @@map("parties")
 }
 
+// worker model 
+model Worker {
+  id           Int      @id @default(autoincrement())
+  name         String
+  phone        String   @db.VarChar(11) // supports 10–11 digits
+  nid          String   @unique
+  address      String
+  workingPlace String
+  dob          DateTime @db.Date
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
 model Product {
   id            Int         @id @default(autoincrement())
   name          String      @db.VarChar(100)
