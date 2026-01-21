@@ -5,6 +5,7 @@ import sendResponse from "../../../shared/sendResponse";
 import { StatusCodes } from "http-status-codes";
 
 const createUnit = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.body)
   const result = await UnitService.createUnit(req.body);
 
   sendResponse(res, {

@@ -5,6 +5,7 @@ import { workerServices } from "./worker.services";
 
 const createWorker = catchAsync(
     async (req, res) => {
+        console.log(req.body)
         const result = await workerServices.createWorkerDb(req.body)
         sendResponse(res, {
             statusCode: StatusCodes.OK,
@@ -12,7 +13,6 @@ const createWorker = catchAsync(
             message: "Worker Created successfully",
             data: result
         })
-
     }
 )
 const getWorker = catchAsync(
