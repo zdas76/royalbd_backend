@@ -72,7 +72,6 @@ model User {
   email     String   @unique @db.VarChar(30)
   password  String
   name      String   @db.VarChar(50)
-  photo     String?
   mobile    String   @db.VarChar(14)
   role      UserRole @default(USER)
   status    Status   @default(ACTIVE)
