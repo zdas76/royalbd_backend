@@ -5,6 +5,7 @@ import { workerServices } from "./worker.services";
 
 const createWorker = catchAsync(
     async (req, res) => {
+        console.log(req.body)
         const result = await workerServices.createWorkerDb(req.body)
         sendResponse(res, {
             statusCode: StatusCodes.OK,
@@ -12,7 +13,6 @@ const createWorker = catchAsync(
             message: "Worker Created successfully",
             data: result
         })
-
     }
 )
 const getWorker = catchAsync(
@@ -21,13 +21,11 @@ const getWorker = catchAsync(
         sendResponse(res, {
             statusCode: StatusCodes.OK,
             success: true,
-            message: "Worker Created successfully",
+            message: "Worker Retrieved successfully",
             data: result
         })
-
     }
-)
-
+);
 const getWorkerById = catchAsync(
     async (req, res) => {
         const result = await workerServices.getWorkerByIddb(Number(req.params.id))

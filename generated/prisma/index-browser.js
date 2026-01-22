@@ -310,6 +310,7 @@ exports.Prisma.TransactionInfoScalarFieldEnum = {
   voucherNo: 'voucherNo',
   invoiceNo: 'invoiceNo',
   date: 'date',
+  partyId: 'partyId',
   voucherType: 'voucherType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

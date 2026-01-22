@@ -22,7 +22,7 @@ import { LogtoRawRoute } from "../modules/LogtoRowMaterial/logToRaw.route";
 import { ReportRouter } from "../modules/Reports/report.route";
 import { VoucherRoute } from "../modules/TransctionVoucher/transction.route";
 import { UserRoute } from "../modules/User/user.route";
-import path from "path";
+
 import { workerRoute } from "../modules/worker/worker.route";
 
 const router = express.Router();
@@ -123,6 +123,10 @@ const moduleRoutes = [
   {
     path: "/worker",
     route: workerRoute,
+  },
+  {
+    path: "/user",
+    route: UserRoute,
   }
 ];
 
