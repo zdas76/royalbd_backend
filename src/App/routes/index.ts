@@ -23,6 +23,8 @@ import { ReportRouter } from "../modules/Reports/report.route";
 import { VoucherRoute } from "../modules/TransctionVoucher/transction.route";
 import { UserRoute } from "../modules/User/user.route";
 
+import { workerRoute } from "../modules/worker/worker.route";
+
 const router = express.Router();
 
 const moduleRoutes = [
@@ -118,6 +120,14 @@ const moduleRoutes = [
     path: "/voucher",
     route: VoucherRoute,
   },
+  {
+    path: "/worker",
+    route: workerRoute,
+  },
+  {
+    path: "/user",
+    route: UserRoute,
+  }
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

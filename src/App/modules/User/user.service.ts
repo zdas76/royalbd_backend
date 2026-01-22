@@ -1,10 +1,11 @@
-import { User, Prisma, Status } from "@prisma/client";
+import { Prisma, } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import bcrypt from "bcryptjs";
 import config from "../../../config";
 import { IPaginationOptions } from "../../interfaces/pagination";
 import { paginationHelper } from "../../../helpars/paginationHelpers";
 import { Request } from "express";
+import { Status, User } from "../../../../generated/prisma";
 
 const creatUserToDB = async (req: Request) => {
 
@@ -29,7 +30,6 @@ const getAllUser = async () => {
     where: {
       status: Status.ACTIVE,
     },
-
     select: {
       id: true,
       email: true,
@@ -70,7 +70,6 @@ const updateUserById = async (id: number, payload: Partial<User>) => {
     },
     data: payload,
   });
-
   return result;
 };
 

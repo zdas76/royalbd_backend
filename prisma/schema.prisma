@@ -103,20 +103,33 @@ model Employee {
 }
 
 model Party {
-  id            Int         @id @default(autoincrement())
-  name          String      @db.VarChar(50)
-  contactNo     String      @db.VarChar(15)
-  address       String      @db.VarChar(200)
-  partyType     PartyType
-  openingDate   DateTime?   @default(now())
-  openingAmount Float?      @default(0.00)
-  isDeleted     Boolean     @default(false)
-  journals      Journal[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  inventories   Inventory[]
+  id               Int               @id @default(autoincrement())
+  name             String            @db.VarChar(50)
+  contactNo        String            @db.VarChar(15)
+  address          String            @db.VarChar(200)
+  partyType        PartyType
+  openingDate      DateTime?         @default(now())
+  openingAmount    Float?            @default(0.00)
+  isDeleted        Boolean           @default(false)
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  inventories      Inventory[]
+  transactionInfos TransactionInfo[]
 
   @@map("parties")
+}
+
+// worker model 
+model Worker {
+  id           Int      @id @default(autoincrement())
+  name         String
+  phone        String   @db.VarChar(11) // supports 10–11 digits
+  nid          String   @unique
+  address      String
+  workingPlace String
+  dob          DateTime @db.Date
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 model Product {
@@ -237,10 +250,13 @@ model Inventory {
 }
 
 model TransactionInfo {
-  id               Int                @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
   voucherNo        String             @unique
   invoiceNo        String?
   date             DateTime?
+  partyId          Int?
+  party            Party?             @relation(fields: [partyId], references: [id])
   voucherType      VoucherType
   bankTransaction  BankTransaction[]
   journal          Journal[]
@@ -266,7 +282,6 @@ model Journal {
   isClosing       Boolean          @default(false)
   transactionInfo TransactionInfo? @relation(fields: [transectionId], references: [id])
   accountsItem    AccountsItem?    @relation(fields: [accountsItemId], references: [id])
-  party           Party?           @relation(fields: [partyId], references: [id])
   customer        Customer?        @relation(fields: [customerId], references: [id])
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt

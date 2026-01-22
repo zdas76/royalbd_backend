@@ -9,4 +9,8 @@ route.get("/party", ReportControllers.partyReport);
 
 route.get("/party/:id", ReportControllers.partyReport);
 
+route.get("/raw", ReportControllers.rawReport);
+
+// route.get("/raw/:id", ReportControllers.rawReport);
+
 export const ReportRouter = route;

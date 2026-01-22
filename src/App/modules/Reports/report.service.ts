@@ -1,4 +1,4 @@
-import { Query } from "mysql2";
+import { Query, raw } from "mysql2";
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
@@ -93,7 +93,6 @@ const partyLedgerReport = async (payload: {
       orderBy: {
         date: "asc",
       },
-
       select: {
         date: true,
         transactionInfo: true,
@@ -102,7 +101,6 @@ const partyLedgerReport = async (payload: {
         narration: true,
       },
     });
-
     return result;
   } else {
     const result = await prisma.journal.findMany({
@@ -133,8 +131,45 @@ const partyLedgerReport = async (payload: {
     return result;
   }
 };
-
-export const ReportController = {
+// raw report
+const rawReport = async (payload: {
+  startDate?: string | null;
+  endDate?: string | null;
+}) => {
+  const allrawMaterial = await prisma.rawMaterial.findMany({
+    where: {
+      isDeleted: false
+    },
+  });
+  if (allrawMaterial.length < 1) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
+  }
+  const result = Promise.all(allrawMaterial.map(async (rawMaterial) => (
+    await prisma.inventory.aggregate({
+      _sum: {
+        debitAmount: true,
+        creditAmount: true
+      },
+      where: {
+        AND: [
+          {
+            rawId: rawMaterial.id
+          },
+          {
+            date: {
+              gte: new Date(payload?.startDate || ""),
+              lte: new Date(payload?.endDate || "")
+            }
+          }
+        ]
+      },
+    })
+  )))
+  console.log(result)
+  return result;
+};
+export const ReportService = {
   getAccountLedgerReport,
   partyLedgerReport,
+  rawReport,
 };

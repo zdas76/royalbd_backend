@@ -10,7 +10,8 @@ export type TUser = z.infer<typeof createUser>
 
 const updateUser = z.object({
   name: z.string({ required_error: "Name is required" }).optional(),
-  mobile: z.string({ required_error: "Working Place is required" }).optional(),
+  role: z.enum(["admin", "user", "employee"]).optional(),
+  phone: z.string({ required_error: "Mobile number is required" }).optional(),
 });
 
 export const userValidaton = {
