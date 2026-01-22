@@ -21,13 +21,11 @@ const getWorker = catchAsync(
         sendResponse(res, {
             statusCode: StatusCodes.OK,
             success: true,
-            message: "Worker Created successfully",
+            message: "Worker Retrieved successfully",
             data: result
         })
-
     }
-)
-
+);
 const getWorkerById = catchAsync(
     async (req, res) => {
         const result = await workerServices.getWorkerByIddb(Number(req.params.id))
