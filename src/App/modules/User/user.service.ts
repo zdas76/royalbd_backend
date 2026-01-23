@@ -19,7 +19,7 @@ const creatUserToDB = async (payload: TUser) => {
       email: payload.email,
       password: hashedPassword,
       name: payload.name,
-      mobile: payload.phone,
+      phone: payload.phone,
     },
   });
   return createUser;
@@ -34,7 +34,7 @@ const getAllUser = async () => {
       id: true,
       email: true,
       name: true,
-      mobile: true,
+      phone: true,
       status: true,
     },
   });
@@ -52,7 +52,7 @@ const getUserById = async (id: number) => {
       id: true,
       email: true,
       name: true,
-      mobile: true,
+      phone: true,
       status: true,
     },
   });
@@ -68,6 +68,7 @@ const updateUserById = async (id: number, payload: Partial<User>) => {
     },
     data: payload,
   });
+  console.log(result)
   return result;
 };
 
