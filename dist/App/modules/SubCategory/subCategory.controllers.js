@@ -45,11 +45,22 @@ const getSubCategoryById = (0, catchAsync_1.default)((req, res) => __awaiter(voi
     });
 }));
 const updateSubCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield subCategory_service_1.SubCagetoryService.subCategoryUpdate(req.body);
+    const id = parseInt(req.params.id);
+    const result = yield subCategory_service_1.SubCagetoryService.subCategoryUpdate(req.body, id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Category updated Successfully",
+        message: `${result.subCategoryName} is updated Successfully`,
+        data: result,
+    });
+}));
+const deleteSubCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    const result = yield subCategory_service_1.SubCagetoryService.deleteSubService(id);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: `SubCategory is deleted Successfully`,
         data: result,
     });
 }));
@@ -58,4 +69,5 @@ exports.SubCategoryControllers = {
     getSubCategory,
     updateSubCategory,
     getSubCategoryById,
+    deleteSubCategory
 };

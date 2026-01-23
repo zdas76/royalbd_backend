@@ -90,7 +90,6 @@ const createProductInfo = (payLoad) => __awaiter(void 0, void 0, void 0, functio
             journal: true,
         },
     });
-    console.log(getCreatedProduct);
     return getCreatedProduct;
 });
 exports.CreateProductServices = {
