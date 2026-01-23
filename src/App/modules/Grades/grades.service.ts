@@ -1,8 +1,9 @@
-import { LogGrades } from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
 import { TLogGradesTypes } from "./grades.types";
+import { LogGrades } from "../../../../generated/prisma";
 
 const crateGradeIntoDB = async (payLoad: TLogGradesTypes) => {
   const isExistCategory = await prisma.logCategory.findUnique({

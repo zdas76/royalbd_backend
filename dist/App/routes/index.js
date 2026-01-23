@@ -125,6 +125,10 @@ const moduleRoutes = [
     {
         path: "/worker",
         route: worker_route_1.workerRoute,
+    },
+    {
+        path: "/user",
+        route: user_route_1.UserRoute,
     }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

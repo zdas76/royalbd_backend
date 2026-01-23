@@ -1,9 +1,9 @@
-import { Prisma, } from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
 import bcrypt from "bcryptjs";
 import config from "../../../config";
-import { IPaginationOptions } from "../../interfaces/pagination";
-import { paginationHelper } from "../../../helpars/paginationHelpers";
+// import { IPaginationOptions } from "../../interfaces/pagination";
+// import { paginationHelper } from "../../../helpars/paginationHelpers";
 import { Request } from "express";
 import { Status, User } from "../../../../generated/prisma";
 

@@ -1,15 +1,7 @@
 import { date } from "zod";
-import {
-  AccountsItem,
-  Customer,
-  ItemType,
-  Party,
-  PartyType,
-  Prisma,
-  TransactionInfo,
-  VoucherType,
-} from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
+import { AccountsItem, Customer, Party, TransactionInfo, VoucherType } from "../../../../generated/prisma";
 
 //Create Purchase Received Voucher
 const createPurchestReceivedIntoDB = async (payload: any) => {
@@ -31,7 +23,6 @@ const createPurchestReceivedIntoDB = async (payload: any) => {
           invoiceNo: payload.invoiceNo || null,
           voucherNo: payload.voucherNo,
           date: payload.date,
-          paymentType: payload.paymentType,
           voucherType: VoucherType.PURCHASE,
           partyId: partyExists.id,
         },
@@ -162,10 +153,8 @@ const createSalesVoucher = async (payload: any) => {
       await tx.transactionInfo.create({
         data: {
           voucherNo: payload.voucherNo,
-          paymentType: payload.paymentType,
           voucherType: VoucherType.SALES,
           partyId: isParty?.id || null,
-          customerId: isCustomer?.id || null,
           date: payload.date,
         },
       });
@@ -286,7 +275,6 @@ const createPaymentVoucher = async (payload: any) => {
       await tx.transactionInfo.create({
         data: {
           voucherNo: payload.voucherNo,
-          paymentType: payload.paymentType,
           voucherType: VoucherType.PAYMENT,
           partyId: isParty?.id || null,
           date: payload.date,
@@ -398,7 +386,6 @@ const createReceiptVoucher = async (payload: any) => {
       await tx.transactionInfo.create({
         data: {
           voucherNo: payload.voucherNo,
-          paymentType: payload.paymentType,
           voucherType: VoucherType.RECEIPT,
           partyId: isParty?.id || null,
           date: payload.date,
@@ -658,9 +645,8 @@ j.accountsItemId,
     
   FROM journals j
   LEFT JOIN transaction_info t ON t.id = j.transectionId
-  WHERE j.accountsItemId = ${payLoad.accountsItemId} AND  j.date >= ${
-    getDate?.date || new Date(payLoad.date)
-  } 
+  WHERE j.accountsItemId = ${payLoad.accountsItemId} AND  j.date >= ${getDate?.date || new Date(payLoad.date)
+    } 
   GROUP BY j.accountsItemId`;
 
   return (result as any[])[0];

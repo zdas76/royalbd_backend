@@ -1,8 +1,9 @@
-import { BankAccount } from "@prisma/client";
+
+import { BankAccount } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
-import { date } from "zod";
+
 
 const getAllTransaction = async () => {
   const result = await prisma.bankTransaction.findMany({

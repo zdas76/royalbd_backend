@@ -2,7 +2,7 @@ import { date, promise } from "zod";
 import { StatusCodes } from "http-status-codes";
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
-import { LogCategory, LogToRaw } from "@prisma/client";
+
 
 const createLogToRowIntoDB = async (payLoad: any) => {
   const createLogOrdrByCategory = await prisma.$transaction(async (tx) => {

@@ -13,14 +13,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GradesOrderService = void 0;
-const client_1 = require("@prisma/client");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_codes_1 = require("http-status-codes");
+const prisma_2 = require("../../../../generated/prisma");
 const getAllOrder = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.transactionInfo.findMany({
         where: {
-            voucherType: client_1.VoucherType.LOGORADES,
+            voucherType: prisma_2.VoucherType.LOGORADES,
         },
     });
     return result;
@@ -30,7 +30,7 @@ const createGradesOrder = (payLoad) => __awaiter(void 0, void 0, void 0, functio
         const isSupplierExistd = yield tx.party.findFirst({
             where: {
                 id: payLoad.supplierId,
-                partyType: client_1.PartyType.SUPPLIER,
+                partyType: prisma_2.PartyType.SUPPLIER,
             },
         });
         if (!isSupplierExistd) {
@@ -51,7 +51,7 @@ const createGradesOrder = (payLoad) => __awaiter(void 0, void 0, void 0, functio
             data: {
                 invoiceNo: payLoad.chalanNo || null,
                 voucherNo: payLoad.voucherNo,
-                voucherType: client_1.VoucherType.LOGORADES,
+                voucherType: prisma_2.VoucherType.LOGORADES,
                 partyId: payLoad.supplierId,
             },
         });

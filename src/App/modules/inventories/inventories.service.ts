@@ -1,8 +1,9 @@
 import { date } from "zod";
-import { Inventory } from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
+import { Inventory } from "../../../../generated/prisma";
 
 const getInventory = async () => {
   return await prisma.inventory.findMany({

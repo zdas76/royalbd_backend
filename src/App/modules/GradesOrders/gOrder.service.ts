@@ -1,9 +1,9 @@
 import { date } from "zod";
-import { LogOrderItem, PartyType, VoucherType } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
 import { TlogOrderItems } from "./order.types";
+import { LogOrderItem, PartyType, VoucherType } from "../../../../generated/prisma";
 
 const getAllOrder = async () => {
   const result = await prisma.transactionInfo.findMany({
