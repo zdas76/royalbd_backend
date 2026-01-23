@@ -36,10 +36,10 @@ const getCategory = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.category.findMany({});
     return result;
 });
-const categoryUpdate = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
+const categoryUpdate = (id, payLoad) => __awaiter(void 0, void 0, void 0, function* () {
     const category = yield prisma_1.default.category.findFirst({
         where: {
-            categoryName: payLoad.categoryName,
+            id: id,
         },
     });
     if (!category) {
@@ -47,7 +47,7 @@ const categoryUpdate = (payLoad) => __awaiter(void 0, void 0, void 0, function* 
     }
     const result = yield prisma_1.default.category.update({
         where: {
-            id: category.id,
+            id: id,
         },
         data: {
             categoryName: payLoad.categoryName,

@@ -11,4 +11,5 @@ route.post("/", unit_controllers_1.UnitControllers.createUnit);
 route.get("/", unit_controllers_1.UnitControllers.getAllUnit);
 route.get("/:id", unit_controllers_1.UnitControllers.getUnitById);
 route.put("/:id", unit_controllers_1.UnitControllers.updateUnit);
+route.delete("/:id", unit_controllers_1.UnitControllers.deleteUnit);
 exports.UnitRoute = route;

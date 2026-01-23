@@ -26,7 +26,8 @@ const createProduct_route_1 = require("../modules/createProduce/createProduct.ro
 const logToRaw_route_1 = require("../modules/LogtoRowMaterial/logToRaw.route");
 const report_route_1 = require("../modules/Reports/report.route");
 const transction_route_1 = require("../modules/TransctionVoucher/transction.route");
-const employee_route_2 = require("../modules/User/employee.route");
+const user_route_1 = require("../modules/User/user.route");
+const worker_route_1 = require("../modules/worker/worker.route");
 const router = express_1.default.Router();
 const moduleRoutes = [
     {
@@ -51,7 +52,7 @@ const moduleRoutes = [
     },
     {
         path: "/user",
-        route: employee_route_2.UserRoute,
+        route: user_route_1.UserRoute,
     },
     {
         path: "/party",
@@ -121,6 +122,10 @@ const moduleRoutes = [
         path: "/voucher",
         route: transction_route_1.VoucherRoute,
     },
+    {
+        path: "/worker",
+        route: worker_route_1.workerRoute,
+    }
 ];
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
 exports.default = router;
