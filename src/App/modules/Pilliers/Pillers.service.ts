@@ -1,4 +1,5 @@
-import { AccountMainPiller } from "@prisma/client";
+
+import { AccountMainPiller } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 
 const createPliersItemIntoDB = async (

@@ -13,22 +13,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateProductServices = void 0;
-const client_1 = require("@prisma/client");
-const prisma_1 = __importDefault(require("../../../shared/prisma"));
+const prisma_1 = require("../../../../generated/prisma");
+const prisma_2 = __importDefault(require("../../../shared/prisma"));
 const createProductInfo = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
-    const addProduct = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+    const addProduct = yield prisma_2.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
         // create Transaction
         const createTransaction = yield tx.transactionInfo.create({
             data: {
                 voucherNo: payLoad.voucherNo,
-                voucherType: client_1.VoucherType.CREATEPRODUCT,
+                voucherType: prisma_1.VoucherType.CREATEPRODUCT,
             },
         });
         // 2. check product item
-        const isProductExisted = yield prisma_1.default.product.findFirst({
+        const isProductExisted = yield prisma_2.default.product.findFirst({
             where: {
                 id: payLoad.product.productId,
-                itemType: client_1.ItemType.PRODUCT,
+                itemType: prisma_1.ItemType.PRODUCT,
                 isDeleted: false,
             },
         });
@@ -45,10 +45,10 @@ const createProductInfo = (payLoad) => __awaiter(void 0, void 0, void 0, functio
         };
         // 3. Check Raw Materials
         const isRawMaterialExisted = payLoad.rawMaterials.map((item) => __awaiter(void 0, void 0, void 0, function* () {
-            return yield prisma_1.default.product.findFirst({
+            return yield prisma_2.default.product.findFirst({
                 where: {
                     id: item.rawMaterialsId,
-                    itemType: client_1.ItemType.RAW_MATERIAL,
+                    itemType: prisma_1.ItemType.RAW_MATERIAL,
                     isDeleted: false,
                 },
             });
@@ -81,12 +81,11 @@ const createProductInfo = (payLoad) => __awaiter(void 0, void 0, void 0, functio
         });
         return createTransaction;
     }));
-    const getCreatedProduct = yield prisma_1.default.transactionInfo.findFirst({
+    const getCreatedProduct = yield prisma_2.default.transactionInfo.findFirst({
         where: {
             id: addProduct.id,
         },
         include: {
-            inventory: true,
             journal: true,
         },
     });

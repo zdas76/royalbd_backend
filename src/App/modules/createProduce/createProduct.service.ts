@@ -1,4 +1,4 @@
-import { ItemType, VoucherType } from "@prisma/client";
+import { ItemType, VoucherType } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 
 const createProductInfo = async (payLoad: any) => {
@@ -95,7 +95,6 @@ const createProductInfo = async (payLoad: any) => {
       id: addProduct.id,
     },
     include: {
-      inventory: true,
       journal: true,
     },
   });

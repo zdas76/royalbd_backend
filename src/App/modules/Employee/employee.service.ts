@@ -1,4 +1,4 @@
-import { Employee, Prisma, Status } from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
 import bcrypt from "bcryptjs";
 import config from "../../../config";
@@ -6,6 +6,7 @@ import { IPaginationOptions } from "../../interfaces/pagination";
 import { paginationHelper } from "../../../helpars/paginationHelpers";
 import { Request } from "express";
 import { UserSearchAbleFields } from "./employee.constant";
+import { Employee, Prisma, Status } from "../../../../generated/prisma";
 
 const creatEmployeeToDB = async (req: Request): Promise<Partial<Employee>> => {
   req.body.photo = req?.file?.filename;
@@ -63,11 +64,11 @@ const getAllemployee = async (params: any, paginat: IPaginationOptions) => {
     orderBy:
       paginat.sortBy && paginat.sortOrder
         ? {
-            [paginat.sortBy]: paginat.sortOrder,
-          }
+          [paginat.sortBy]: paginat.sortOrder,
+        }
         : {
-            createdAt: "desc",
-          },
+          createdAt: "desc",
+        },
     select: {
       id: true,
       email: true,

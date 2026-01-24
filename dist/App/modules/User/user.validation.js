@@ -10,7 +10,8 @@ const createUser = zod_1.z.object({
 });
 const updateUser = zod_1.z.object({
     name: zod_1.z.string({ required_error: "Name is required" }).optional(),
-    mobile: zod_1.z.string({ required_error: "Working Place is required" }).optional(),
+    role: zod_1.z.enum(["admin", "user", "employee"]).optional(),
+    phone: zod_1.z.string({ required_error: "Mobile number is required" }).optional(),
 });
 exports.userValidaton = {
     createUser,

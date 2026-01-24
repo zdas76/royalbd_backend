@@ -24,10 +24,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EmployeeService = void 0;
-const client_1 = require("@prisma/client");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const paginationHelpers_1 = require("../../../helpars/paginationHelpers");
 const employee_constant_1 = require("./employee.constant");
+const prisma_2 = require("../../../../generated/prisma");
 const creatEmployeeToDB = (req) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     req.body.photo = (_a = req === null || req === void 0 ? void 0 : req.file) === null || _a === void 0 ? void 0 : _a.filename;
@@ -68,7 +68,7 @@ const getAllemployee = (params, paginat) => __awaiter(void 0, void 0, void 0, fu
             })),
         });
     }
-    const wehreConditions = andCondition.length > 0 ? { AND: andCondition } : { status: client_1.Status.ACTIVE };
+    const wehreConditions = andCondition.length > 0 ? { AND: andCondition } : { status: prisma_2.Status.ACTIVE };
     const result = yield prisma_1.default.employee.findMany({
         where: wehreConditions,
         skip,
@@ -109,7 +109,7 @@ const getEmployeeById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.employee.findFirst({
         where: {
             id: id,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         select: {
             id: true,
@@ -130,7 +130,7 @@ const updateEmployeeById = (id, payload) => __awaiter(void 0, void 0, void 0, fu
     const result = yield prisma_1.default.employee.update({
         where: {
             id: id,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         data: payload,
     });
@@ -140,10 +140,10 @@ const deleteEmployeeById = (id) => __awaiter(void 0, void 0, void 0, function* (
     const result = yield prisma_1.default.employee.update({
         where: {
             id: id,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         data: {
-            status: client_1.Status.DELETED,
+            status: prisma_2.Status.DELETED,
         },
     });
     return result;

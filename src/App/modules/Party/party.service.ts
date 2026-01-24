@@ -1,10 +1,11 @@
-import { Party, Prisma } from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
 import { StatusCodes } from "http-status-codes";
 import { paginationHelper } from "../../../helpars/paginationHelpers";
 import { IPaginationOptions } from "../../interfaces/pagination";
 import { PartySearchAbleFields } from "./party.constant";
 import AppError from "../../errors/AppError";
+import { Party, Prisma } from "../../../../generated/prisma";
 
 const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
   const { page, limit, skip } = paginationHelper.Pagination(paginat);
@@ -119,11 +120,11 @@ const getAllParty = async (params: any, paginat: IPaginationOptions) => {
     orderBy:
       paginat.sortBy && paginat.sortOrder
         ? {
-            [paginat.sortBy]: paginat.sortOrder,
-          }
+          [paginat.sortBy]: paginat.sortOrder,
+        }
         : {
-            createdAt: "desc",
-          },
+          createdAt: "desc",
+        },
   });
 
   return result;
@@ -162,7 +163,7 @@ const updatePartyById = async (id: number, payload: Partial<Party>) => {
 };
 
 const deletePartyById = async (id: number) => {
- 
+
   const isExist = await prisma.party.findFirst({
     where: {
       id: id,

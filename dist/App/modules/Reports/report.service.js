@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ReportController = void 0;
+exports.ReportService = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const http_status_codes_1 = require("http-status-codes");
@@ -131,7 +131,42 @@ const partyLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, functio
         return result;
     }
 });
-exports.ReportController = {
+// raw report
+const rawReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const allrawMaterial = yield prisma_1.default.rawMaterial.findMany({
+        where: {
+            isDeleted: false
+        },
+    });
+    if (allrawMaterial.length < 1) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Raw Material not found");
+    }
+    const result = Promise.all(allrawMaterial.map((rawMaterial) => __awaiter(void 0, void 0, void 0, function* () {
+        return (yield prisma_1.default.inventory.aggregate({
+            _sum: {
+                debitAmount: true,
+                creditAmount: true
+            },
+            where: {
+                AND: [
+                    {
+                        rawId: rawMaterial.id
+                    },
+                    {
+                        date: {
+                            gte: new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
+                            lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || "")
+                        }
+                    }
+                ]
+            },
+        }));
+    })));
+    console.log(result);
+    return result;
+});
+exports.ReportService = {
     getAccountLedgerReport,
     partyLedgerReport,
+    rawReport,
 };

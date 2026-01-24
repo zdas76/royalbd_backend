@@ -36,13 +36,6 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
                     partyType: true,
                 },
             },
-            customer: {
-                select: {
-                    name: true,
-                    contactNumber: true,
-                    address: true,
-                },
-            },
             bankTransaction: {
                 select: {
                     date: true,
@@ -68,29 +61,6 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
                     accountsItem: {
                         select: {
                             accountsItemName: true,
-                        },
-                    },
-                },
-            },
-            inventory: {
-                select: {
-                    date: true,
-                    unitPrice: true,
-                    quantityAdd: true,
-                    quantityLess: true,
-                    discount: true,
-                    debitAmount: true,
-                    creditAmount: true,
-                    product: {
-                        select: {
-                            id: true,
-                            name: true,
-                        },
-                    },
-                    raWMaterial: {
-                        select: {
-                            id: true,
-                            name: true,
                         },
                     },
                 },
@@ -140,13 +110,6 @@ const getVoucherByid = (id) => __awaiter(void 0, void 0, void 0, function* () {
                     partyType: true,
                 },
             },
-            customer: {
-                select: {
-                    name: true,
-                    contactNumber: true,
-                    address: true,
-                },
-            },
             bankTransaction: {
                 select: {
                     date: true,
@@ -172,29 +135,6 @@ const getVoucherByid = (id) => __awaiter(void 0, void 0, void 0, function* () {
                     accountsItem: {
                         select: {
                             accountsItemName: true,
-                        },
-                    },
-                },
-            },
-            inventory: {
-                select: {
-                    date: true,
-                    unitPrice: true,
-                    quantityAdd: true,
-                    quantityLess: true,
-                    discount: true,
-                    debitAmount: true,
-                    creditAmount: true,
-                    product: {
-                        select: {
-                            id: true,
-                            name: true,
-                        },
-                    },
-                    raWMaterial: {
-                        select: {
-                            id: true,
-                            name: true,
                         },
                     },
                 },

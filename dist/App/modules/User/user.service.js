@@ -13,10 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserService = void 0;
-const client_1 = require("@prisma/client");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const config_1 = __importDefault(require("../../../config"));
+const prisma_2 = require("../../../../generated/prisma");
 const creatUserToDB = (req) => __awaiter(void 0, void 0, void 0, function* () {
     const hashedPassword = bcryptjs_1.default.hashSync(req.body.password, parseInt(config_1.default.hash_round));
     const createUser = yield prisma_1.default.user.create({
@@ -32,7 +32,7 @@ const creatUserToDB = (req) => __awaiter(void 0, void 0, void 0, function* () {
 const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.user.findMany({
         where: {
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         select: {
             id: true,
@@ -49,7 +49,7 @@ const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.user.findFirst({
         where: {
             id: id,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         select: {
             id: true,
@@ -66,7 +66,7 @@ const updateUserById = (id, payload) => __awaiter(void 0, void 0, void 0, functi
     const result = yield prisma_1.default.user.update({
         where: {
             id: id,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         data: payload,
     });
@@ -76,10 +76,10 @@ const deleteUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.user.update({
         where: {
             id: id,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         data: {
-            status: client_1.Status.DELETED,
+            status: prisma_2.Status.DELETED,
         },
     });
     return result;

@@ -18,7 +18,7 @@ const report_service_1 = require("./report.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_codes_1 = require("http-status-codes");
 const ladgerReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield report_service_1.ReportController.getAccountLedgerReport({
+    const result = yield report_service_1.ReportService.getAccountLedgerReport({
         accountsItemId: Number(req.query.accountsItemId),
         startDate: req.query.startDate ? String(req.query.startDate) : null,
         endDate: req.query.endDate ? String(req.query.endDate) : null,
@@ -31,7 +31,7 @@ const ladgerReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 const partyReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield report_service_1.ReportController.partyLedgerReport({
+    const result = yield report_service_1.ReportService.partyLedgerReport({
         partyId: Number(req.query.partyId),
         startDate: req.query.startDate ? String(req.query.startDate) : null,
         endDate: req.query.endDate ? String(req.query.endDate) : null,
@@ -43,7 +43,21 @@ const partyReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
         data: result,
     });
 }));
+// ----------------------------------------- raw report -----------------------------
+const rawReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield report_service_1.ReportService.rawReport({
+        startDate: req.query.startDate,
+        endDate: req.query.endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
 exports.ReportControllers = {
     ladgerReport,
     partyReport,
+    rawReport,
 };

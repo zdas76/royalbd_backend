@@ -13,8 +13,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.JurnalService = void 0;
-const client_1 = require("@prisma/client");
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
+const prisma_2 = require("../../../../generated/prisma");
 //Create Purchase Received Voucher
 const createPurchestReceivedIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const createPurchestVoucher = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
@@ -30,8 +30,7 @@ const createPurchestReceivedIntoDB = (payload) => __awaiter(void 0, void 0, void
                 invoiceNo: payload.invoiceNo || null,
                 voucherNo: payload.voucherNo,
                 date: payload.date,
-                paymentType: payload.paymentType,
-                voucherType: client_1.VoucherType.PURCHASE,
+                voucherType: prisma_2.VoucherType.PURCHASE,
                 partyId: partyExists.id,
             },
         });
@@ -136,10 +135,8 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
         const createTransactionInfo = yield tx.transactionInfo.create({
             data: {
                 voucherNo: payload.voucherNo,
-                paymentType: payload.paymentType,
-                voucherType: client_1.VoucherType.SALES,
+                voucherType: prisma_2.VoucherType.SALES,
                 partyId: (isParty === null || isParty === void 0 ? void 0 : isParty.id) || null,
-                customerId: (isCustomer === null || isCustomer === void 0 ? void 0 : isCustomer.id) || null,
                 date: payload.date,
             },
         });
@@ -231,8 +228,7 @@ const createPaymentVoucher = (payload) => __awaiter(void 0, void 0, void 0, func
         const createTransactionInfo = yield tx.transactionInfo.create({
             data: {
                 voucherNo: payload.voucherNo,
-                paymentType: payload.paymentType,
-                voucherType: client_1.VoucherType.PAYMENT,
+                voucherType: prisma_2.VoucherType.PAYMENT,
                 partyId: (isParty === null || isParty === void 0 ? void 0 : isParty.id) || null,
                 date: payload.date,
             },
@@ -307,8 +303,7 @@ const createReceiptVoucher = (payload) => __awaiter(void 0, void 0, void 0, func
         const createTransactionInfo = yield tx.transactionInfo.create({
             data: {
                 voucherNo: payload.voucherNo,
-                paymentType: payload.paymentType,
-                voucherType: client_1.VoucherType.RECEIPT,
+                voucherType: prisma_2.VoucherType.RECEIPT,
                 partyId: (isParty === null || isParty === void 0 ? void 0 : isParty.id) || null,
                 date: payload.date,
             },
@@ -381,7 +376,7 @@ const createJournalVoucher = (payload) => __awaiter(void 0, void 0, void 0, func
         const createTransactionInfo = yield tx.transactionInfo.create({
             data: {
                 voucherNo: payload.voucherNo,
-                voucherType: client_1.VoucherType.JOURNAL,
+                voucherType: prisma_2.VoucherType.JOURNAL,
                 date: payload.date,
                 partyId: (partyExists === null || partyExists === void 0 ? void 0 : partyExists.id) || null,
             },
@@ -448,7 +443,7 @@ const createQantaVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
         const createTransactionInfo = yield tx.transactionInfo.create({
             data: {
                 voucherNo: payload.voucherNo,
-                voucherType: client_1.VoucherType.JOURNAL,
+                voucherType: prisma_2.VoucherType.JOURNAL,
                 partyId: (partyExists === null || partyExists === void 0 ? void 0 : partyExists.id) || null,
                 date: payload.date,
             },

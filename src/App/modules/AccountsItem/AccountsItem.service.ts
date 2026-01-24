@@ -1,7 +1,7 @@
-import { AccountsItem } from "@prisma/client";
 import prisma from "../../../shared/prisma";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/AppError";
+import { AccountsItem } from "../../../../generated/prisma";
 
 const createAccountsItemtoDB = async (payLoad: AccountsItem) => {
   const isExist = await prisma.accountsItem.findFirst({
