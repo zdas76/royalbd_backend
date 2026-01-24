@@ -17,7 +17,6 @@ const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const createSubCategoryToDB = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
-
     const subCategory = yield prisma_1.default.subCategory.findFirst({
         where: {
             subCategoryName: payLoad.subCategoryName,
@@ -42,14 +41,14 @@ const getSubCategory = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     return result;
 });
-const subCategoryUpdate = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
+const subCategoryUpdate = (payLoad, id) => __awaiter(void 0, void 0, void 0, function* () {
     const subCategory = yield prisma_1.default.subCategory.findFirst({
         where: {
-            subCategoryName: payLoad.subCategoryName,
+            id: id,
         },
     });
     if (!subCategory) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "This Name already used");
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "This Field is not founed");
     }
     const result = yield prisma_1.default.subCategory.update({
         where: {
@@ -77,9 +76,19 @@ const getCategorybyId = (payLoad) => __awaiter(void 0, void 0, void 0, function*
     });
     return result;
 });
+// delete subcategory
+const deleteSubService = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const deleteResult = yield prisma_1.default.subCategory.delete({
+        where: {
+            id: Number(id),
+        }
+    });
+    return deleteResult;
+});
 exports.SubCagetoryService = {
     createSubCategoryToDB,
     getSubCategory,
     subCategoryUpdate,
     getCategorybyId,
+    deleteSubService
 };

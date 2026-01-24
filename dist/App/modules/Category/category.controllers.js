@@ -45,7 +45,8 @@ const getCategoryById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     });
 }));
 const updateCategory = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield category_service_1.CagetoryService.categoryUpdate(req.body);
+    const id = parseInt(req.params.id);
+    const result = yield category_service_1.CagetoryService.categoryUpdate(id, req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,

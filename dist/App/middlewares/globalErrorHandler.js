@@ -3,7 +3,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
 const http_status_codes_1 = require("http-status-codes");
 const handelZorError_1 = __importDefault(require("../errors/handelZorError"));
 const zod_1 = require("zod");
@@ -19,15 +18,13 @@ const globalErrorHandler = (err, req, res, next) => {
         message = simplifedError === null || simplifedError === void 0 ? void 0 : simplifedError.message;
         error = simplifedError.errorSources;
     }
-    else if (err instanceof client_1.Prisma.PrismaClientValidationError) {
+    else if (err.code === "P2025") {
         message = "Validation Error";
         error = err.message;
     }
-    else if (err instanceof client_1.Prisma.PrismaClientKnownRequestError) {
-        if (err.code === "P2002") {
-            message = "Duplicate error";
-            error = err.meta;
-        }
+    else if (err.code === "P2002") {
+        message = "Duplicate error";
+        error = err.meta;
     }
     else if (err instanceof AppError_1.default) {
         statusCode = err === null || err === void 0 ? void 0 : err.statusCode;
@@ -48,7 +45,6 @@ const globalErrorHandler = (err, req, res, next) => {
             },
         ];
     }
-
     res.status(statusCode).json({
         success: false,
         message,

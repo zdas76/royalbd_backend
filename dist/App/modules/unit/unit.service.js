@@ -53,9 +53,27 @@ const updateUnit = (id, payload) => __awaiter(void 0, void 0, void 0, function* 
     });
     return result;
 });
+// delete unit
+const deleteUnit = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const existUnit = yield prisma_1.default.unit.findUnique({
+        where: {
+            id: id
+        }
+    });
+    if (!existUnit) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Unit not found");
+    }
+    const result = yield prisma_1.default.unit.delete({
+        where: {
+            id: id
+        }
+    });
+    return result;
+});
 exports.UnitService = {
     createUnit,
     getAllUnit,
     getUnitById,
     updateUnit,
+    deleteUnit
 };

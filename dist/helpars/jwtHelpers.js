@@ -31,7 +31,6 @@ const generateToken = (payload, secret, expiresIn) => {
 const verifyToken = (token, secret) => {
     return jsonwebtoken_1.default.verify(token, secret);
 };
-0;
 exports.jwtHelpers = {
     generateToken,
     verifyToken

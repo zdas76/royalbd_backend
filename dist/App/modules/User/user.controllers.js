@@ -12,64 +12,63 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UnitControllers = void 0;
+exports.UserControllers = void 0;
 const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
-const unit_service_1 = require("./unit.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_codes_1 = require("http-status-codes");
-const createUnit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield unit_service_1.UnitService.createUnit(req.body);
+const user_service_1 = require("./user.service");
+const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.UserService.creatUserToDB(req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Unit create Successfully",
+        message: "User create successfully",
         data: result,
     });
 }));
-const getAllUnit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield unit_service_1.UnitService.getAllUnit();
+const getUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_service_1.UserService.getAllUser();
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Units retrive Successfully",
+        message: "Users retrived Successfully",
         data: result,
     });
 }));
-const getUnitById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
-    const result = yield unit_service_1.UnitService.getUnitById(id);
+    const result = yield user_service_1.UserService.getUserById(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Unit retrive Successfully",
+        message: "User retrived Successfully",
         data: result,
     });
 }));
-const updateUnit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
-    const result = yield unit_service_1.UnitService.updateUnit(id, req.body);
+    const result = yield user_service_1.UserService.updateUserById(id, req.body);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: "Unit updated Successfully",
+        message: "User retrived Successfully",
         data: result,
     });
 }));
-// delete unit controller
-const deleteUnit = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const id = Number(req.params.id);
-    yield unit_service_1.UnitService.deleteUnit(id);
+const deleteUserById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const result = yield user_service_1.UserService.deleteUserById(id);
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
-        message: `Unit is deleted Successfully`,
-        data: null,
+        message: "User deleted Successfully",
+        data: result,
     });
 }));
-exports.UnitControllers = {
-    createUnit,
-    getAllUnit,
-    getUnitById,
-    updateUnit,
-    deleteUnit
+exports.UserControllers = {
+    getUser,
+    getUserById,
+    updateUserById,
+    createUser,
+    deleteUserById,
 };

@@ -11,4 +11,5 @@ router.post("/", subCategory_controllers_1.SubCategoryControllers.createSubCateg
 router.get("/", subCategory_controllers_1.SubCategoryControllers.getSubCategory);
 router.get("/:id", subCategory_controllers_1.SubCategoryControllers.getSubCategoryById);
 router.put("/:id", subCategory_controllers_1.SubCategoryControllers.updateSubCategory);
+router.delete("/:id", subCategory_controllers_1.SubCategoryControllers.deleteSubCategory);
 exports.SubCategoryRouter = router;
