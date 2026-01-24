@@ -77,10 +77,11 @@ CREATE TABLE `user` (
 -- CreateTable
 CREATE TABLE `employees` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `email` VARCHAR(30) NOT NULL,
+    `email` VARCHAR(30) NULL,
     `name` VARCHAR(50) NOT NULL,
     `nid` VARCHAR(20) NULL,
     `dob` DATE NOT NULL,
+    `employeeType` ENUM('wroker', 'employee') NOT NULL DEFAULT 'employee',
     `workingPlase` VARCHAR(191) NULL,
     `photo` VARCHAR(191) NULL,
     `address` VARCHAR(191) NOT NULL,
@@ -107,6 +108,22 @@ CREATE TABLE `parties` (
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Worker` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `phone` VARCHAR(11) NOT NULL,
+    `nid` VARCHAR(191) NOT NULL,
+    `address` VARCHAR(191) NOT NULL,
+    `workingPlace` VARCHAR(191) NOT NULL,
+    `dob` DATE NOT NULL,
+    `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    `updatedAt` DATETIME(3) NOT NULL,
+
+    UNIQUE INDEX `Worker_nid_key`(`nid`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -226,7 +243,6 @@ CREATE TABLE `transaction_info` (
     `partyId` INTEGER NULL,
     `customerId` INTEGER NULL,
     `voucherType` ENUM('SALES', 'PURCHASE', 'RECEIPT', 'PAYMENT', 'JOURNAL', 'CONTRA', 'LOGORADES', 'CREATEPRODUCT') NOT NULL,
-    `paymentType` ENUM('PAID', 'DUE', 'PARTIAL') NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -240,6 +256,8 @@ CREATE TABLE `journals` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `transectionId` INTEGER NULL,
     `accountsItemId` INTEGER NULL,
+    `partyId` INTEGER NULL,
+    `customerId` INTEGER NULL,
     `date` DATE NOT NULL,
     `creditAmount` DOUBLE NULL DEFAULT 0.00,
     `debitAmount` DOUBLE NULL DEFAULT 0.00,
@@ -356,9 +374,6 @@ ALTER TABLE `inventories` ADD CONSTRAINT `inventories_productId_fkey` FOREIGN KE
 ALTER TABLE `inventories` ADD CONSTRAINT `inventories_rawId_fkey` FOREIGN KEY (`rawId`) REFERENCES `raw_materials`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `inventories` ADD CONSTRAINT `inventories_transactionId_fkey` FOREIGN KEY (`transactionId`) REFERENCES `transaction_info`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_partyId_fkey` FOREIGN KEY (`partyId`) REFERENCES `parties`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -369,6 +384,9 @@ ALTER TABLE `journals` ADD CONSTRAINT `journals_transectionId_fkey` FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE `journals` ADD CONSTRAINT `journals_accountsItemId_fkey` FOREIGN KEY (`accountsItemId`) REFERENCES `account_items`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `journals` ADD CONSTRAINT `journals_customerId_fkey` FOREIGN KEY (`customerId`) REFERENCES `customers`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `logGrades` ADD CONSTRAINT `logGrades_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `logcategories`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

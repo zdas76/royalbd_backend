@@ -291,8 +291,6 @@ exports.Prisma.InventoryScalarFieldEnum = {
   productId: 'productId',
   rawId: 'rawId',
   transactionId: 'transactionId',
-  partyId: 'partyId',
-  customerId: 'customerId',
   unitPrice: 'unitPrice',
   quantityAdd: 'quantityAdd',
   quantityLess: 'quantityLess',
@@ -311,6 +309,7 @@ exports.Prisma.TransactionInfoScalarFieldEnum = {
   invoiceNo: 'invoiceNo',
   date: 'date',
   partyId: 'partyId',
+  customerId: 'customerId',
   voucherType: 'voucherType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
