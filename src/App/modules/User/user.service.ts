@@ -19,7 +19,7 @@ const creatUserToDB = async (payload: TUser) => {
       email: payload.email,
       password: hashedPassword,
       name: payload.name,
-      mobile: payload.phone,
+      phone: payload.phone,
     },
   });
   return createUser;
@@ -34,7 +34,7 @@ const getAllUser = async () => {
       id: true,
       email: true,
       name: true,
-      mobile: true,
+      phone: true,
       status: true,
     },
   });
@@ -52,11 +52,10 @@ const getUserById = async (id: number) => {
       id: true,
       email: true,
       name: true,
-      mobile: true,
+      phone: true,
       status: true,
     },
   });
-
   return result;
 };
 
@@ -72,7 +71,6 @@ const updateUserById = async (id: number, payload: Partial<User>) => {
 };
 
 const deleteUserById = async (id: number) => {
-
   const result = await prisma.user.update({
     where: {
       id: id,
@@ -82,7 +80,6 @@ const deleteUserById = async (id: number) => {
       status: Status.DELETED,
     },
   });
-
   return result;
 };
 
@@ -92,5 +89,4 @@ export const UserService = {
   getUserById,
   updateUserById,
   deleteUserById,
-
 };
