@@ -1,20 +1,20 @@
 import { z } from "zod";
 
-const createUser = z.object({
+const createUserSchema = z.object({
   email: z.string({ required_error: "Email is required" }),
   password: z.string({ required_error: "Password is required" }),
   name: z.string({ required_error: "Name is required" }),
   phone: z.string({ required_error: "Mobile number is required" }),
 });
-export type TUser = z.infer<typeof createUser>
+export type TUser = z.infer<typeof createUserSchema>
 
-const updateUser = z.object({
+const updateUserSchema = z.object({
   name: z.string({ required_error: "Name is required" }).optional(),
-  role: z.enum(["admin", "user", "employee"]).optional(),
+  email: z.string({ required_error: "Email is required" }).email().optional(),
   phone: z.string({ required_error: "Mobile number is required" }).optional(),
 });
 
 export const userValidaton = {
-  createUser,
-  updateUser,
+  createUserSchema,
+  updateUserSchema,
 };

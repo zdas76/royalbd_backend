@@ -6,20 +6,20 @@ import config from "../../../config";
 // import { paginationHelper } from "../../../helpars/paginationHelpers";
 import { Request } from "express";
 import { Status, User } from "../../../../generated/prisma";
+import { TUser } from "./user.validation";
 
-const creatUserToDB = async (req: Request) => {
-
+const creatUserToDB = async (payload: TUser) => {
   const hashedPassword = bcrypt.hashSync(
-    req.body.password,
+    payload.password,
     parseInt(config.hash_round as any)
   );
 
   const createUser = await prisma.user.create({
     data: {
-      email: req.body.email,
+      email: payload.email,
       password: hashedPassword,
-      name: req.body.name,
-      mobile: req.body.mobile,
+      name: payload.name,
+      phone: payload.phone,
     },
   });
   return createUser;
@@ -34,8 +34,7 @@ const getAllUser = async () => {
       id: true,
       email: true,
       name: true,
-      photo: true,
-      mobile: true,
+      phone: true,
       status: true,
     },
   });
@@ -53,12 +52,10 @@ const getUserById = async (id: number) => {
       id: true,
       email: true,
       name: true,
-      photo: true,
-      mobile: true,
+      phone: true,
       status: true,
     },
   });
-
   return result;
 };
 
@@ -74,7 +71,6 @@ const updateUserById = async (id: number, payload: Partial<User>) => {
 };
 
 const deleteUserById = async (id: number) => {
-
   const result = await prisma.user.update({
     where: {
       id: id,
@@ -84,7 +80,6 @@ const deleteUserById = async (id: number) => {
       status: Status.DELETED,
     },
   });
-
   return result;
 };
 
