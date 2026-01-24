@@ -24,13 +24,7 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           partyType: true,
         },
       },
-      customer: {
-        select: {
-          name: true,
-          contactNumber: true,
-          address: true,
-        },
-      },
+
       bankTransaction: {
         select: {
           date: true,
@@ -60,29 +54,7 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           },
         },
       },
-      inventory: {
-        select: {
-          date: true,
-          unitPrice: true,
-          quantityAdd: true,
-          quantityLess: true,
-          discount: true,
-          debitAmount: true,
-          creditAmount: true,
-          product: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          raWMaterial: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
+
       logOrderItem: {
         select: {
           id: true,
@@ -131,13 +103,7 @@ const getVoucherByid = async (id: number) => {
           partyType: true,
         },
       },
-      customer: {
-        select: {
-          name: true,
-          contactNumber: true,
-          address: true,
-        },
-      },
+
       bankTransaction: {
         select: {
           date: true,
@@ -167,29 +133,7 @@ const getVoucherByid = async (id: number) => {
           },
         },
       },
-      inventory: {
-        select: {
-          date: true,
-          unitPrice: true,
-          quantityAdd: true,
-          quantityLess: true,
-          discount: true,
-          debitAmount: true,
-          creditAmount: true,
-          product: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-          raWMaterial: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      },
+
       logOrderItem: {
         select: {
           id: true,

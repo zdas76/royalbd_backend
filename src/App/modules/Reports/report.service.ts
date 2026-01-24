@@ -1,4 +1,3 @@
-import { Query, raw } from "mysql2";
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";

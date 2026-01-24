@@ -112,7 +112,6 @@ model Party {
   isDeleted        Boolean           @default(false)
   createdAt        DateTime          @default(now())
   updatedAt        DateTime          @updatedAt
-  inventories      Inventory[]
   transactionInfos TransactionInfo[]
 
   @@map("parties")
@@ -177,15 +176,16 @@ model RawMaterial {
 }
 
 model Customer {
-  id            Int         @id @default(autoincrement())
+  id            Int       @id @default(autoincrement())
   name          String?
-  contactNumber String      @unique
+  contactNumber String    @unique
   address       String?
-  status        Status      @default(ACTIVE)
+  status        Status    @default(ACTIVE)
   journals      Journal[]
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  inventories   Inventory[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  transactionInfos TransactionInfo[]
 
   @@map("customers")
 }
@@ -226,8 +226,6 @@ model Inventory {
   productId     Int?
   rawId         Int?
   transactionId Int?
-  partyId       Int?
-  customerId    Int?
   unitPrice     Float        @default(0.00)
   quantityAdd   Float?       @default(0.00)
   quantityLess  Float?       @default(0.00)
@@ -239,8 +237,6 @@ model Inventory {
   logToRaw      LogToRaw[]
   product       Product?     @relation(fields: [productId], references: [id])
   raWMaterial   RawMaterial? @relation(fields: [rawId], references: [id])
-  party         Party?       @relation(fields: [partyId], references: [id])
-  customer      Customer?    @relation(fields: [customerId], references: [id])
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
 
@@ -249,13 +245,14 @@ model Inventory {
 }
 
 model TransactionInfo {
-  id Int @id @default(autoincrement())
-
+  id               Int                @id @default(autoincrement())
   voucherNo        String             @unique
   invoiceNo        String?
   date             DateTime?
   partyId          Int?
   party            Party?             @relation(fields: [partyId], references: [id])
+  customerId       Int?
+  customer         Customer?          @relation(fields: [customerId], references: [id])
   voucherType      VoucherType
   bankTransaction  BankTransaction[]
   journal          Journal[]

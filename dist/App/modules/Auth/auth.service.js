@@ -53,12 +53,12 @@ const jwtHelpers_1 = require("../../../helpars/jwtHelpers");
 const config_1 = __importDefault(require("../../../config"));
 const emailSender_1 = __importDefault(require("./emailSender"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
-const client_1 = require("@prisma/client");
+const prisma_2 = require("../../../../generated/prisma");
 const loginUser = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
     const userData = yield prisma_1.default.user.findFirst({
         where: {
             email: payLoad.email,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
     });
     if (!userData) {
@@ -96,7 +96,7 @@ const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {
     const checkUser = yield prisma_1.default.employee.findUniqueOrThrow({
         where: {
             email: userData.email,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
     });
     const accessToken = jwtHelpers_1.jwtHelpers.generateToken({
@@ -124,7 +124,7 @@ const changePassword = (user, data) => __awaiter(void 0, void 0, void 0, functio
     yield prisma_1.default.user.update({
         where: {
             email: userData.email,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         data: {
             password: hassPassWord,
@@ -138,7 +138,7 @@ const forgotPassword = (playLoad) => __awaiter(void 0, void 0, void 0, function*
     const userData = yield prisma_1.default.user.findUniqueOrThrow({
         where: {
             email: playLoad.email,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
     });
     const resetPasswordToken = jwtHelpers_1.jwtHelpers.generateToken({
@@ -161,7 +161,7 @@ const resetPassword = (token, payLoad) => __awaiter(void 0, void 0, void 0, func
     const userData = yield prisma_1.default.employee.findUniqueOrThrow({
         where: {
             email: payLoad.email,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
     });
     const isValidToken = jwtHelpers_1.jwtHelpers.verifyToken(token, config_1.default.jwt.reset_pass_secret);
@@ -172,7 +172,7 @@ const resetPassword = (token, payLoad) => __awaiter(void 0, void 0, void 0, func
     yield prisma_1.default.user.update({
         where: {
             email: userData.email,
-            status: client_1.Status.ACTIVE,
+            status: prisma_2.Status.ACTIVE,
         },
         data: {
             password: hassPassWord,

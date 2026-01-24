@@ -6,7 +6,7 @@ import { jwtHelpers } from "../../../helpars/jwtHelpers";
 import config from "../../../config";
 import emailSender from "./emailSender";
 import AppError from "../../errors/AppError";
-import { Status } from "@prisma/client";
+import { Status } from "../../../../generated/prisma";
 
 const loginUser = async (payLoad: { email: string; password: string }) => {
   const userData = await prisma.user.findFirst({

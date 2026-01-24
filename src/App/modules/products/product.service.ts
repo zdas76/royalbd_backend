@@ -1,8 +1,9 @@
-import { ItemType, Product } from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
 import { TcreateProduct } from "./product.type";
+import { Product } from "../../../../generated/prisma";
 
 const createProduct = async (payload: TcreateProduct) => {
 

@@ -1,8 +1,9 @@
-import { ItemType, LogToRaw, RawMaterial } from "@prisma/client";
+
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
 import { TrawMaterial } from "./raw.types";
+import { RawMaterial } from "../../../../generated/prisma";
 
 const createRawMaterial = async (payload: TrawMaterial) => {
   const isExist = await prisma.rawMaterial.findFirst({

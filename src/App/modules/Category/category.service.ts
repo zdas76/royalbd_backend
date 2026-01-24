@@ -1,8 +1,7 @@
-import { Category } from "@prisma/client";
-import { Request, Response } from "express";
 import prisma from "../../../shared/prisma";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/AppError";
+import { Category } from "../../../../generated/prisma";
 
 const createCategoryToDB = async (payLoad: Category) => {
   const category = await prisma.category.findFirst({

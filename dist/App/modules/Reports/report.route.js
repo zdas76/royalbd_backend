@@ -10,4 +10,6 @@ const route = express_1.default.Router();
 route.get("/ledger", report_controllers_1.ReportControllers.ladgerReport);
 route.get("/party", report_controllers_1.ReportControllers.partyReport);
 route.get("/party/:id", report_controllers_1.ReportControllers.partyReport);
+route.get("/raw", report_controllers_1.ReportControllers.rawReport);
+// route.get("/raw/:id", ReportControllers.rawReport);
 exports.ReportRouter = route;

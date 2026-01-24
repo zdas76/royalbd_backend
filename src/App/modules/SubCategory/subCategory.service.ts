@@ -1,8 +1,7 @@
-import { Category, SubCategory } from "@prisma/client";
-import { Request, Response } from "express";
 import prisma from "../../../shared/prisma";
 import { StatusCodes } from "http-status-codes";
 import AppError from "../../errors/AppError";
+import { SubCategory } from "../../../../generated/prisma";
 
 const createSubCategoryToDB = async (payLoad: SubCategory) => {
   const subCategory = await prisma.subCategory.findFirst({
