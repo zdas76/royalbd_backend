@@ -245,14 +245,14 @@ model Inventory {
 }
 
 model TransactionInfo {
-  id Int @id @default(autoincrement())
-
+  id               Int                @id @default(autoincrement())
   voucherNo        String             @unique
   invoiceNo        String?
   date             DateTime?
   partyId          Int?
   party            Party?             @relation(fields: [partyId], references: [id])
   customerId       Int?
+  customer         Customer?          @relation(fields: [customerId], references: [id])
   voucherType      VoucherType
   bankTransaction  BankTransaction[]
   journal          Journal[]
@@ -260,7 +260,6 @@ model TransactionInfo {
   logOrdByCategory LogOrdByCategory[]
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
-  customer         Customer?          @relation(fields: [customerId], references: [id])
 
   @@index([voucherNo, voucherType])
   @@map("transaction_info")

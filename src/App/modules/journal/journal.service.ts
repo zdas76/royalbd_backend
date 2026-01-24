@@ -380,7 +380,6 @@ const createReceiptVoucher = async (payload: any) => {
         );
       }
     }
-
     // Create Transaction Voucher
     const createTransactionInfo: TransactionInfo =
       await tx.transactionInfo.create({
@@ -391,7 +390,6 @@ const createReceiptVoucher = async (payload: any) => {
           date: payload.date,
         },
       });
-
     // 2. create bank transaction
     const BankTXData: {
       transectionId: number;
@@ -440,11 +438,9 @@ const createReceiptVoucher = async (payload: any) => {
         });
       }
     });
-
     if (!Array.isArray(payload.creditItem) || payload.creditItem.length === 0) {
       throw new Error("Invalid data: salseItem must be a non-empty array");
     }
-
     // Step 7: Prepare Journal Credit Entries (For Payment Accounts)
     const journalCreditItems = payload.creditItem.map((item: any) => ({
       transectionId: createTransactionInfo.id,
@@ -473,7 +469,6 @@ const createReceiptVoucher = async (payload: any) => {
 const createJournalVoucher = async (payload: any) => {
   const createJournal = await prisma.$transaction(async (tx) => {
     let partyExists;
-
     //check party
     if (payload.party) {
       partyExists = await tx.party.findFirst({
