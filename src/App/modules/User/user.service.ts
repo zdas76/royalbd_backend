@@ -56,7 +56,6 @@ const getUserById = async (id: number) => {
       status: true,
     },
   });
-
   return result;
 };
 
@@ -68,12 +67,10 @@ const updateUserById = async (id: number, payload: Partial<User>) => {
     },
     data: payload,
   });
-  console.log(result)
   return result;
 };
 
 const deleteUserById = async (id: number) => {
-
   const result = await prisma.user.update({
     where: {
       id: id,
@@ -83,7 +80,6 @@ const deleteUserById = async (id: number) => {
       status: Status.DELETED,
     },
   });
-
   return result;
 };
 
@@ -93,5 +89,4 @@ export const UserService = {
   getUserById,
   updateUserById,
   deleteUserById,
-
 };
