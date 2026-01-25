@@ -24,6 +24,14 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           partyType: true,
         },
       },
+      customer: {
+        select: {
+          name: true,
+          contactNumber: true,
+          address: true,
+          status: true,
+        },
+      },
 
       bankTransaction: {
         select: {
@@ -40,6 +48,7 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           },
         },
       },
+
       journal: {
         select: {
           accountsItemId: true,
@@ -64,6 +73,28 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           quantity: true,
           u_price: true,
           amount: true,
+        },
+      },
+      inventory: {
+        select: {
+          id: true,
+          productId: true,
+          rawId: true,
+          product: {
+            select: {
+              name: true,
+            },
+          },
+          raWMaterial: {
+            select: {
+              name: true,
+            },
+          },
+          date: true,
+          quantityAdd: true,
+          quantityLess: true,
+          debitAmount: true,
+          creditAmount: true,
         },
       },
       logOrdByCategory: {

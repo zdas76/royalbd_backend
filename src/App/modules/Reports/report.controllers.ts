@@ -34,6 +34,7 @@ const partyReport = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
 // ----------------------------------------- raw report -----------------------------
 const rawReport = catchAsync(async (req: Request, res: Response) => {
   const result = await ReportService.rawReport({
@@ -48,8 +49,30 @@ const rawReport = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+
+// ----------------------------------------- raw report By Id -----------------------------
+const rawReportById = catchAsync(async (req: Request, res: Response) => {
+
+  const id = Number(req.params.id);
+
+  const result = await ReportService.getRawReportById(id, {
+    startDate: req.query.startDate as string,
+    endDate: req.query.endDate as string,
+
+  });
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Ladger report retrived successfully",
+    data: result,
+  });
+});
+
+
 export const ReportControllers = {
   ladgerReport,
   partyReport,
   rawReport,
+  rawReportById,
 };
