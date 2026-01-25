@@ -1,14 +1,17 @@
 import { date } from "zod";
 
 import prisma from "../../../shared/prisma";
-import { AccountsItem, Customer, Party, TransactionInfo, VoucherType } from "../../../../generated/prisma";
+import { AccountsItem, Customer, Journal, Party, TransactionInfo, VoucherType } from "../../../../generated/prisma";
 
 //Create Purchase Received Voucher
 const createPurchestReceivedIntoDB = async (payload: any) => {
+
+
   const createPurchestVoucher = await prisma.$transaction(async (tx) => {
     const partyExists = await tx.party.findUnique({
       where: { id: payload.partyOrcustomerId },
     });
+
 
     if (!partyExists) {
       throw new Error(
@@ -36,13 +39,13 @@ const createPurchestReceivedIntoDB = async (payload: any) => {
       date: Date;
     }[] = [];
 
-    payload.creditItem.map(async (item: any) => {
+    payload.creditItem.forEach((item: any) => {
       if (item.bankId !== null) {
         BankTXData.push({
           transectionId: createTransactionInfo.id,
           bankAccountId: item.bankId,
           date: payload.date,
-          creditAmount: item?.amount,
+          creditAmount: item.amount,
         });
       }
     });
@@ -91,19 +94,58 @@ const createPurchestReceivedIntoDB = async (payload: any) => {
       )
     );
 
+    let journalItem: any[] = [];
+
     // Step 7: Prepare Journal Credit Entries (For Payment Accounts)
-    const journalCreditItems = payload.creditItem.map((item: any) => ({
+    payload.creditItem.forEach((item: any) => journalItem.push({
       transectionId: createTransactionInfo.id,
-      accountsItemId: item.accountsItemId,
-      creditAmount: item.amount || 0,
-      narration: item?.narration || "",
-      date: payload.date,
+      accountsItemId: Number(item.accountsItemId),
+      creditAmount: Number(item.amount),
+      narration: item.narration ?? "",
+      date: new Date(payload.date),
     }));
 
-    const createJournal = await tx.journal.createMany({
-      data: journalCreditItems,
+    const debiteAccountsId = await tx.accountsItem.findFirst({
+      where: {
+        accountsItemName: {
+          contains: "inventory"
+        },
+      },
     });
-    return createJournal;
+
+    if (!debiteAccountsId) {
+      throw new Error("Invalid Accounts Item ");
+    }
+
+    journalItem.push({
+      transectionId: createTransactionInfo.id,
+      accountsItemId: debiteAccountsId.id,
+      debitAmount: payload.grandTotal,
+      narration: "Purchase Inventory Received",
+      date: new Date(payload.date),
+
+    });
+
+    const debitAmount = journalItem.reduce(
+      (total: number, item: any) => total + (Number(item.debitAmount) || 0),
+      0
+    );
+
+    const creditAmount = journalItem.reduce(
+      (total: number, item: any) => total + (Number(item.creditAmount) || 0),
+      0
+    );
+
+
+    if (debitAmount !== creditAmount) {
+      throw new Error("Debit and Credit amounts do not match");
+    }
+
+    //Step 8: Insert Journal Records
+    await tx.journal.createMany({
+      data: journalItem,
+    });
+    return createTransactionInfo;
   });
   return createPurchestVoucher;
 };
@@ -133,7 +175,7 @@ const createSalesVoucher = async (payload: any) => {
 
     let isParty: Party | null = null;
 
-    if (payload.partyType === "VENDOR" || "SUPPLIER") {
+    if (payload.partyType === "VENDOR") {
       isParty = await tx.party.findFirst({
         where: {
           id: payload.partyOrcustomerId,
@@ -143,7 +185,7 @@ const createSalesVoucher = async (payload: any) => {
 
       if (!isParty) {
         throw new Error(
-          `Invalid partyOrcustomerId: ${payload.partyOrcustomerId}. No matching Party or Customer found.`
+          `Invalid Vendor`
         );
       }
     }
@@ -155,6 +197,7 @@ const createSalesVoucher = async (payload: any) => {
           voucherNo: payload.voucherNo,
           voucherType: VoucherType.SALES,
           partyId: isParty?.id || null,
+          customerId: isCustomer?.id || null,
           date: payload.date,
         },
       });
@@ -213,7 +256,9 @@ const createSalesVoucher = async (payload: any) => {
       throw new Error("Invalid data: items must be a non-empty array");
     }
 
-    const journalDebitItems = payload.debitItem.map((item: any) => ({
+    let journalItems = [];
+
+    payload.debitItem.map((item: any) => journalItems.push({
       transectionId: createTransactionInfo.id,
       accountsItemId: item.accountsItemId,
       date: payload.date,
@@ -231,20 +276,57 @@ const createSalesVoucher = async (payload: any) => {
       });
 
       if (payload.totalDiscount && discountItem) {
-        journalDebitItems.push({
+        journalItems.push({
           transectionId: createTransactionInfo.id,
           accountsItemId: parseInt(discountItem.id!),
-          creditAmount: payload.totalDiscount,
+          debitAmount: payload.totalDiscount,
           narration: "Discount",
           date: payload.date,
         });
       }
     }
 
-    const debitJournal = await tx.journal.createMany({
-      data: journalDebitItems,
+    const debiteAccountsId = await tx.accountsItem.findFirst({
+      where: {
+        accountsItemName: {
+          contains: "inventory"
+        },
+      },
     });
-    return debitJournal;
+
+    if (!debiteAccountsId) {
+      throw new Error("Invalid Accounts Item ");
+    }
+
+    journalItems.push({
+      transectionId: createTransactionInfo.id,
+      accountsItemId: debiteAccountsId.id,
+      debitAmount: payload.grandTotal,
+      narration: "Purchase Inventory Received",
+      date: new Date(payload.date),
+
+    });
+
+    const debitAmount = journalItems.reduce(
+      (total: number, item: any) => total + (Number(item.debitAmount) || 0),
+      0
+    );
+
+    const creditAmount = journalItems.reduce(
+      (total: number, item: any) => total + (Number(item.creditAmount) || 0),
+      0
+    );
+
+
+    if (debitAmount !== creditAmount) {
+      throw new Error("Debit and Credit amounts do not match");
+    }
+
+
+    await tx.journal.createMany({
+      data: journalItems,
+    });
+    return createTransactionInfo;
   });
 
   return createSalseVoucher;
