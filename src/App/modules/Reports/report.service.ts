@@ -143,11 +143,13 @@ const rawReport = async (payload: {
   if (allrawMaterial.length < 1) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
   }
-  const result = Promise.all(allrawMaterial.map(async (rawMaterial) => (
-    await prisma.inventory.aggregate({
+  const result = Promise.all(allrawMaterial.map(async (rawMaterial) => {
+    const total = await prisma.inventory.aggregate({
       _sum: {
         debitAmount: true,
-        creditAmount: true
+        creditAmount: true,
+        quantityAdd: true,
+        quantityLess: true,
       },
       where: {
         AND: [
@@ -163,12 +165,43 @@ const rawReport = async (payload: {
         ]
       },
     })
-  )))
-  console.log(result)
+    return { rawMaterial, total }
+  }))
+
   return result;
+};
+
+const getRawReportById = async (id: number, payload: {
+  startDate?: string | null;
+  endDate?: string | null;
+}) => {
+  const rawMaterial = await prisma.rawMaterial.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!rawMaterial) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
+  }
+
+  const report = await prisma.inventory.findMany({
+
+    where: {
+      rawId: rawMaterial.id,
+      date: {
+        gte: rawMaterial.openingDate || new Date(payload?.startDate || ""),
+        lte: new Date(payload?.endDate || new Date())
+      }
+
+    },
+  })
+
+  return { rawMaterial, report };
 };
 export const ReportService = {
   getAccountLedgerReport,
   partyLedgerReport,
   rawReport,
+  getRawReportById,
 };

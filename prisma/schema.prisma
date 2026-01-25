@@ -221,24 +221,25 @@ model BankTransaction {
 }
 
 model Inventory {
-  id            Int          @id @default(autoincrement())
-  date          DateTime
-  productId     Int?
-  rawId         Int?
-  transactionId Int?
-  unitPrice     Float        @default(0.00)
-  quantityAdd   Float?       @default(0.00)
-  quantityLess  Float?       @default(0.00)
-  discount      Float?       @default(0.00)
-  debitAmount   Float?       @default(0.00)
-  creditAmount  Float?       @default(0.00)
-  isClosing     Boolean      @default(false)
-  status        Status       @default(PENDING)
-  logToRaw      LogToRaw[]
-  product       Product?     @relation(fields: [productId], references: [id])
-  raWMaterial   RawMaterial? @relation(fields: [rawId], references: [id])
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  id              Int              @id @default(autoincrement())
+  date            DateTime
+  productId       Int?
+  rawId           Int?
+  transactionId   Int?
+  unitPrice       Float            @default(0.00)
+  quantityAdd     Float?           @default(0.00)
+  quantityLess    Float?           @default(0.00)
+  discount        Float?           @default(0.00)
+  debitAmount     Float?           @default(0.00)
+  creditAmount    Float?           @default(0.00)
+  isClosing       Boolean          @default(false)
+  status          Status           @default(PENDING)
+  logToRaw        LogToRaw[]
+  product         Product?         @relation(fields: [productId], references: [id])
+  raWMaterial     RawMaterial?     @relation(fields: [rawId], references: [id])
+  transactionInfo TransactionInfo? @relation(fields: [transactionId], references: [id])
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
 
   @@index([productId, rawId])
   @@map("inventories")
@@ -258,6 +259,7 @@ model TransactionInfo {
   journal          Journal[]
   logOrderItem     LogOrderItem[]
   logOrdByCategory LogOrdByCategory[]
+  inventory        Inventory[]
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 
