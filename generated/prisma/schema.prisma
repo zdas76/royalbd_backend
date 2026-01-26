@@ -176,14 +176,13 @@ model RawMaterial {
 }
 
 model Customer {
-  id            Int       @id @default(autoincrement())
+  id            Int      @id @default(autoincrement())
   name          String?
-  contactNumber String    @unique
+  contactNumber String   @unique
   address       String?
-  status        Status    @default(ACTIVE)
-  journals      Journal[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  status        Status   @default(ACTIVE)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   transactionInfos TransactionInfo[]
 
@@ -251,8 +250,8 @@ model TransactionInfo {
   invoiceNo        String?
   date             DateTime?
   partyId          Int?
-  party            Party?             @relation(fields: [partyId], references: [id])
   customerId       Int?
+  party            Party?             @relation(fields: [partyId], references: [id])
   customer         Customer?          @relation(fields: [customerId], references: [id])
   voucherType      VoucherType
   bankTransaction  BankTransaction[]
@@ -271,8 +270,6 @@ model Journal {
   id              Int              @id @default(autoincrement())
   transectionId   Int?
   accountsItemId  Int?
-  partyId         Int?
-  customerId      Int?
   date            DateTime         @db.Date
   creditAmount    Float?           @default(0.00)
   debitAmount     Float?           @default(0.00)
@@ -280,7 +277,6 @@ model Journal {
   isClosing       Boolean          @default(false)
   transactionInfo TransactionInfo? @relation(fields: [transectionId], references: [id])
   accountsItem    AccountsItem?    @relation(fields: [accountsItemId], references: [id])
-  customer        Customer?        @relation(fields: [customerId], references: [id])
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 

@@ -318,8 +318,6 @@ exports.Prisma.JournalScalarFieldEnum = {
   id: 'id',
   transectionId: 'transectionId',
   accountsItemId: 'accountsItemId',
-  partyId: 'partyId',
-  customerId: 'customerId',
   date: 'date',
   creditAmount: 'creditAmount',
   debitAmount: 'debitAmount',

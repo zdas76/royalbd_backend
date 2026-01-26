@@ -36,16 +36,16 @@ const createPurchestReceivedIntoDB = (payload) => __awaiter(void 0, void 0, void
         });
         // 2. create bank transaction
         const BankTXData = [];
-        payload.creditItem.map((item) => __awaiter(void 0, void 0, void 0, function* () {
+        payload.creditItem.forEach((item) => {
             if (item.bankId !== null) {
                 BankTXData.push({
                     transectionId: createTransactionInfo.id,
                     bankAccountId: item.bankId,
                     date: payload.date,
-                    creditAmount: item === null || item === void 0 ? void 0 : item.amount,
+                    creditAmount: item.amount,
                 });
             }
-        }));
+        });
         if (BankTXData.length > 0) {
             yield tx.bankTransaction.createMany({
                 data: BankTXData,
@@ -83,18 +83,45 @@ const createPurchestReceivedIntoDB = (payload) => __awaiter(void 0, void 0, void
         yield Promise.all(inventoryData.map((item) => tx.inventory.create({
             data: item,
         })));
+        let journalItem = [];
         // Step 7: Prepare Journal Credit Entries (For Payment Accounts)
-        const journalCreditItems = payload.creditItem.map((item) => ({
-            transectionId: createTransactionInfo.id,
-            accountsItemId: item.accountsItemId,
-            creditAmount: item.amount || 0,
-            narration: (item === null || item === void 0 ? void 0 : item.narration) || "",
-            date: payload.date,
-        }));
-        const createJournal = yield tx.journal.createMany({
-            data: journalCreditItems,
+        payload.creditItem.forEach((item) => {
+            var _a;
+            return journalItem.push({
+                transectionId: createTransactionInfo.id,
+                accountsItemId: Number(item.accountsItemId),
+                creditAmount: Number(item.amount),
+                narration: (_a = item.narration) !== null && _a !== void 0 ? _a : "",
+                date: new Date(payload.date),
+            });
         });
-        return createJournal;
+        const debiteAccountsId = yield tx.accountsItem.findFirst({
+            where: {
+                accountsItemName: {
+                    contains: "inventory"
+                },
+            },
+        });
+        if (!debiteAccountsId) {
+            throw new Error("Invalid Accounts Item ");
+        }
+        journalItem.push({
+            transectionId: createTransactionInfo.id,
+            accountsItemId: debiteAccountsId.id,
+            debitAmount: payload.grandTotal,
+            narration: "Purchase Inventory Received",
+            date: new Date(payload.date),
+        });
+        const debitAmount = journalItem.reduce((total, item) => total + (Number(item.debitAmount) || 0), 0);
+        const creditAmount = journalItem.reduce((total, item) => total + (Number(item.creditAmount) || 0), 0);
+        if (debitAmount !== creditAmount) {
+            throw new Error("Debit and Credit amounts do not match");
+        }
+        //Step 8: Insert Journal Records
+        yield tx.journal.createMany({
+            data: journalItem,
+        });
+        return createTransactionInfo;
     }));
     return createPurchestVoucher;
 });
@@ -120,7 +147,7 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
             }
         }
         let isParty = null;
-        if (payload.partyType === "VENDOR" || "SUPPLIER") {
+        if (payload.partyType === "VENDOR") {
             isParty = yield tx.party.findFirst({
                 where: {
                     id: payload.partyOrcustomerId,
@@ -128,7 +155,7 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
                 },
             });
             if (!isParty) {
-                throw new Error(`Invalid partyOrcustomerId: ${payload.partyOrcustomerId}. No matching Party or Customer found.`);
+                throw new Error(`Invalid Vendor`);
             }
         }
         // step 1. create transaction entries
@@ -137,6 +164,7 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
                 voucherNo: payload.voucherNo,
                 voucherType: prisma_2.VoucherType.SALES,
                 partyId: (isParty === null || isParty === void 0 ? void 0 : isParty.id) || null,
+                customerId: (isCustomer === null || isCustomer === void 0 ? void 0 : isCustomer.id) || null,
                 date: payload.date,
             },
         });
@@ -177,7 +205,8 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
         if (!Array.isArray(payload.debitItem) || payload.debitItem.length === 0) {
             throw new Error("Invalid data: items must be a non-empty array");
         }
-        const journalDebitItems = payload.debitItem.map((item) => ({
+        let journalItems = [];
+        payload.debitItem.map((item) => journalItems.push({
             transectionId: createTransactionInfo.id,
             accountsItemId: item.accountsItemId,
             date: payload.date,
@@ -193,19 +222,41 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
                 },
             });
             if (payload.totalDiscount && discountItem) {
-                journalDebitItems.push({
+                journalItems.push({
                     transectionId: createTransactionInfo.id,
                     accountsItemId: parseInt(discountItem.id),
-                    creditAmount: payload.totalDiscount,
+                    debitAmount: payload.totalDiscount,
                     narration: "Discount",
                     date: payload.date,
                 });
             }
         }
-        const debitJournal = yield tx.journal.createMany({
-            data: journalDebitItems,
+        const debiteAccountsId = yield tx.accountsItem.findFirst({
+            where: {
+                accountsItemName: {
+                    contains: "inventory"
+                },
+            },
         });
-        return debitJournal;
+        if (!debiteAccountsId) {
+            throw new Error("Invalid Accounts Item ");
+        }
+        journalItems.push({
+            transectionId: createTransactionInfo.id,
+            accountsItemId: debiteAccountsId.id,
+            debitAmount: payload.grandTotal,
+            narration: "Purchase Inventory Received",
+            date: new Date(payload.date),
+        });
+        const debitAmount = journalItems.reduce((total, item) => total + (Number(item.debitAmount) || 0), 0);
+        const creditAmount = journalItems.reduce((total, item) => total + (Number(item.creditAmount) || 0), 0);
+        if (debitAmount !== creditAmount) {
+            throw new Error("Debit and Credit amounts do not match");
+        }
+        yield tx.journal.createMany({
+            data: journalItems,
+        });
+        return createTransactionInfo;
     }));
     return createSalseVoucher;
 });

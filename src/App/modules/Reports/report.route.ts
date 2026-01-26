@@ -5,12 +5,14 @@ const route = express.Router();
 
 route.get("/ledger", ReportControllers.ladgerReport);
 
-route.get("/party", ReportControllers.partyReport);
-
-route.get("/party/:id", ReportControllers.partyReport);
+route.get("/party/:partyId", ReportControllers.partyReport);
 
 route.get("/raw", ReportControllers.rawReport);
 
 route.get("/raw/:id", ReportControllers.rawReportById);
+
+route.get("/product", ReportControllers.productReport);
+
+route.get("/product/:id", ReportControllers.productReportById);
 
 export const ReportRouter = route;

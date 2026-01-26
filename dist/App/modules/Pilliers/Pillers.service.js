@@ -15,10 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PillersService = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const createPliersItemIntoDB = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield prisma_1.default.accountMainPiller.create({
+    const result = yield prisma_1.default.accountMainPiller.createMany({
         data: payLoad,
     });
-    return result;
+    return result; // { count: number }
 });
 const getAllPillerItem = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.accountMainPiller.findMany();

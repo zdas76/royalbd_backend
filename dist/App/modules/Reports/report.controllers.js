@@ -18,10 +18,13 @@ const report_service_1 = require("./report.service");
 const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_codes_1 = require("http-status-codes");
 const ladgerReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const accountsItemId = Number(req.query.accountsItemId);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
     const result = yield report_service_1.ReportService.getAccountLedgerReport({
-        accountsItemId: Number(req.query.accountsItemId),
-        startDate: req.query.startDate ? String(req.query.startDate) : null,
-        endDate: req.query.endDate ? String(req.query.endDate) : null,
+        accountsItemId,
+        startDate,
+        endDate,
     });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
@@ -31,10 +34,15 @@ const ladgerReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
     });
 }));
 const partyReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const partyId = Number(req.params.partyId);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const partyType = req.query.partyType;
     const result = yield report_service_1.ReportService.partyLedgerReport({
-        partyId: Number(req.query.partyId),
-        startDate: req.query.startDate ? String(req.query.startDate) : null,
-        endDate: req.query.endDate ? String(req.query.endDate) : null,
+        partyId,
+        partyType,
+        startDate,
+        endDate,
     });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
@@ -45,9 +53,58 @@ const partyReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, vo
 }));
 // ----------------------------------------- raw report -----------------------------
 const rawReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
     const result = yield report_service_1.ReportService.rawReport({
-        startDate: req.query.startDate,
-        endDate: req.query.endDate,
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+// ----------------------------------------- raw report By Id -----------------------------
+const rawReportById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.getRawReportById(id, {
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+// ----------------------------------------- raw report -----------------------------
+const productReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.productReport({
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+// ----------------------------------------- raw report By Id -----------------------------
+const productReportById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.getProductReportById(id, {
+        startDate,
+        endDate,
     });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
@@ -60,4 +117,7 @@ exports.ReportControllers = {
     ladgerReport,
     partyReport,
     rawReport,
+    rawReportById,
+    productReport,
+    productReportById,
 };
