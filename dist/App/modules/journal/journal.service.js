@@ -239,7 +239,7 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
             },
         });
         if (!debiteAccountsId) {
-            throw new Error("Invalid Accounts Item ");
+            throw new Error("Invalid Accounts Item inventory");
         }
         journalItems.push({
             transectionId: createTransactionInfo.id,
