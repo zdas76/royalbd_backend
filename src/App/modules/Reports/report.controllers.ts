@@ -6,10 +6,15 @@ import { StatusCodes } from "http-status-codes";
 import { Query } from "mysql2";
 
 const ladgerReport = catchAsync(async (req: Request, res: Response) => {
+
+  const accountsItemId = Number(req.query.accountsItemId);
+  const startDate = req.query.startDate ? String(req.query.startDate) : null;
+  const endDate = req.query.endDate ? String(req.query.endDate) : null;
+
   const result = await ReportService.getAccountLedgerReport({
-    accountsItemId: Number(req.query.accountsItemId),
-    startDate: req.query.startDate ? String(req.query.startDate) : null,
-    endDate: req.query.endDate ? String(req.query.endDate) : null,
+    accountsItemId,
+    startDate,
+    endDate,
   });
 
   sendResponse(res, {
@@ -21,10 +26,17 @@ const ladgerReport = catchAsync(async (req: Request, res: Response) => {
 });
 
 const partyReport = catchAsync(async (req: Request, res: Response) => {
+
+  const partyId = Number(req.params.partyId);
+  const startDate = req.query.startDate ? String(req.query.startDate) : null;
+  const endDate = req.query.endDate ? String(req.query.endDate) : null;
+  const partyType = req.query.partyType as string;
+
   const result = await ReportService.partyLedgerReport({
-    partyId: Number(req.query.partyId),
-    startDate: req.query.startDate ? String(req.query.startDate) : null,
-    endDate: req.query.endDate ? String(req.query.endDate) : null,
+    partyId,
+    partyType,
+    startDate,
+    endDate,
   });
 
   sendResponse(res, {
@@ -37,9 +49,12 @@ const partyReport = catchAsync(async (req: Request, res: Response) => {
 
 // ----------------------------------------- raw report -----------------------------
 const rawReport = catchAsync(async (req: Request, res: Response) => {
+  const startDate = req.query.startDate ? String(req.query.startDate) : null;
+  const endDate = req.query.endDate ? String(req.query.endDate) : null;
+
   const result = await ReportService.rawReport({
-    startDate: req.query.startDate as string,
-    endDate: req.query.endDate as string,
+    startDate,
+    endDate,
   });
 
   sendResponse(res, {
@@ -55,9 +70,53 @@ const rawReportById = catchAsync(async (req: Request, res: Response) => {
 
   const id = Number(req.params.id);
 
+  const startDate = req.query.startDate ? String(req.query.startDate) : null;
+  const endDate = req.query.endDate ? String(req.query.endDate) : null;
+
   const result = await ReportService.getRawReportById(id, {
-    startDate: req.query.startDate as string,
-    endDate: req.query.endDate as string,
+    startDate,
+    endDate,
+
+  });
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Ladger report retrived successfully",
+    data: result,
+  });
+});
+
+
+// ----------------------------------------- raw report -----------------------------
+const productReport = catchAsync(async (req: Request, res: Response) => {
+  const startDate = req.query.startDate ? String(req.query.startDate) : null;
+  const endDate = req.query.endDate ? String(req.query.endDate) : null;
+
+  const result = await ReportService.productReport({
+    startDate,
+    endDate,
+  });
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Ladger report retrived successfully",
+    data: result,
+  });
+});
+
+// ----------------------------------------- raw report By Id -----------------------------
+const productReportById = catchAsync(async (req: Request, res: Response) => {
+
+  const id = Number(req.params.id);
+
+  const startDate = req.query.startDate ? String(req.query.startDate) : null;
+  const endDate = req.query.endDate ? String(req.query.endDate) : null;
+
+  const result = await ReportService.getProductReportById(id, {
+    startDate,
+    endDate,
 
   });
 
@@ -75,4 +134,6 @@ export const ReportControllers = {
   partyReport,
   rawReport,
   rawReportById,
+  productReport,
+  productReportById,
 };

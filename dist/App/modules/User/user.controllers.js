@@ -55,6 +55,16 @@ const updateUserById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
         data: result,
     });
 }));
+const updateUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = parseInt(req.params.id);
+    const result = yield user_service_1.UserService.updateUserById(id, req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "User retrived Successfully",
+        data: result,
+    });
+}));
 const deleteUserById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = parseInt(req.params.id);
     const result = yield user_service_1.UserService.deleteUserById(id);
@@ -66,9 +76,10 @@ const deleteUserById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0,
     });
 }));
 exports.UserControllers = {
+    createUser,
     getUser,
     getUserById,
     updateUserById,
-    createUser,
     deleteUserById,
+    updateUser,
 };

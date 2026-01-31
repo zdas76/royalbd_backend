@@ -36,6 +36,14 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
                     partyType: true,
                 },
             },
+            customer: {
+                select: {
+                    name: true,
+                    contactNumber: true,
+                    address: true,
+                    status: true,
+                },
+            },
             bankTransaction: {
                 select: {
                     date: true,
@@ -74,6 +82,28 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
                     quantity: true,
                     u_price: true,
                     amount: true,
+                },
+            },
+            inventory: {
+                select: {
+                    id: true,
+                    productId: true,
+                    rawId: true,
+                    product: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                    raWMaterial: {
+                        select: {
+                            name: true,
+                        },
+                    },
+                    date: true,
+                    quantityAdd: true,
+                    quantityLess: true,
+                    debitAmount: true,
+                    creditAmount: true,
                 },
             },
             logOrdByCategory: {

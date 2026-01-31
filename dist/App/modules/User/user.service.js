@@ -17,14 +17,14 @@ const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const config_1 = __importDefault(require("../../../config"));
 const prisma_2 = require("../../../../generated/prisma");
-const creatUserToDB = (req) => __awaiter(void 0, void 0, void 0, function* () {
-    const hashedPassword = bcryptjs_1.default.hashSync(req.body.password, parseInt(config_1.default.hash_round));
+const creatUserToDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const hashedPassword = bcryptjs_1.default.hashSync(payload.password, parseInt(config_1.default.hash_round));
     const createUser = yield prisma_1.default.user.create({
         data: {
-            email: req.body.email,
+            email: payload.email,
             password: hashedPassword,
-            name: req.body.name,
-            mobile: req.body.mobile,
+            name: payload.name,
+            phone: payload.phone,
         },
     });
     return createUser;
@@ -38,8 +38,7 @@ const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
             id: true,
             email: true,
             name: true,
-            photo: true,
-            mobile: true,
+            phone: true,
             status: true,
         },
     });
@@ -55,8 +54,7 @@ const getUserById = (id) => __awaiter(void 0, void 0, void 0, function* () {
             id: true,
             email: true,
             name: true,
-            photo: true,
-            mobile: true,
+            phone: true,
             status: true,
         },
     });
