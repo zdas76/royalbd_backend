@@ -135,7 +135,7 @@ const partyLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, functio
             narration: true,
         },
     });
-    return result;
+    return { party, result };
 });
 // raw report
 const rawReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -190,6 +190,15 @@ const getRawReportById = (id, payload) => __awaiter(void 0, void 0, void 0, func
                 lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || new Date())
             }
         },
+        select: {
+            transactionInfo: {
+                select: {
+                    id: true,
+                    voucherNo: true,
+                    voucherType: true,
+                },
+            },
+        }
     });
     return { rawMaterial, report };
 });

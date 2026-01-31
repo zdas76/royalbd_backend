@@ -295,7 +295,7 @@ const createSalesVoucher = async (payload: any) => {
     });
 
     if (!debiteAccountsId) {
-      throw new Error("Invalid Accounts Item ");
+      throw new Error("Invalid Accounts Item inventory");
     }
 
     journalItems.push({

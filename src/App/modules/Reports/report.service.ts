@@ -142,7 +142,7 @@ const partyLedgerReport = async (payload: {
 
   });
 
-  return result;
+  return { party, result };
 
 }
 
@@ -211,6 +211,15 @@ const getRawReportById = async (id: number, payload: {
       }
 
     },
+    select: {
+      transactionInfo: {
+        select: {
+          id: true,
+          voucherNo: true,
+          voucherType: true,
+        },
+      },
+    }
   })
 
   return { rawMaterial, report };
