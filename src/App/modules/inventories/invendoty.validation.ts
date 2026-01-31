@@ -1,4 +1,4 @@
-import { ItemType } from "@prisma/client";
+import { ItemType } from "../../../../generated/prisma";
 import z from "zod";
 
 const createInventoryValidationSchema = z.object({

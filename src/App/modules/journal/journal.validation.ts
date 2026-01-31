@@ -1,4 +1,4 @@
-import { PartyType } from "@prisma/client";
+import { PartyType } from "../../../../generated/prisma";
 import { z } from "zod";
 
 const CreatePurchestSchema = z.object({

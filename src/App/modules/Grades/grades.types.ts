@@ -1,4 +1,5 @@
-import { Status } from "@prisma/client";
+import { Status } from "../../../../generated/prisma";
+
 
 export type TLogGradesTypes = {
   id: number;

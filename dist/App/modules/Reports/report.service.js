@@ -71,65 +71,71 @@ const getAccountLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, fu
 const partyLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const partyId = Number(payload.partyId);
     const { startDate, endDate } = payload;
+    if (!partyId) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Party Id is required");
+    }
     const party = yield prisma_1.default.party.findFirst({
         where: { id: partyId },
     });
     if (!party) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Party not found");
     }
-    const closingDate = new Date("2025-01-01");
-    if (startDate && endDate) {
-        const result = yield prisma_1.default.journal.findMany({
+    let accountsItemId;
+    if (payload.partyType === 'SUPPLIER') {
+        const accountsItem = yield prisma_1.default.accountsItem.findFirst({
             where: {
-                transactionInfo: {
-                    partyId: partyId,
+                accountsItemName: {
+                    contains: "accounts payable"
                 },
-                date: {
-                    gte: new Date(startDate),
-                    lte: new Date(endDate),
-                },
-            },
-            orderBy: {
-                date: "asc",
-            },
-            select: {
-                date: true,
-                transactionInfo: true,
-                debitAmount: true,
-                creditAmount: true,
-                narration: true,
             },
         });
-        return result;
+        accountsItemId = accountsItem === null || accountsItem === void 0 ? void 0 : accountsItem.id;
     }
-    else {
-        const result = yield prisma_1.default.journal.findMany({
+    else if (payload.partyType === 'VENDOR') {
+        const accountsItem = yield prisma_1.default.accountsItem.findFirst({
             where: {
-                transactionInfo: {
-                    partyId: partyId,
+                accountsItemName: {
+                    contains: "accounts receivable"
                 },
-                date: {
-                    gt: new Date(closingDate.setDate(closingDate.getDate() + 1)),
-                },
-            },
-            orderBy: {
-                date: "asc",
-            },
-            select: {
-                transectionId: true,
-                accountsItem: {
-                    select: {
-                        accountsItemName: true,
-                    },
-                },
-                date: true,
-                creditAmount: true,
-                debitAmount: true,
-                narration: true,
             },
         });
-        return result;
+        accountsItemId = accountsItem === null || accountsItem === void 0 ? void 0 : accountsItem.id;
     }
+    if (!accountsItemId) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts Item not found");
+    }
+    const result = yield prisma_1.default.journal.findMany({
+        where: {
+            accountsItemId: accountsItemId,
+            transactionInfo: {
+                partyId: party.id,
+            },
+            date: {
+                gte: startDate ? new Date(startDate) : party.openingDate || new Date(),
+                lte: endDate ? new Date(endDate) : new Date(),
+            },
+        },
+        orderBy: {
+            date: "asc",
+        },
+        select: {
+            transactionInfo: {
+                select: {
+                    id: true,
+                    voucherNo: true,
+                    invoiceNo: true,
+                    partyId: true,
+                    voucherType: true,
+                },
+            },
+            accountsItemId: true,
+            date: true,
+            creditAmount: true,
+            debitAmount: true,
+            narration: true,
+        },
+    });
+    return result;
 });
 // raw report
 const rawReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -142,10 +148,12 @@ const rawReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Raw Material not found");
     }
     const result = Promise.all(allrawMaterial.map((rawMaterial) => __awaiter(void 0, void 0, void 0, function* () {
-        return (yield prisma_1.default.inventory.aggregate({
+        const total = yield prisma_1.default.inventory.aggregate({
             _sum: {
                 debitAmount: true,
-                creditAmount: true
+                creditAmount: true,
+                quantityAdd: true,
+                quantityLess: true,
             },
             where: {
                 AND: [
@@ -160,13 +168,91 @@ const rawReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
                     }
                 ]
             },
-        }));
+        });
+        return { rawMaterial, total };
     })));
-    console.log(result);
     return result;
+});
+const getRawReportById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const rawMaterial = yield prisma_1.default.rawMaterial.findUnique({
+        where: {
+            id: id,
+        },
+    });
+    if (!rawMaterial) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Raw Material not found");
+    }
+    const report = yield prisma_1.default.inventory.findMany({
+        where: {
+            rawId: rawMaterial.id,
+            date: {
+                gte: rawMaterial.openingDate || new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
+                lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || new Date())
+            }
+        },
+    });
+    return { rawMaterial, report };
+});
+const productReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const allProduct = yield prisma_1.default.product.findMany({
+        where: {
+            isDeleted: false
+        },
+    });
+    if (allProduct.length < 1) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Product not found");
+    }
+    const result = Promise.all(allProduct.map((product) => __awaiter(void 0, void 0, void 0, function* () {
+        const total = yield prisma_1.default.inventory.aggregate({
+            _sum: {
+                debitAmount: true,
+                creditAmount: true,
+                quantityAdd: true,
+                quantityLess: true,
+            },
+            where: {
+                AND: [
+                    {
+                        productId: product.id
+                    },
+                    {
+                        date: {
+                            gte: product.openingDate || new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
+                            lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || new Date())
+                        }
+                    }
+                ]
+            },
+        });
+        return { product, total };
+    })));
+    return result;
+});
+const getProductReportById = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const product = yield prisma_1.default.product.findUnique({
+        where: {
+            id: id,
+        },
+    });
+    if (!product) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Product not found");
+    }
+    const report = yield prisma_1.default.inventory.findMany({
+        where: {
+            productId: product.id,
+            date: {
+                gte: product.openingDate || new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
+                lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || new Date())
+            }
+        },
+    });
+    return { product, report };
 });
 exports.ReportService = {
     getAccountLedgerReport,
     partyLedgerReport,
     rawReport,
+    getRawReportById,
+    productReport,
+    getProductReportById,
 };
