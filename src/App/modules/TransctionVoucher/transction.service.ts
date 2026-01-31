@@ -1,6 +1,12 @@
+import { VoucherType } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 
-const getAllVoucher = async () => {
+const getAllVoucher = async (payload: {
+  startDate?: string;
+  endDate?: string;
+  voucherType?: VoucherType;
+  searchTerm?: string | null;
+}) => {
   const voucher = await prisma.transactionInfo.findMany({
     orderBy: {
       date: "desc",
