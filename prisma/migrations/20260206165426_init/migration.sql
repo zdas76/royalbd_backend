@@ -62,8 +62,7 @@ CREATE TABLE `user` (
     `email` VARCHAR(30) NOT NULL,
     `password` VARCHAR(191) NOT NULL,
     `name` VARCHAR(50) NOT NULL,
-    `photo` VARCHAR(191) NULL,
-    `mobile` VARCHAR(14) NOT NULL,
+    `phone` VARCHAR(14) NOT NULL,
     `role` ENUM('SUPER_ADMIN', 'ADMIN', 'USER') NOT NULL DEFAULT 'USER',
     `status` ENUM('ACTIVE', 'DELETED', 'PUSH', 'BLOCK', 'PENDING', 'CHECKED', 'CLOSED', 'CONVERTED') NOT NULL DEFAULT 'ACTIVE',
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -242,7 +241,7 @@ CREATE TABLE `transaction_info` (
     `date` DATETIME(3) NULL,
     `partyId` INTEGER NULL,
     `customerId` INTEGER NULL,
-    `voucherType` ENUM('SALES', 'PURCHASE', 'RECEIPT', 'PAYMENT', 'JOURNAL', 'CONTRA', 'LOGORADES', 'CREATEPRODUCT') NOT NULL,
+    `voucherType` ENUM('SALES', 'PURCHASE', 'RECEIPT', 'PAYMENT', 'JOURNAL', 'CONTRA', 'LOGORDERS', 'CREATEPRODUCT') NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 
@@ -256,8 +255,6 @@ CREATE TABLE `journals` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `transectionId` INTEGER NULL,
     `accountsItemId` INTEGER NULL,
-    `partyId` INTEGER NULL,
-    `customerId` INTEGER NULL,
     `date` DATE NOT NULL,
     `creditAmount` DOUBLE NULL DEFAULT 0.00,
     `debitAmount` DOUBLE NULL DEFAULT 0.00,
@@ -374,6 +371,9 @@ ALTER TABLE `inventories` ADD CONSTRAINT `inventories_productId_fkey` FOREIGN KE
 ALTER TABLE `inventories` ADD CONSTRAINT `inventories_rawId_fkey` FOREIGN KEY (`rawId`) REFERENCES `raw_materials`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE `inventories` ADD CONSTRAINT `inventories_transactionId_fkey` FOREIGN KEY (`transactionId`) REFERENCES `transaction_info`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE `transaction_info` ADD CONSTRAINT `transaction_info_partyId_fkey` FOREIGN KEY (`partyId`) REFERENCES `parties`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -384,9 +384,6 @@ ALTER TABLE `journals` ADD CONSTRAINT `journals_transectionId_fkey` FOREIGN KEY 
 
 -- AddForeignKey
 ALTER TABLE `journals` ADD CONSTRAINT `journals_accountsItemId_fkey` FOREIGN KEY (`accountsItemId`) REFERENCES `account_items`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE `journals` ADD CONSTRAINT `journals_customerId_fkey` FOREIGN KEY (`customerId`) REFERENCES `customers`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `logGrades` ADD CONSTRAINT `logGrades_categoryId_fkey` FOREIGN KEY (`categoryId`) REFERENCES `logcategories`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
