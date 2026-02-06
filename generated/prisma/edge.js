@@ -474,7 +474,7 @@ exports.VoucherType = exports.$Enums.VoucherType = {
   PAYMENT: 'PAYMENT',
   JOURNAL: 'JOURNAL',
   CONTRA: 'CONTRA',
-  LOGORADES: 'LOGORADES',
+  LOGORDERS: 'LOGORDERS',
   CREATEPRODUCT: 'CREATEPRODUCT'
 };
 

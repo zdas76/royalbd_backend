@@ -20,7 +20,7 @@ const prisma_2 = require("../../../../generated/prisma");
 const getAllOrder = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.transactionInfo.findMany({
         where: {
-            voucherType: prisma_2.VoucherType.LOGORADES,
+            voucherType: prisma_2.VoucherType.LOGORDERS,
         },
     });
     return result;
@@ -51,7 +51,7 @@ const createGradesOrder = (payLoad) => __awaiter(void 0, void 0, void 0, functio
             data: {
                 invoiceNo: payLoad.chalanNo || null,
                 voucherNo: payLoad.voucherNo,
-                voucherType: prisma_2.VoucherType.LOGORADES,
+                voucherType: prisma_2.VoucherType.LOGORDERS,
                 partyId: payLoad.supplierId,
             },
         });

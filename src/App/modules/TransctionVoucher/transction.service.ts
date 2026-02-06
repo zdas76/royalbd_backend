@@ -7,7 +7,51 @@ const getAllVoucher = async (payload: {
   voucherType?: VoucherType;
   searchTerm?: string | null;
 }) => {
+  const { startDate, endDate, voucherType, searchTerm } = payload;
+
+  const where: any = {};
+
+  // Voucher Type
+  if (voucherType) {
+    where.voucherType = voucherType;
+  }
+
+  // Date Range (only if valid)
+  if (startDate || endDate) {
+    where.date = {};
+
+    if (startDate && !isNaN(Date.parse(startDate))) {
+      where.date.gte = new Date(startDate);
+    }
+
+    if (endDate && !isNaN(Date.parse(endDate))) {
+      where.date.lte = new Date(endDate);
+    }
+
+    // remove empty date object
+    if (Object.keys(where.date).length === 0) {
+      delete where.date;
+    }
+  }
+
+  // Search Term (ignore undefined / empty)
+  if (searchTerm && searchTerm !== "undefined") {
+    where.OR = [
+      {
+        voucherNo: {
+          contains: searchTerm,
+        },
+      },
+      {
+        invoiceNo: {
+          contains: searchTerm,
+        },
+      },
+    ];
+  }
+
   const voucher = await prisma.transactionInfo.findMany({
+    where,
     orderBy: {
       date: "desc",
     },
@@ -15,6 +59,7 @@ const getAllVoucher = async (payload: {
 
   return voucher;
 };
+
 
 const getVoucherByVoucherNo = async (voucherNo: string) => {
   const voucher = await prisma.transactionInfo.findFirst({

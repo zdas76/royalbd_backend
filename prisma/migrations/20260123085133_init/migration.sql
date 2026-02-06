@@ -242,7 +242,16 @@ CREATE TABLE `transaction_info` (
     `date` DATETIME(3) NULL,
     `partyId` INTEGER NULL,
     `customerId` INTEGER NULL,
-    `voucherType` ENUM('SALES', 'PURCHASE', 'RECEIPT', 'PAYMENT', 'JOURNAL', 'CONTRA', 'LOGORADES', 'CREATEPRODUCT') NOT NULL,
+`voucherType` ENUM(
+    'SALES',
+    'PURCHASE',
+    'RECEIPT',
+    'PAYMENT',
+    'JOURNAL',
+    'CONTRA',
+    'LOGORDERS',
+    'CREATEPRODUCT'
+) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updatedAt` DATETIME(3) NOT NULL,
 

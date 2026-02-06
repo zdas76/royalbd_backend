@@ -8,7 +8,7 @@ import { LogOrderItem, PartyType, VoucherType } from "../../../../generated/pris
 const getAllOrder = async () => {
   const result = await prisma.transactionInfo.findMany({
     where: {
-      voucherType: VoucherType.LOGORADES,
+      voucherType: VoucherType.LOGORDERS,
     },
   });
 
@@ -47,7 +47,7 @@ const createGradesOrder = async (payLoad: any) => {
       data: {
         invoiceNo: payLoad.chalanNo || null,
         voucherNo: payLoad.voucherNo,
-        voucherType: VoucherType.LOGORADES,
+        voucherType: VoucherType.LOGORDERS,
         partyId: payLoad.supplierId,
       },
     });
