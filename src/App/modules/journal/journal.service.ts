@@ -295,13 +295,13 @@ const createSalesVoucher = async (payload: any) => {
     });
 
     if (!debiteAccountsId) {
-      throw new Error("Invalid Accounts Item ");
+      throw new Error("Invalid Accounts Item inventory");
     }
 
     journalItems.push({
       transectionId: createTransactionInfo.id,
       accountsItemId: debiteAccountsId.id,
-      debitAmount: payload.grandTotal,
+      creditAmount: payload.grandTotal,
       narration: "Purchase Inventory Received",
       date: new Date(payload.date),
 
