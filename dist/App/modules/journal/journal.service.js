@@ -244,7 +244,7 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
         journalItems.push({
             transectionId: createTransactionInfo.id,
             accountsItemId: debiteAccountsId.id,
-            debitAmount: payload.grandTotal,
+            creditAmount: payload.grandTotal,
             narration: "Purchase Inventory Received",
             date: new Date(payload.date),
         });

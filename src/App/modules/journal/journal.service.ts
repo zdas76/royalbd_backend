@@ -301,7 +301,7 @@ const createSalesVoucher = async (payload: any) => {
     journalItems.push({
       transectionId: createTransactionInfo.id,
       accountsItemId: debiteAccountsId.id,
-      debitAmount: payload.grandTotal,
+      creditAmount: payload.grandTotal,
       narration: "Purchase Inventory Received",
       date: new Date(payload.date),
 
