@@ -34,6 +34,14 @@ const createAccountsItemtoDB = (payLoad) => __awaiter(void 0, void 0, void 0, fu
     if (!checkPiller) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts head not found");
     }
+    const checkName = yield prisma_1.default.accountsItem.findFirst({
+        where: {
+            accountsItemName: payLoad.accountsItemName,
+        },
+    });
+    if (checkName) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts item name already exist");
+    }
     const result = yield prisma_1.default.accountsItem.create({
         data: payLoad,
     });
