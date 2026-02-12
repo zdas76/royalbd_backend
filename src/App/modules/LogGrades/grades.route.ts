@@ -11,4 +11,4 @@ route.get("/:id", GradeControllers.getLogGradesById);
 
 route.put("/:id", GradeControllers.updateLogGradesById);
 
-export const GradesRoutes = route;
+export const LogGradesRoutes = route;

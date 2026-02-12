@@ -9,4 +9,4 @@ route.get("/categoryTotal", OrderControllers.getTotelByCategoryId);
 
 route.get("/", OrderControllers.getAllOrder);
 
-export const GradesOrderRouter = route;
+export const LogOrdersRouter = route;

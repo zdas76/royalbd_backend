@@ -118,12 +118,21 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
       logOrderItem: {
         select: {
           id: true,
-          logGradeId: true,
           radis: true,
           height: true,
           quantity: true,
           u_price: true,
           amount: true,
+          logGrades: {
+            select: {
+              gradeName: true,
+              logCategory: {
+                select: {
+                  name: true,
+                }
+              }
+            }
+          },
         },
       },
       inventory: {

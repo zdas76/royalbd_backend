@@ -5,11 +5,116 @@ import { StatusCodes } from "http-status-codes";
 import { TlogOrderItems } from "./order.types";
 import { LogOrderItem, PartyType, VoucherType } from "../../../../generated/prisma";
 
-const getAllOrder = async () => {
+const getAllOrder = async ({ startDate, endDate, searchTerm }: { startDate?: Date, endDate?: Date, searchTerm?: string }) => {
+
+
+  if (startDate) {
+    startDate.setHours(0, 0, 0, 0);
+  }
+  if (endDate) {
+    endDate.setHours(23, 59, 59, 999);
+  }
   const result = await prisma.transactionInfo.findMany({
     where: {
       voucherType: VoucherType.LOGORDERS,
+      date: {
+        gte: startDate ? startDate : undefined,
+        lte: endDate ? endDate : undefined,
+      },
+
+      OR: [
+        {
+          voucherNo: {
+            contains: searchTerm,
+          },
+        },
+        {
+          party: {
+            name: {
+              contains: searchTerm,
+            },
+          },
+        },
+
+      ],
     },
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      party: {
+        select: {
+          name: true,
+          contactNo: true,
+          address: true,
+          partyType: true,
+        }
+      },
+    }
+  });
+
+  return result;
+};
+
+const getLogOrderById = async (payload: any) => {
+
+  if (!payload.voucherNo) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Voucher no is required");
+  }
+
+
+  const result = await prisma.transactionInfo.findFirst({
+    where: {
+      voucherNo: payload.voucherNo,
+      voucherType: VoucherType.LOGORDERS,
+    },
+    include: {
+      party: {
+        select: {
+          name: true,
+          contactNo: true,
+          address: true,
+          partyType: true,
+        }
+      },
+      journal: {
+        include: {
+          accountsItem: {
+            select: {
+              accountsItemName: true,
+            }
+          }
+        }
+      },
+      logOrderItem: {
+        include: {
+          logGrades: {
+            select: {
+              gradeName: true,
+              logCategory: {
+                select: {
+                  name: true,
+                }
+              }
+            }
+
+          },
+        }
+      },
+      logOrdByCategory: {
+        include: {
+          logCategory: {
+            select: {
+              name: true,
+            }
+          }
+        }
+      },
+      bankTransaction: true,
+      inventory: true,
+      customer: true,
+    },
+
   });
 
   return result;
@@ -47,6 +152,7 @@ const createGradesOrder = async (payLoad: any) => {
       data: {
         invoiceNo: payLoad.chalanNo || null,
         voucherNo: payLoad.voucherNo,
+        date: payLoad.date,
         voucherType: VoucherType.LOGORDERS,
         partyId: payLoad.supplierId,
       },
@@ -157,5 +263,6 @@ i.logCategoryId,
 export const GradesOrderService = {
   createGradesOrder,
   getAllOrder,
+  getLogOrderById,
   getLogTotalByCagetoryId,
 };

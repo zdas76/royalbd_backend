@@ -20,8 +20,8 @@ const bank_route_1 = require("../modules/bank/bank.route");
 const transaction_route_1 = require("../modules/bankTransaction/transaction.route");
 const customer_route_1 = require("../modules/customer/customer.route");
 const logCategory_route_1 = require("../modules/LogCategory/logCategory.route");
-const grades_route_1 = require("../modules/Grades/grades.route");
-const gOrder_route_1 = require("../modules/GradesOrders/gOrder.route");
+const grades_route_1 = require("../modules/LogGrades/grades.route");
+const gOrder_route_1 = require("../modules/LogOrders/gOrder.route");
 const createProduct_route_1 = require("../modules/createProduce/createProduct.route");
 const logToRaw_route_1 = require("../modules/LogtoRowMaterial/logToRaw.route");
 const report_route_1 = require("../modules/Reports/report.route");
@@ -99,12 +99,12 @@ const moduleRoutes = [
         route: logCategory_route_1.LogCategoryRoute,
     },
     {
-        path: "/grades",
-        route: grades_route_1.GradesRoutes,
+        path: "/log-grades",
+        route: grades_route_1.LogGradesRoutes,
     },
     {
-        path: "/gorder",
-        route: gOrder_route_1.GradesOrderRouter,
+        path: "/log-orders",
+        route: gOrder_route_1.LogOrdersRouter,
     },
     {
         path: "/create-product",

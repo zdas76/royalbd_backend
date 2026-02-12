@@ -3154,6 +3154,37 @@ export namespace Prisma {
 
 
   /**
+   * Count Type LogGradesCountOutputType
+   */
+
+  export type LogGradesCountOutputType = {
+    logOrderItems: number
+  }
+
+  export type LogGradesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    logOrderItems?: boolean | LogGradesCountOutputTypeCountLogOrderItemsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * LogGradesCountOutputType without action
+   */
+  export type LogGradesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LogGradesCountOutputType
+     */
+    select?: LogGradesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * LogGradesCountOutputType without action
+   */
+  export type LogGradesCountOutputTypeCountLogOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: LogOrderItemWhereInput
+  }
+
+
+  /**
    * Count Type LogOrdByCategoryCountOutputType
    */
 
@@ -22346,6 +22377,8 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     logCategory?: boolean | LogCategoryDefaultArgs<ExtArgs>
+    logOrderItems?: boolean | LogGrades$logOrderItemsArgs<ExtArgs>
+    _count?: boolean | LogGradesCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["logGrades"]>
 
 
@@ -22365,12 +22398,15 @@ export namespace Prisma {
   export type LogGradesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "categoryId" | "gradeName" | "minRadius" | "maxRadius" | "unitPrice" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["logGrades"]>
   export type LogGradesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     logCategory?: boolean | LogCategoryDefaultArgs<ExtArgs>
+    logOrderItems?: boolean | LogGrades$logOrderItemsArgs<ExtArgs>
+    _count?: boolean | LogGradesCountOutputTypeDefaultArgs<ExtArgs>
   }
 
   export type $LogGradesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LogGrades"
     objects: {
       logCategory: Prisma.$LogCategoryPayload<ExtArgs>
+      logOrderItems: Prisma.$LogOrderItemPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -22723,6 +22759,7 @@ export namespace Prisma {
   export interface Prisma__LogGradesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     logCategory<T extends LogCategoryDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LogCategoryDefaultArgs<ExtArgs>>): Prisma__LogCategoryClient<$Result.GetResult<Prisma.$LogCategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    logOrderItems<T extends LogGrades$logOrderItemsArgs<ExtArgs> = {}>(args?: Subset<T, LogGrades$logOrderItemsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -23113,6 +23150,30 @@ export namespace Prisma {
   }
 
   /**
+   * LogGrades.logOrderItems
+   */
+  export type LogGrades$logOrderItemsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the LogOrderItem
+     */
+    select?: LogOrderItemSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the LogOrderItem
+     */
+    omit?: LogOrderItemOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: LogOrderItemInclude<ExtArgs> | null
+    where?: LogOrderItemWhereInput
+    orderBy?: LogOrderItemOrderByWithRelationInput | LogOrderItemOrderByWithRelationInput[]
+    cursor?: LogOrderItemWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: LogOrderItemScalarFieldEnum | LogOrderItemScalarFieldEnum[]
+  }
+
+  /**
    * LogGrades without action
    */
   export type LogGradesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -23382,6 +23443,7 @@ export namespace Prisma {
     u_price?: boolean
     amount?: boolean
     transactionInfo?: boolean | TransactionInfoDefaultArgs<ExtArgs>
+    logGrades?: boolean | LogGradesDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["logOrderItem"]>
 
 
@@ -23400,12 +23462,14 @@ export namespace Prisma {
   export type LogOrderItemOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transectionId" | "logGradeId" | "radis" | "height" | "quantity" | "u_price" | "amount", ExtArgs["result"]["logOrderItem"]>
   export type LogOrderItemInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     transactionInfo?: boolean | TransactionInfoDefaultArgs<ExtArgs>
+    logGrades?: boolean | LogGradesDefaultArgs<ExtArgs>
   }
 
   export type $LogOrderItemPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LogOrderItem"
     objects: {
       transactionInfo: Prisma.$TransactionInfoPayload<ExtArgs>
+      logGrades: Prisma.$LogGradesPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -23757,6 +23821,7 @@ export namespace Prisma {
   export interface Prisma__LogOrderItemClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     transactionInfo<T extends TransactionInfoDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TransactionInfoDefaultArgs<ExtArgs>>): Prisma__TransactionInfoClient<$Result.GetResult<Prisma.$TransactionInfoPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    logGrades<T extends LogGradesDefaultArgs<ExtArgs> = {}>(args?: Subset<T, LogGradesDefaultArgs<ExtArgs>>): Prisma__LogGradesClient<$Result.GetResult<Prisma.$LogGradesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -28331,6 +28396,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LogGrades"> | Date | string
     updatedAt?: DateTimeFilter<"LogGrades"> | Date | string
     logCategory?: XOR<LogCategoryScalarRelationFilter, LogCategoryWhereInput>
+    logOrderItems?: LogOrderItemListRelationFilter
   }
 
   export type LogGradesOrderByWithRelationInput = {
@@ -28344,6 +28410,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     logCategory?: LogCategoryOrderByWithRelationInput
+    logOrderItems?: LogOrderItemOrderByRelationAggregateInput
     _relevance?: LogGradesOrderByRelevanceInput
   }
 
@@ -28361,6 +28428,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LogGrades"> | Date | string
     updatedAt?: DateTimeFilter<"LogGrades"> | Date | string
     logCategory?: XOR<LogCategoryScalarRelationFilter, LogCategoryWhereInput>
+    logOrderItems?: LogOrderItemListRelationFilter
   }, "id">
 
   export type LogGradesOrderByWithAggregationInput = {
@@ -28408,6 +28476,7 @@ export namespace Prisma {
     u_price?: FloatFilter<"LogOrderItem"> | number
     amount?: FloatFilter<"LogOrderItem"> | number
     transactionInfo?: XOR<TransactionInfoScalarRelationFilter, TransactionInfoWhereInput>
+    logGrades?: XOR<LogGradesScalarRelationFilter, LogGradesWhereInput>
   }
 
   export type LogOrderItemOrderByWithRelationInput = {
@@ -28420,6 +28489,7 @@ export namespace Prisma {
     u_price?: SortOrder
     amount?: SortOrder
     transactionInfo?: TransactionInfoOrderByWithRelationInput
+    logGrades?: LogGradesOrderByWithRelationInput
   }
 
   export type LogOrderItemWhereUniqueInput = Prisma.AtLeast<{
@@ -28435,6 +28505,7 @@ export namespace Prisma {
     u_price?: FloatFilter<"LogOrderItem"> | number
     amount?: FloatFilter<"LogOrderItem"> | number
     transactionInfo?: XOR<TransactionInfoScalarRelationFilter, TransactionInfoWhereInput>
+    logGrades?: XOR<LogGradesScalarRelationFilter, LogGradesWhereInput>
   }, "id">
 
   export type LogOrderItemOrderByWithAggregationInput = {
@@ -30123,6 +30194,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     logCategory: LogCategoryCreateNestedOneWithoutLogGradesInput
+    logOrderItems?: LogOrderItemCreateNestedManyWithoutLogGradesInput
   }
 
   export type LogGradesUncheckedCreateInput = {
@@ -30135,6 +30207,7 @@ export namespace Prisma {
     status?: $Enums.Status
     createdAt?: Date | string
     updatedAt?: Date | string
+    logOrderItems?: LogOrderItemUncheckedCreateNestedManyWithoutLogGradesInput
   }
 
   export type LogGradesUpdateInput = {
@@ -30146,6 +30219,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     logCategory?: LogCategoryUpdateOneRequiredWithoutLogGradesNestedInput
+    logOrderItems?: LogOrderItemUpdateManyWithoutLogGradesNestedInput
   }
 
   export type LogGradesUncheckedUpdateInput = {
@@ -30158,6 +30232,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logOrderItems?: LogOrderItemUncheckedUpdateManyWithoutLogGradesNestedInput
   }
 
   export type LogGradesCreateManyInput = {
@@ -30195,13 +30270,13 @@ export namespace Prisma {
   }
 
   export type LogOrderItemCreateInput = {
-    logGradeId: number
     radis: number
     height: number
     quantity: number
     u_price: number
     amount: number
     transactionInfo: TransactionInfoCreateNestedOneWithoutLogOrderItemInput
+    logGrades: LogGradesCreateNestedOneWithoutLogOrderItemsInput
   }
 
   export type LogOrderItemUncheckedCreateInput = {
@@ -30216,13 +30291,13 @@ export namespace Prisma {
   }
 
   export type LogOrderItemUpdateInput = {
-    logGradeId?: IntFieldUpdateOperationsInput | number
     radis?: FloatFieldUpdateOperationsInput | number
     height?: FloatFieldUpdateOperationsInput | number
     quantity?: FloatFieldUpdateOperationsInput | number
     u_price?: FloatFieldUpdateOperationsInput | number
     amount?: FloatFieldUpdateOperationsInput | number
     transactionInfo?: TransactionInfoUpdateOneRequiredWithoutLogOrderItemNestedInput
+    logGrades?: LogGradesUpdateOneRequiredWithoutLogOrderItemsNestedInput
   }
 
   export type LogOrderItemUncheckedUpdateInput = {
@@ -30248,7 +30323,6 @@ export namespace Prisma {
   }
 
   export type LogOrderItemUpdateManyMutationInput = {
-    logGradeId?: IntFieldUpdateOperationsInput | number
     radis?: FloatFieldUpdateOperationsInput | number
     height?: FloatFieldUpdateOperationsInput | number
     quantity?: FloatFieldUpdateOperationsInput | number
@@ -31960,6 +32034,11 @@ export namespace Prisma {
     isNot?: TransactionInfoWhereInput
   }
 
+  export type LogGradesScalarRelationFilter = {
+    is?: LogGradesWhereInput
+    isNot?: LogGradesWhereInput
+  }
+
   export type LogOrderItemCountOrderByAggregateInput = {
     id?: SortOrder
     transectionId?: SortOrder
@@ -33232,6 +33311,20 @@ export namespace Prisma {
     connect?: LogCategoryWhereUniqueInput
   }
 
+  export type LogOrderItemCreateNestedManyWithoutLogGradesInput = {
+    create?: XOR<LogOrderItemCreateWithoutLogGradesInput, LogOrderItemUncheckedCreateWithoutLogGradesInput> | LogOrderItemCreateWithoutLogGradesInput[] | LogOrderItemUncheckedCreateWithoutLogGradesInput[]
+    connectOrCreate?: LogOrderItemCreateOrConnectWithoutLogGradesInput | LogOrderItemCreateOrConnectWithoutLogGradesInput[]
+    createMany?: LogOrderItemCreateManyLogGradesInputEnvelope
+    connect?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+  }
+
+  export type LogOrderItemUncheckedCreateNestedManyWithoutLogGradesInput = {
+    create?: XOR<LogOrderItemCreateWithoutLogGradesInput, LogOrderItemUncheckedCreateWithoutLogGradesInput> | LogOrderItemCreateWithoutLogGradesInput[] | LogOrderItemUncheckedCreateWithoutLogGradesInput[]
+    connectOrCreate?: LogOrderItemCreateOrConnectWithoutLogGradesInput | LogOrderItemCreateOrConnectWithoutLogGradesInput[]
+    createMany?: LogOrderItemCreateManyLogGradesInputEnvelope
+    connect?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+  }
+
   export type LogCategoryUpdateOneRequiredWithoutLogGradesNestedInput = {
     create?: XOR<LogCategoryCreateWithoutLogGradesInput, LogCategoryUncheckedCreateWithoutLogGradesInput>
     connectOrCreate?: LogCategoryCreateOrConnectWithoutLogGradesInput
@@ -33240,10 +33333,44 @@ export namespace Prisma {
     update?: XOR<XOR<LogCategoryUpdateToOneWithWhereWithoutLogGradesInput, LogCategoryUpdateWithoutLogGradesInput>, LogCategoryUncheckedUpdateWithoutLogGradesInput>
   }
 
+  export type LogOrderItemUpdateManyWithoutLogGradesNestedInput = {
+    create?: XOR<LogOrderItemCreateWithoutLogGradesInput, LogOrderItemUncheckedCreateWithoutLogGradesInput> | LogOrderItemCreateWithoutLogGradesInput[] | LogOrderItemUncheckedCreateWithoutLogGradesInput[]
+    connectOrCreate?: LogOrderItemCreateOrConnectWithoutLogGradesInput | LogOrderItemCreateOrConnectWithoutLogGradesInput[]
+    upsert?: LogOrderItemUpsertWithWhereUniqueWithoutLogGradesInput | LogOrderItemUpsertWithWhereUniqueWithoutLogGradesInput[]
+    createMany?: LogOrderItemCreateManyLogGradesInputEnvelope
+    set?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    disconnect?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    delete?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    connect?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    update?: LogOrderItemUpdateWithWhereUniqueWithoutLogGradesInput | LogOrderItemUpdateWithWhereUniqueWithoutLogGradesInput[]
+    updateMany?: LogOrderItemUpdateManyWithWhereWithoutLogGradesInput | LogOrderItemUpdateManyWithWhereWithoutLogGradesInput[]
+    deleteMany?: LogOrderItemScalarWhereInput | LogOrderItemScalarWhereInput[]
+  }
+
+  export type LogOrderItemUncheckedUpdateManyWithoutLogGradesNestedInput = {
+    create?: XOR<LogOrderItemCreateWithoutLogGradesInput, LogOrderItemUncheckedCreateWithoutLogGradesInput> | LogOrderItemCreateWithoutLogGradesInput[] | LogOrderItemUncheckedCreateWithoutLogGradesInput[]
+    connectOrCreate?: LogOrderItemCreateOrConnectWithoutLogGradesInput | LogOrderItemCreateOrConnectWithoutLogGradesInput[]
+    upsert?: LogOrderItemUpsertWithWhereUniqueWithoutLogGradesInput | LogOrderItemUpsertWithWhereUniqueWithoutLogGradesInput[]
+    createMany?: LogOrderItemCreateManyLogGradesInputEnvelope
+    set?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    disconnect?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    delete?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    connect?: LogOrderItemWhereUniqueInput | LogOrderItemWhereUniqueInput[]
+    update?: LogOrderItemUpdateWithWhereUniqueWithoutLogGradesInput | LogOrderItemUpdateWithWhereUniqueWithoutLogGradesInput[]
+    updateMany?: LogOrderItemUpdateManyWithWhereWithoutLogGradesInput | LogOrderItemUpdateManyWithWhereWithoutLogGradesInput[]
+    deleteMany?: LogOrderItemScalarWhereInput | LogOrderItemScalarWhereInput[]
+  }
+
   export type TransactionInfoCreateNestedOneWithoutLogOrderItemInput = {
     create?: XOR<TransactionInfoCreateWithoutLogOrderItemInput, TransactionInfoUncheckedCreateWithoutLogOrderItemInput>
     connectOrCreate?: TransactionInfoCreateOrConnectWithoutLogOrderItemInput
     connect?: TransactionInfoWhereUniqueInput
+  }
+
+  export type LogGradesCreateNestedOneWithoutLogOrderItemsInput = {
+    create?: XOR<LogGradesCreateWithoutLogOrderItemsInput, LogGradesUncheckedCreateWithoutLogOrderItemsInput>
+    connectOrCreate?: LogGradesCreateOrConnectWithoutLogOrderItemsInput
+    connect?: LogGradesWhereUniqueInput
   }
 
   export type TransactionInfoUpdateOneRequiredWithoutLogOrderItemNestedInput = {
@@ -33252,6 +33379,14 @@ export namespace Prisma {
     upsert?: TransactionInfoUpsertWithoutLogOrderItemInput
     connect?: TransactionInfoWhereUniqueInput
     update?: XOR<XOR<TransactionInfoUpdateToOneWithWhereWithoutLogOrderItemInput, TransactionInfoUpdateWithoutLogOrderItemInput>, TransactionInfoUncheckedUpdateWithoutLogOrderItemInput>
+  }
+
+  export type LogGradesUpdateOneRequiredWithoutLogOrderItemsNestedInput = {
+    create?: XOR<LogGradesCreateWithoutLogOrderItemsInput, LogGradesUncheckedCreateWithoutLogOrderItemsInput>
+    connectOrCreate?: LogGradesCreateOrConnectWithoutLogOrderItemsInput
+    upsert?: LogGradesUpsertWithoutLogOrderItemsInput
+    connect?: LogGradesWhereUniqueInput
+    update?: XOR<XOR<LogGradesUpdateToOneWithWhereWithoutLogOrderItemsInput, LogGradesUpdateWithoutLogOrderItemsInput>, LogGradesUncheckedUpdateWithoutLogOrderItemsInput>
   }
 
   export type LogToRawCreateNestedManyWithoutLogOrdByCategoryInput = {
@@ -35202,12 +35337,12 @@ export namespace Prisma {
   }
 
   export type LogOrderItemCreateWithoutTransactionInfoInput = {
-    logGradeId: number
     radis: number
     height: number
     quantity: number
     u_price: number
     amount: number
+    logGrades: LogGradesCreateNestedOneWithoutLogOrderItemsInput
   }
 
   export type LogOrderItemUncheckedCreateWithoutTransactionInfoInput = {
@@ -35628,6 +35763,7 @@ export namespace Prisma {
     status?: $Enums.Status
     createdAt?: Date | string
     updatedAt?: Date | string
+    logOrderItems?: LogOrderItemCreateNestedManyWithoutLogGradesInput
   }
 
   export type LogGradesUncheckedCreateWithoutLogCategoryInput = {
@@ -35639,6 +35775,7 @@ export namespace Prisma {
     status?: $Enums.Status
     createdAt?: Date | string
     updatedAt?: Date | string
+    logOrderItems?: LogOrderItemUncheckedCreateNestedManyWithoutLogGradesInput
   }
 
   export type LogGradesCreateOrConnectWithoutLogCategoryInput = {
@@ -35759,6 +35896,35 @@ export namespace Prisma {
     create: XOR<LogCategoryCreateWithoutLogGradesInput, LogCategoryUncheckedCreateWithoutLogGradesInput>
   }
 
+  export type LogOrderItemCreateWithoutLogGradesInput = {
+    radis: number
+    height: number
+    quantity: number
+    u_price: number
+    amount: number
+    transactionInfo: TransactionInfoCreateNestedOneWithoutLogOrderItemInput
+  }
+
+  export type LogOrderItemUncheckedCreateWithoutLogGradesInput = {
+    id?: number
+    transectionId: number
+    radis: number
+    height: number
+    quantity: number
+    u_price: number
+    amount: number
+  }
+
+  export type LogOrderItemCreateOrConnectWithoutLogGradesInput = {
+    where: LogOrderItemWhereUniqueInput
+    create: XOR<LogOrderItemCreateWithoutLogGradesInput, LogOrderItemUncheckedCreateWithoutLogGradesInput>
+  }
+
+  export type LogOrderItemCreateManyLogGradesInputEnvelope = {
+    data: LogOrderItemCreateManyLogGradesInput | LogOrderItemCreateManyLogGradesInput[]
+    skipDuplicates?: boolean
+  }
+
   export type LogCategoryUpsertWithoutLogGradesInput = {
     update: XOR<LogCategoryUpdateWithoutLogGradesInput, LogCategoryUncheckedUpdateWithoutLogGradesInput>
     create: XOR<LogCategoryCreateWithoutLogGradesInput, LogCategoryUncheckedCreateWithoutLogGradesInput>
@@ -35785,6 +35951,22 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     logOrdByCategory?: LogOrdByCategoryUncheckedUpdateManyWithoutLogCategoryNestedInput
+  }
+
+  export type LogOrderItemUpsertWithWhereUniqueWithoutLogGradesInput = {
+    where: LogOrderItemWhereUniqueInput
+    update: XOR<LogOrderItemUpdateWithoutLogGradesInput, LogOrderItemUncheckedUpdateWithoutLogGradesInput>
+    create: XOR<LogOrderItemCreateWithoutLogGradesInput, LogOrderItemUncheckedCreateWithoutLogGradesInput>
+  }
+
+  export type LogOrderItemUpdateWithWhereUniqueWithoutLogGradesInput = {
+    where: LogOrderItemWhereUniqueInput
+    data: XOR<LogOrderItemUpdateWithoutLogGradesInput, LogOrderItemUncheckedUpdateWithoutLogGradesInput>
+  }
+
+  export type LogOrderItemUpdateManyWithWhereWithoutLogGradesInput = {
+    where: LogOrderItemScalarWhereInput
+    data: XOR<LogOrderItemUpdateManyMutationInput, LogOrderItemUncheckedUpdateManyWithoutLogGradesInput>
   }
 
   export type TransactionInfoCreateWithoutLogOrderItemInput = {
@@ -35821,6 +36003,34 @@ export namespace Prisma {
   export type TransactionInfoCreateOrConnectWithoutLogOrderItemInput = {
     where: TransactionInfoWhereUniqueInput
     create: XOR<TransactionInfoCreateWithoutLogOrderItemInput, TransactionInfoUncheckedCreateWithoutLogOrderItemInput>
+  }
+
+  export type LogGradesCreateWithoutLogOrderItemsInput = {
+    gradeName: string
+    minRadius: number
+    maxRadius: number
+    unitPrice: number
+    status?: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    logCategory: LogCategoryCreateNestedOneWithoutLogGradesInput
+  }
+
+  export type LogGradesUncheckedCreateWithoutLogOrderItemsInput = {
+    id?: number
+    categoryId: number
+    gradeName: string
+    minRadius: number
+    maxRadius: number
+    unitPrice: number
+    status?: $Enums.Status
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type LogGradesCreateOrConnectWithoutLogOrderItemsInput = {
+    where: LogGradesWhereUniqueInput
+    create: XOR<LogGradesCreateWithoutLogOrderItemsInput, LogGradesUncheckedCreateWithoutLogOrderItemsInput>
   }
 
   export type TransactionInfoUpsertWithoutLogOrderItemInput = {
@@ -35863,6 +36073,40 @@ export namespace Prisma {
     journal?: JournalUncheckedUpdateManyWithoutTransactionInfoNestedInput
     logOrdByCategory?: LogOrdByCategoryUncheckedUpdateManyWithoutTransactionInfoNestedInput
     inventory?: InventoryUncheckedUpdateManyWithoutTransactionInfoNestedInput
+  }
+
+  export type LogGradesUpsertWithoutLogOrderItemsInput = {
+    update: XOR<LogGradesUpdateWithoutLogOrderItemsInput, LogGradesUncheckedUpdateWithoutLogOrderItemsInput>
+    create: XOR<LogGradesCreateWithoutLogOrderItemsInput, LogGradesUncheckedCreateWithoutLogOrderItemsInput>
+    where?: LogGradesWhereInput
+  }
+
+  export type LogGradesUpdateToOneWithWhereWithoutLogOrderItemsInput = {
+    where?: LogGradesWhereInput
+    data: XOR<LogGradesUpdateWithoutLogOrderItemsInput, LogGradesUncheckedUpdateWithoutLogOrderItemsInput>
+  }
+
+  export type LogGradesUpdateWithoutLogOrderItemsInput = {
+    gradeName?: StringFieldUpdateOperationsInput | string
+    minRadius?: FloatFieldUpdateOperationsInput | number
+    maxRadius?: FloatFieldUpdateOperationsInput | number
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logCategory?: LogCategoryUpdateOneRequiredWithoutLogGradesNestedInput
+  }
+
+  export type LogGradesUncheckedUpdateWithoutLogOrderItemsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    categoryId?: IntFieldUpdateOperationsInput | number
+    gradeName?: StringFieldUpdateOperationsInput | string
+    minRadius?: FloatFieldUpdateOperationsInput | number
+    maxRadius?: FloatFieldUpdateOperationsInput | number
+    unitPrice?: FloatFieldUpdateOperationsInput | number
+    status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LogToRawCreateWithoutLogOrdByCategoryInput = {
@@ -36966,12 +37210,12 @@ export namespace Prisma {
   }
 
   export type LogOrderItemUpdateWithoutTransactionInfoInput = {
-    logGradeId?: IntFieldUpdateOperationsInput | number
     radis?: FloatFieldUpdateOperationsInput | number
     height?: FloatFieldUpdateOperationsInput | number
     quantity?: FloatFieldUpdateOperationsInput | number
     u_price?: FloatFieldUpdateOperationsInput | number
     amount?: FloatFieldUpdateOperationsInput | number
+    logGrades?: LogGradesUpdateOneRequiredWithoutLogOrderItemsNestedInput
   }
 
   export type LogOrderItemUncheckedUpdateWithoutTransactionInfoInput = {
@@ -37122,6 +37366,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logOrderItems?: LogOrderItemUpdateManyWithoutLogGradesNestedInput
   }
 
   export type LogGradesUncheckedUpdateWithoutLogCategoryInput = {
@@ -37133,6 +37378,7 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    logOrderItems?: LogOrderItemUncheckedUpdateManyWithoutLogGradesNestedInput
   }
 
   export type LogGradesUncheckedUpdateManyWithoutLogCategoryInput = {
@@ -37187,6 +37433,45 @@ export namespace Prisma {
     status?: EnumStatusFieldUpdateOperationsInput | $Enums.Status
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type LogOrderItemCreateManyLogGradesInput = {
+    id?: number
+    transectionId: number
+    radis: number
+    height: number
+    quantity: number
+    u_price: number
+    amount: number
+  }
+
+  export type LogOrderItemUpdateWithoutLogGradesInput = {
+    radis?: FloatFieldUpdateOperationsInput | number
+    height?: FloatFieldUpdateOperationsInput | number
+    quantity?: FloatFieldUpdateOperationsInput | number
+    u_price?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+    transactionInfo?: TransactionInfoUpdateOneRequiredWithoutLogOrderItemNestedInput
+  }
+
+  export type LogOrderItemUncheckedUpdateWithoutLogGradesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    transectionId?: IntFieldUpdateOperationsInput | number
+    radis?: FloatFieldUpdateOperationsInput | number
+    height?: FloatFieldUpdateOperationsInput | number
+    quantity?: FloatFieldUpdateOperationsInput | number
+    u_price?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
+  }
+
+  export type LogOrderItemUncheckedUpdateManyWithoutLogGradesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    transectionId?: IntFieldUpdateOperationsInput | number
+    radis?: FloatFieldUpdateOperationsInput | number
+    height?: FloatFieldUpdateOperationsInput | number
+    quantity?: FloatFieldUpdateOperationsInput | number
+    u_price?: FloatFieldUpdateOperationsInput | number
+    amount?: FloatFieldUpdateOperationsInput | number
   }
 
   export type LogToRawCreateManyLogOrdByCategoryInput = {

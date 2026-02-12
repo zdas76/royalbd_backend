@@ -16,17 +16,23 @@ const createOrder = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getAllOrder = catchAsync(async (req: Request, res: Response) => {
-  const result = await GradesOrderService.getAllOrder();
+  const { startDate, endDate, searchTerm } = req.query;
+  const result = await GradesOrderService.getAllOrder({
+    startDate: startDate ? new Date(startDate as string) : undefined,
+    endDate: endDate ? new Date(endDate as string) : undefined,
+    searchTerm: searchTerm as string
+  });
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
-    message: "Log Order created successfully",
+    message: "Log Order retrived successfully",
     data: result,
   });
 });
 
 const getTotelByCategoryId = catchAsync(async (req: Request, res: Response) => {
+
   const result = await GradesOrderService.getLogTotalByCagetoryId(req.query);
 
   sendResponse(res, {

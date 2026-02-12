@@ -114,7 +114,7 @@ const createPurchestReceivedIntoDB = async (payload: any) => {
     });
 
     if (!debiteAccountsId) {
-      throw new Error("Invalid Accounts Item ");
+      throw new Error("Inventory Accounts Item not found");
     }
 
     journalItem.push({
@@ -295,7 +295,7 @@ const createSalesVoucher = async (payload: any) => {
     });
 
     if (!debiteAccountsId) {
-      throw new Error("Invalid Accounts Item inventory");
+      throw new Error("Inventory Accounts Item not found");
     }
 
     journalItems.push({

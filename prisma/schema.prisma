@@ -58,7 +58,7 @@ model AccountsItem {
   id                  Int               @id @default(autoincrement())
   accountsItemName    String
   accountMainPillerId String            @db.VarChar(2)
-  accountsItemId      String            @db.VarChar(4)
+  accountsItemId      String            @db.VarChar(6)
   journal             Journal[]
   accountsPiler       AccountMainPiller @relation(fields: [accountMainPillerId], references: [pillerId])
   createdAt           DateTime          @default(now())
@@ -248,7 +248,7 @@ model TransactionInfo {
   id               Int                @id @default(autoincrement())
   voucherNo        String             @unique
   invoiceNo        String?
-  date             DateTime?
+  date             DateTime?          @default(now())
   partyId          Int?
   customerId       Int?
   party            Party?             @relation(fields: [partyId], references: [id])
@@ -306,8 +306,9 @@ model LogGrades {
   status      Status      @default(ACTIVE)
   logCategory LogCategory @relation(fields: [categoryId], references: [id])
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  logOrderItems LogOrderItem[]
 
   @@index([categoryId])
   @@map("logGrades")
@@ -323,6 +324,7 @@ model LogOrderItem {
   u_price         Float
   amount          Float
   transactionInfo TransactionInfo @relation(fields: [transectionId], references: [id])
+  logGrades       LogGrades       @relation(fields: [logGradeId], references: [id])
 
   @@index([logGradeId])
   @@map("log_Order_Items")

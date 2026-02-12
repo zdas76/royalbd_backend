@@ -112,12 +112,21 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
             logOrderItem: {
                 select: {
                     id: true,
-                    logGradeId: true,
                     radis: true,
                     height: true,
                     quantity: true,
                     u_price: true,
                     amount: true,
+                    logGrades: {
+                        select: {
+                            gradeName: true,
+                            logCategory: {
+                                select: {
+                                    name: true,
+                                }
+                            }
+                        }
+                    },
                 },
             },
             inventory: {
