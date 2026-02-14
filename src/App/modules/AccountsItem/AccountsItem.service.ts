@@ -78,21 +78,26 @@ const updateAccountsItemFromDBbyId = async (
   payLoad: AccountsItem
 ) => {
 
-  const accountsItemId = Number(payLoad.accountMainPillerId) + payLoad.accountsItemId;
 
   const isExistItemId = await prisma.accountsItem.findFirst({
     where: {
-      accountsItemId: accountsItemId,
+      id: id,
     },
   });
 
-  if (isExistItemId) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "This item already exist");
+  if (!isExistItemId) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "This item not found");
   }
+
+  const accountsItemId = Number(payLoad.accountMainPillerId) + isExistItemId.accountsItemId.toString().slice(-4);
 
   const checkName = await prisma.accountsItem.findFirst({
     where: {
       accountsItemName: payLoad.accountsItemName,
+      accountsItemId: isExistItemId.accountsItemId,
+      NOT: {
+        id: id,
+      },
     },
   });
 
