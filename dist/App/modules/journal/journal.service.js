@@ -103,7 +103,7 @@ const createPurchestReceivedIntoDB = (payload) => __awaiter(void 0, void 0, void
             },
         });
         if (!debiteAccountsId) {
-            throw new Error("Invalid Accounts Item ");
+            throw new Error("Inventory Accounts Item not found");
         }
         journalItem.push({
             transectionId: createTransactionInfo.id,
@@ -239,7 +239,7 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
             },
         });
         if (!debiteAccountsId) {
-            throw new Error("Invalid Accounts Item inventory");
+            throw new Error("Inventory Accounts Item not found");
         }
         journalItems.push({
             transectionId: createTransactionInfo.id,

@@ -14,8 +14,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.VoucherService = void 0;
 const prisma_1 = __importDefault(require("../../../shared/prisma"));
-const getAllVoucher = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllVoucher = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const { startDate, endDate, voucherType, searchTerm } = payload;
+    const where = {};
+    // Voucher Type
+    if (voucherType) {
+        where.voucherType = voucherType;
+    }
+    // Date Range (only if valid)
+    if (startDate || endDate) {
+        where.date = {};
+        if (startDate && !isNaN(Date.parse(startDate))) {
+            where.date.gte = new Date(startDate);
+        }
+        if (endDate && !isNaN(Date.parse(endDate))) {
+            where.date.lte = new Date(endDate);
+        }
+        // remove empty date object
+        if (Object.keys(where.date).length === 0) {
+            delete where.date;
+        }
+    }
+    // Search Term (ignore undefined / empty)
+    if (searchTerm && searchTerm !== "undefined") {
+        where.OR = [
+            {
+                voucherNo: {
+                    contains: searchTerm,
+                },
+            },
+            {
+                invoiceNo: {
+                    contains: searchTerm,
+                },
+            },
+        ];
+    }
     const voucher = yield prisma_1.default.transactionInfo.findMany({
+        where,
         orderBy: {
             date: "desc",
         },
@@ -76,12 +112,21 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
             logOrderItem: {
                 select: {
                     id: true,
-                    logGradeId: true,
                     radis: true,
                     height: true,
                     quantity: true,
                     u_price: true,
                     amount: true,
+                    logGrades: {
+                        select: {
+                            gradeName: true,
+                            logCategory: {
+                                select: {
+                                    name: true,
+                                }
+                            }
+                        }
+                    },
                 },
             },
             inventory: {

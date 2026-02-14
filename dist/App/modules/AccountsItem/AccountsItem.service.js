@@ -17,25 +17,29 @@ const prisma_1 = __importDefault(require("../../../shared/prisma"));
 const http_status_codes_1 = require("http-status-codes");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const createAccountsItemtoDB = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
-    const isExist = yield prisma_1.default.accountsItem.findFirst({
+    const accountsItemId = Number(payLoad.accountMainPillerId) + payLoad.accountsItemId;
+    const isExistItemId = yield prisma_1.default.accountsItem.findFirst({
         where: {
-            accountMainPillerId: payLoad.accountMainPillerId,
-            accountsItemId: payLoad.accountsItemId,
+            accountsItemId: accountsItemId,
         },
     });
-    if (isExist) {
+    if (isExistItemId) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "This item already exist");
     }
-    const checkPiller = yield prisma_1.default.accountMainPiller.findUnique({
+    const checkName = yield prisma_1.default.accountsItem.findFirst({
         where: {
-            pillerId: payLoad.accountMainPillerId,
+            accountsItemName: payLoad.accountsItemName,
         },
     });
-    if (!checkPiller) {
-        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts head not found");
+    if (checkName) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts item name already exist");
     }
     const result = yield prisma_1.default.accountsItem.create({
-        data: payLoad,
+        data: {
+            accountsItemId: accountsItemId,
+            accountsItemName: payLoad.accountsItemName,
+            accountMainPillerId: payLoad.accountMainPillerId,
+        },
     });
     return result;
 });
@@ -70,9 +74,30 @@ const getAccountsItemByIdFromDB = (id) => __awaiter(void 0, void 0, void 0, func
     return result;
 });
 const updateAccountsItemFromDBbyId = (id, payLoad) => __awaiter(void 0, void 0, void 0, function* () {
+    const accountsItemId = Number(payLoad.accountMainPillerId) + payLoad.accountsItemId;
+    const isExistItemId = yield prisma_1.default.accountsItem.findFirst({
+        where: {
+            accountsItemId: accountsItemId,
+        },
+    });
+    if (isExistItemId) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "This item already exist");
+    }
+    const checkName = yield prisma_1.default.accountsItem.findFirst({
+        where: {
+            accountsItemName: payLoad.accountsItemName,
+        },
+    });
+    if (checkName) {
+        throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts item name already exist");
+    }
     const result = yield prisma_1.default.accountsItem.update({
         where: { id },
-        data: payLoad,
+        data: {
+            accountsItemId: accountsItemId,
+            accountsItemName: payLoad.accountsItemName,
+            accountMainPillerId: payLoad.accountMainPillerId,
+        },
     });
     return result;
 });

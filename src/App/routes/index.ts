@@ -15,8 +15,8 @@ import { BankRoute } from "../modules/bank/bank.route";
 import { TransactionRoute } from "../modules/bankTransaction/transaction.route";
 import { CustomerRouter } from "../modules/customer/customer.route";
 import { LogCategoryRoute } from "../modules/LogCategory/logCategory.route";
-import { GradesRoutes } from "../modules/Grades/grades.route";
-import { GradesOrderRouter } from "../modules/GradesOrders/gOrder.route";
+import { LogGradesRoutes } from "../modules/LogGrades/grades.route";
+import { LogOrdersRouter } from "../modules/LogOrders/gOrder.route";
 import { createProductRoute } from "../modules/createProduce/createProduct.route";
 import { LogtoRawRoute } from "../modules/LogtoRowMaterial/logToRaw.route";
 import { ReportRouter } from "../modules/Reports/report.route";
@@ -97,12 +97,12 @@ const moduleRoutes = [
     route: LogCategoryRoute,
   },
   {
-    path: "/grades",
-    route: GradesRoutes,
+    path: "/log-grades",
+    route: LogGradesRoutes,
   },
   {
-    path: "/gorder",
-    route: GradesOrderRouter,
+    path: "/log-orders",
+    route: LogOrdersRouter,
   },
   {
     path: "/create-product",

@@ -56,6 +56,7 @@ const getBankAccountById = async (id: number) => {
 };
 
 const updateAccountInfo = async (id: number, payload: Partial<BankAccount>) => {
+
   //check account number isExisted
   const accountExisted = await prisma.bankAccount.findFirst({
     where: { id },

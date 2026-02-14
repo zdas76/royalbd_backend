@@ -18,7 +18,15 @@ const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
 const http_status_codes_1 = require("http-status-codes");
 const transction_service_1 = require("./transction.service");
 const getAllVoucher = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield transction_service_1.VoucherService.getAllVoucher();
+    const { startDate, endDate } = req.query;
+    const { voucherType } = req.query;
+    const { searchTerm } = req.query;
+    const result = yield transction_service_1.VoucherService.getAllVoucher({
+        startDate: String(startDate),
+        endDate: String(endDate),
+        voucherType: voucherType,
+        searchTerm: String(searchTerm),
+    });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,

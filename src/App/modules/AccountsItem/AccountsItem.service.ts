@@ -4,28 +4,36 @@ import AppError from "../../errors/AppError";
 import { AccountsItem } from "../../../../generated/prisma";
 
 const createAccountsItemtoDB = async (payLoad: AccountsItem) => {
-  const isExist = await prisma.accountsItem.findFirst({
+
+  const accountsItemId = Number(payLoad.accountMainPillerId) + payLoad.accountsItemId;
+
+
+  const isExistItemId = await prisma.accountsItem.findFirst({
     where: {
-      accountMainPillerId: payLoad.accountMainPillerId,
-      accountsItemId: payLoad.accountsItemId,
+      accountsItemId: accountsItemId,
     },
   });
 
-  if (isExist) {
+  if (isExistItemId) {
     throw new AppError(StatusCodes.BAD_REQUEST, "This item already exist");
   }
 
-  const checkPiller = await prisma.accountMainPiller.findUnique({
+  const checkName = await prisma.accountsItem.findFirst({
     where: {
-      pillerId: payLoad.accountMainPillerId,
+      accountsItemName: payLoad.accountsItemName,
     },
   });
 
-  if (!checkPiller) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Accounts head not found");
+  if (checkName) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Accounts item name already exist");
   }
+
   const result = await prisma.accountsItem.create({
-    data: payLoad,
+    data: {
+      accountsItemId: accountsItemId,
+      accountsItemName: payLoad.accountsItemName,
+      accountMainPillerId: payLoad.accountMainPillerId,
+    },
   });
 
   return result;
@@ -69,9 +77,36 @@ const updateAccountsItemFromDBbyId = async (
   id: number,
   payLoad: AccountsItem
 ) => {
+
+  const accountsItemId = Number(payLoad.accountMainPillerId) + payLoad.accountsItemId;
+
+  const isExistItemId = await prisma.accountsItem.findFirst({
+    where: {
+      accountsItemId: accountsItemId,
+    },
+  });
+
+  if (isExistItemId) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "This item already exist");
+  }
+
+  const checkName = await prisma.accountsItem.findFirst({
+    where: {
+      accountsItemName: payLoad.accountsItemName,
+    },
+  });
+
+  if (checkName) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Accounts item name already exist");
+  }
+
   const result = await prisma.accountsItem.update({
     where: { id },
-    data: payLoad,
+    data: {
+      accountsItemId: accountsItemId,
+      accountsItemName: payLoad.accountsItemName,
+      accountMainPillerId: payLoad.accountMainPillerId,
+    },
   });
   return result;
 };
