@@ -42,7 +42,6 @@ const getRawMaterialById = catchAsync(async (req: Request, res: Response) => {
 const updateRawMaterialById = catchAsync(
   async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-
     const result = await RowMaterialsService.updateRawMaterial(id, req.body);
 
     sendResponse(res, {
@@ -57,7 +56,6 @@ const updateRawMaterialById = catchAsync(
 const deleteRawMaterialById = catchAsync(
   async (req: Request, res: Response) => {
     const id = parseInt(req.params.id);
-
     const result = await RowMaterialsService.deleteRawMaterial(id);
 
     sendResponse(res, {
