@@ -93,9 +93,7 @@ const createPurchestReceivedIntoDB = async (payload: any) => {
         })
       )
     );
-
     let journalItem: any[] = [];
-
     // Step 7: Prepare Journal Credit Entries (For Payment Accounts)
     payload.creditItem.forEach((item: any) => journalItem.push({
       transectionId: createTransactionInfo.id,
