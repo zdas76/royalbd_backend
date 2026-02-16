@@ -42,11 +42,13 @@ const createRawMaterial = async (payload: TrawMaterial) => {
 
 const getAllRawMaterial = async () => {
   const result = await prisma.rawMaterial.findMany({
+    where: {
+      isDeleted: false,
+    },
     include: {
       unit: true,
     },
   });
-
   return result;
 };
 
@@ -78,6 +80,9 @@ const updateRawMaterial = async (id: number, payload: Partial<RawMaterial>) => {
       name: payload.name,
       unitId: payload.unitId,
       description: payload.description,
+      unitPrice: payload.unitPrice,
+      quantity: payload.quantity,
+      amount: payload.amount,
     },
   });
 
@@ -90,11 +95,9 @@ const deleteRawMaterial = async (id: number) => {
       id,
     },
   });
-
   if (!isExist) {
     throw new AppError(StatusCodes.BAD_REQUEST, "No material found");
   }
-
   const result = await prisma.rawMaterial.update({
     where: {
       id,
