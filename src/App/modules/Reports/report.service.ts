@@ -67,6 +67,7 @@ const partyLedgerReport = async (payload: {
   endDate: string | null;
   partyType: string;
 }) => {
+
   const partyId = Number(payload.partyId);
   const { startDate, endDate } = payload;
 
@@ -141,6 +142,8 @@ const partyLedgerReport = async (payload: {
     },
 
   });
+
+  console.log(result, party);
 
   return { party, result };
 
