@@ -279,7 +279,7 @@ model TransactionInfo {
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 
-  @@index([voucherNo, voucherType])
+  @@index([voucherNo, voucherType, partyId, customerId])
   @@map("transaction_info")
 }
 
