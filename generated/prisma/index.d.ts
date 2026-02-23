@@ -54,6 +54,11 @@ export type Employee = $Result.DefaultSelection<Prisma.$EmployeePayload>
  */
 export type Party = $Result.DefaultSelection<Prisma.$PartyPayload>
 /**
+ * Model Vendor
+ * 
+ */
+export type Vendor = $Result.DefaultSelection<Prisma.$VendorPayload>
+/**
  * Model Worker
  * 
  */
@@ -176,7 +181,8 @@ export type Status = (typeof Status)[keyof typeof Status]
 export const PartyType: {
   VENDOR: 'VENDOR',
   CUSTOMER: 'CUSTOMER',
-  SUPPLIER: 'SUPPLIER'
+  SUPPLIER: 'SUPPLIER',
+  PARTY: 'PARTY'
 };
 
 export type PartyType = (typeof PartyType)[keyof typeof PartyType]
@@ -424,6 +430,16 @@ export class PrismaClient<
     * ```
     */
   get party(): Prisma.PartyDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.vendor`: Exposes CRUD operations for the **Vendor** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Vendors
+    * const vendors = await prisma.vendor.findMany()
+    * ```
+    */
+  get vendor(): Prisma.VendorDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.worker`: Exposes CRUD operations for the **Worker** model.
@@ -1006,6 +1022,7 @@ export namespace Prisma {
     User: 'User',
     Employee: 'Employee',
     Party: 'Party',
+    Vendor: 'Vendor',
     Worker: 'Worker',
     Product: 'Product',
     RawMaterial: 'RawMaterial',
@@ -1035,7 +1052,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "category" | "subCategory" | "unit" | "accountMainPiller" | "accountsItem" | "user" | "employee" | "party" | "worker" | "product" | "rawMaterial" | "customer" | "bankAccount" | "bankTransaction" | "inventory" | "transactionInfo" | "journal" | "logCategory" | "logGrades" | "logOrderItem" | "logOrdByCategory" | "logToRaw"
+      modelProps: "category" | "subCategory" | "unit" | "accountMainPiller" | "accountsItem" | "user" | "employee" | "party" | "vendor" | "worker" | "product" | "rawMaterial" | "customer" | "bankAccount" | "bankTransaction" | "inventory" | "transactionInfo" | "journal" | "logCategory" | "logGrades" | "logOrderItem" | "logOrdByCategory" | "logToRaw"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1564,6 +1581,72 @@ export namespace Prisma {
           count: {
             args: Prisma.PartyCountArgs<ExtArgs>
             result: $Utils.Optional<PartyCountAggregateOutputType> | number
+          }
+        }
+      }
+      Vendor: {
+        payload: Prisma.$VendorPayload<ExtArgs>
+        fields: Prisma.VendorFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.VendorFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.VendorFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload>
+          }
+          findFirst: {
+            args: Prisma.VendorFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.VendorFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload>
+          }
+          findMany: {
+            args: Prisma.VendorFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload>[]
+          }
+          create: {
+            args: Prisma.VendorCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload>
+          }
+          createMany: {
+            args: Prisma.VendorCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.VendorDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload>
+          }
+          update: {
+            args: Prisma.VendorUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload>
+          }
+          deleteMany: {
+            args: Prisma.VendorDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.VendorUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.VendorUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$VendorPayload>
+          }
+          aggregate: {
+            args: Prisma.VendorAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateVendor>
+          }
+          groupBy: {
+            args: Prisma.VendorGroupByArgs<ExtArgs>
+            result: $Utils.Optional<VendorGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.VendorCountArgs<ExtArgs>
+            result: $Utils.Optional<VendorCountAggregateOutputType> | number
           }
         }
       }
@@ -2607,6 +2690,7 @@ export namespace Prisma {
     user?: UserOmit
     employee?: EmployeeOmit
     party?: PartyOmit
+    vendor?: VendorOmit
     worker?: WorkerOmit
     product?: ProductOmit
     rawMaterial?: RawMaterialOmit
@@ -2887,6 +2971,37 @@ export namespace Prisma {
    * PartyCountOutputType without action
    */
   export type PartyCountOutputTypeCountTransactionInfosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TransactionInfoWhereInput
+  }
+
+
+  /**
+   * Count Type VendorCountOutputType
+   */
+
+  export type VendorCountOutputType = {
+    transactionInfos: number
+  }
+
+  export type VendorCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactionInfos?: boolean | VendorCountOutputTypeCountTransactionInfosArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * VendorCountOutputType without action
+   */
+  export type VendorCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the VendorCountOutputType
+     */
+    select?: VendorCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * VendorCountOutputType without action
+   */
+  export type VendorCountOutputTypeCountTransactionInfosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TransactionInfoWhereInput
   }
 
@@ -11278,6 +11393,1052 @@ export namespace Prisma {
 
 
   /**
+   * Model Vendor
+   */
+
+  export type AggregateVendor = {
+    _count: VendorCountAggregateOutputType | null
+    _avg: VendorAvgAggregateOutputType | null
+    _sum: VendorSumAggregateOutputType | null
+    _min: VendorMinAggregateOutputType | null
+    _max: VendorMaxAggregateOutputType | null
+  }
+
+  export type VendorAvgAggregateOutputType = {
+    id: number | null
+    openingAmount: number | null
+  }
+
+  export type VendorSumAggregateOutputType = {
+    id: number | null
+    openingAmount: number | null
+  }
+
+  export type VendorMinAggregateOutputType = {
+    id: number | null
+    name: string | null
+    contactNo: string | null
+    address: string | null
+    openingDate: Date | null
+    openingAmount: number | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VendorMaxAggregateOutputType = {
+    id: number | null
+    name: string | null
+    contactNo: string | null
+    address: string | null
+    openingDate: Date | null
+    openingAmount: number | null
+    isDeleted: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type VendorCountAggregateOutputType = {
+    id: number
+    name: number
+    contactNo: number
+    address: number
+    openingDate: number
+    openingAmount: number
+    isDeleted: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type VendorAvgAggregateInputType = {
+    id?: true
+    openingAmount?: true
+  }
+
+  export type VendorSumAggregateInputType = {
+    id?: true
+    openingAmount?: true
+  }
+
+  export type VendorMinAggregateInputType = {
+    id?: true
+    name?: true
+    contactNo?: true
+    address?: true
+    openingDate?: true
+    openingAmount?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VendorMaxAggregateInputType = {
+    id?: true
+    name?: true
+    contactNo?: true
+    address?: true
+    openingDate?: true
+    openingAmount?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type VendorCountAggregateInputType = {
+    id?: true
+    name?: true
+    contactNo?: true
+    address?: true
+    openingDate?: true
+    openingAmount?: true
+    isDeleted?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type VendorAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Vendor to aggregate.
+     */
+    where?: VendorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vendors to fetch.
+     */
+    orderBy?: VendorOrderByWithRelationInput | VendorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: VendorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vendors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vendors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Vendors
+    **/
+    _count?: true | VendorCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: VendorAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: VendorSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: VendorMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: VendorMaxAggregateInputType
+  }
+
+  export type GetVendorAggregateType<T extends VendorAggregateArgs> = {
+        [P in keyof T & keyof AggregateVendor]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateVendor[P]>
+      : GetScalarType<T[P], AggregateVendor[P]>
+  }
+
+
+
+
+  export type VendorGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: VendorWhereInput
+    orderBy?: VendorOrderByWithAggregationInput | VendorOrderByWithAggregationInput[]
+    by: VendorScalarFieldEnum[] | VendorScalarFieldEnum
+    having?: VendorScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: VendorCountAggregateInputType | true
+    _avg?: VendorAvgAggregateInputType
+    _sum?: VendorSumAggregateInputType
+    _min?: VendorMinAggregateInputType
+    _max?: VendorMaxAggregateInputType
+  }
+
+  export type VendorGroupByOutputType = {
+    id: number
+    name: string
+    contactNo: string
+    address: string
+    openingDate: Date | null
+    openingAmount: number | null
+    isDeleted: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: VendorCountAggregateOutputType | null
+    _avg: VendorAvgAggregateOutputType | null
+    _sum: VendorSumAggregateOutputType | null
+    _min: VendorMinAggregateOutputType | null
+    _max: VendorMaxAggregateOutputType | null
+  }
+
+  type GetVendorGroupByPayload<T extends VendorGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<VendorGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof VendorGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], VendorGroupByOutputType[P]>
+            : GetScalarType<T[P], VendorGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type VendorSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    contactNo?: boolean
+    address?: boolean
+    openingDate?: boolean
+    openingAmount?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    transactionInfos?: boolean | Vendor$transactionInfosArgs<ExtArgs>
+    _count?: boolean | VendorCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["vendor"]>
+
+
+
+  export type VendorSelectScalar = {
+    id?: boolean
+    name?: boolean
+    contactNo?: boolean
+    address?: boolean
+    openingDate?: boolean
+    openingAmount?: boolean
+    isDeleted?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type VendorOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "contactNo" | "address" | "openingDate" | "openingAmount" | "isDeleted" | "createdAt" | "updatedAt", ExtArgs["result"]["vendor"]>
+  export type VendorInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transactionInfos?: boolean | Vendor$transactionInfosArgs<ExtArgs>
+    _count?: boolean | VendorCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+  export type $VendorPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Vendor"
+    objects: {
+      transactionInfos: Prisma.$TransactionInfoPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      name: string
+      contactNo: string
+      address: string
+      openingDate: Date | null
+      openingAmount: number | null
+      isDeleted: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["vendor"]>
+    composites: {}
+  }
+
+  type VendorGetPayload<S extends boolean | null | undefined | VendorDefaultArgs> = $Result.GetResult<Prisma.$VendorPayload, S>
+
+  type VendorCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<VendorFindManyArgs, 'select' | 'include' | 'distinct' | 'omit' | 'relationLoadStrategy'> & {
+      select?: VendorCountAggregateInputType | true
+    }
+
+  export interface VendorDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Vendor'], meta: { name: 'Vendor' } }
+    /**
+     * Find zero or one Vendor that matches the filter.
+     * @param {VendorFindUniqueArgs} args - Arguments to find a Vendor
+     * @example
+     * // Get one Vendor
+     * const vendor = await prisma.vendor.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends VendorFindUniqueArgs>(args: SelectSubset<T, VendorFindUniqueArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Vendor that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {VendorFindUniqueOrThrowArgs} args - Arguments to find a Vendor
+     * @example
+     * // Get one Vendor
+     * const vendor = await prisma.vendor.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends VendorFindUniqueOrThrowArgs>(args: SelectSubset<T, VendorFindUniqueOrThrowArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Vendor that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorFindFirstArgs} args - Arguments to find a Vendor
+     * @example
+     * // Get one Vendor
+     * const vendor = await prisma.vendor.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends VendorFindFirstArgs>(args?: SelectSubset<T, VendorFindFirstArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Vendor that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorFindFirstOrThrowArgs} args - Arguments to find a Vendor
+     * @example
+     * // Get one Vendor
+     * const vendor = await prisma.vendor.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends VendorFindFirstOrThrowArgs>(args?: SelectSubset<T, VendorFindFirstOrThrowArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Vendors that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Vendors
+     * const vendors = await prisma.vendor.findMany()
+     * 
+     * // Get first 10 Vendors
+     * const vendors = await prisma.vendor.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const vendorWithIdOnly = await prisma.vendor.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends VendorFindManyArgs>(args?: SelectSubset<T, VendorFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Vendor.
+     * @param {VendorCreateArgs} args - Arguments to create a Vendor.
+     * @example
+     * // Create one Vendor
+     * const Vendor = await prisma.vendor.create({
+     *   data: {
+     *     // ... data to create a Vendor
+     *   }
+     * })
+     * 
+     */
+    create<T extends VendorCreateArgs>(args: SelectSubset<T, VendorCreateArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Vendors.
+     * @param {VendorCreateManyArgs} args - Arguments to create many Vendors.
+     * @example
+     * // Create many Vendors
+     * const vendor = await prisma.vendor.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends VendorCreateManyArgs>(args?: SelectSubset<T, VendorCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Vendor.
+     * @param {VendorDeleteArgs} args - Arguments to delete one Vendor.
+     * @example
+     * // Delete one Vendor
+     * const Vendor = await prisma.vendor.delete({
+     *   where: {
+     *     // ... filter to delete one Vendor
+     *   }
+     * })
+     * 
+     */
+    delete<T extends VendorDeleteArgs>(args: SelectSubset<T, VendorDeleteArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Vendor.
+     * @param {VendorUpdateArgs} args - Arguments to update one Vendor.
+     * @example
+     * // Update one Vendor
+     * const vendor = await prisma.vendor.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends VendorUpdateArgs>(args: SelectSubset<T, VendorUpdateArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Vendors.
+     * @param {VendorDeleteManyArgs} args - Arguments to filter Vendors to delete.
+     * @example
+     * // Delete a few Vendors
+     * const { count } = await prisma.vendor.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends VendorDeleteManyArgs>(args?: SelectSubset<T, VendorDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Vendors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Vendors
+     * const vendor = await prisma.vendor.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends VendorUpdateManyArgs>(args: SelectSubset<T, VendorUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Vendor.
+     * @param {VendorUpsertArgs} args - Arguments to update or create a Vendor.
+     * @example
+     * // Update or create a Vendor
+     * const vendor = await prisma.vendor.upsert({
+     *   create: {
+     *     // ... data to create a Vendor
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Vendor we want to update
+     *   }
+     * })
+     */
+    upsert<T extends VendorUpsertArgs>(args: SelectSubset<T, VendorUpsertArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Vendors.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorCountArgs} args - Arguments to filter Vendors to count.
+     * @example
+     * // Count the number of Vendors
+     * const count = await prisma.vendor.count({
+     *   where: {
+     *     // ... the filter for the Vendors we want to count
+     *   }
+     * })
+    **/
+    count<T extends VendorCountArgs>(
+      args?: Subset<T, VendorCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], VendorCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Vendor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends VendorAggregateArgs>(args: Subset<T, VendorAggregateArgs>): Prisma.PrismaPromise<GetVendorAggregateType<T>>
+
+    /**
+     * Group by Vendor.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {VendorGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends VendorGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: VendorGroupByArgs['orderBy'] }
+        : { orderBy?: VendorGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, VendorGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetVendorGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Vendor model
+   */
+  readonly fields: VendorFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Vendor.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__VendorClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    transactionInfos<T extends Vendor$transactionInfosArgs<ExtArgs> = {}>(args?: Subset<T, Vendor$transactionInfosArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionInfoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Vendor model
+   */
+  interface VendorFieldRefs {
+    readonly id: FieldRef<"Vendor", 'Int'>
+    readonly name: FieldRef<"Vendor", 'String'>
+    readonly contactNo: FieldRef<"Vendor", 'String'>
+    readonly address: FieldRef<"Vendor", 'String'>
+    readonly openingDate: FieldRef<"Vendor", 'DateTime'>
+    readonly openingAmount: FieldRef<"Vendor", 'Float'>
+    readonly isDeleted: FieldRef<"Vendor", 'Boolean'>
+    readonly createdAt: FieldRef<"Vendor", 'DateTime'>
+    readonly updatedAt: FieldRef<"Vendor", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Vendor findUnique
+   */
+  export type VendorFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * Filter, which Vendor to fetch.
+     */
+    where: VendorWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor findUniqueOrThrow
+   */
+  export type VendorFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * Filter, which Vendor to fetch.
+     */
+    where: VendorWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor findFirst
+   */
+  export type VendorFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * Filter, which Vendor to fetch.
+     */
+    where?: VendorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vendors to fetch.
+     */
+    orderBy?: VendorOrderByWithRelationInput | VendorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Vendors.
+     */
+    cursor?: VendorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vendors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vendors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Vendors.
+     */
+    distinct?: VendorScalarFieldEnum | VendorScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor findFirstOrThrow
+   */
+  export type VendorFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * Filter, which Vendor to fetch.
+     */
+    where?: VendorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vendors to fetch.
+     */
+    orderBy?: VendorOrderByWithRelationInput | VendorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Vendors.
+     */
+    cursor?: VendorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vendors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vendors.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Vendors.
+     */
+    distinct?: VendorScalarFieldEnum | VendorScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor findMany
+   */
+  export type VendorFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * Filter, which Vendors to fetch.
+     */
+    where?: VendorWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Vendors to fetch.
+     */
+    orderBy?: VendorOrderByWithRelationInput | VendorOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Vendors.
+     */
+    cursor?: VendorWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Vendors from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Vendors.
+     */
+    skip?: number
+    distinct?: VendorScalarFieldEnum | VendorScalarFieldEnum[]
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor create
+   */
+  export type VendorCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Vendor.
+     */
+    data: XOR<VendorCreateInput, VendorUncheckedCreateInput>
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor createMany
+   */
+  export type VendorCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Vendors.
+     */
+    data: VendorCreateManyInput | VendorCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Vendor update
+   */
+  export type VendorUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Vendor.
+     */
+    data: XOR<VendorUpdateInput, VendorUncheckedUpdateInput>
+    /**
+     * Choose, which Vendor to update.
+     */
+    where: VendorWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor updateMany
+   */
+  export type VendorUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Vendors.
+     */
+    data: XOR<VendorUpdateManyMutationInput, VendorUncheckedUpdateManyInput>
+    /**
+     * Filter which Vendors to update
+     */
+    where?: VendorWhereInput
+    /**
+     * Limit how many Vendors to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Vendor upsert
+   */
+  export type VendorUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Vendor to update in case it exists.
+     */
+    where: VendorWhereUniqueInput
+    /**
+     * In case the Vendor found by the `where` argument doesn't exist, create a new Vendor with this data.
+     */
+    create: XOR<VendorCreateInput, VendorUncheckedCreateInput>
+    /**
+     * In case the Vendor was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<VendorUpdateInput, VendorUncheckedUpdateInput>
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor delete
+   */
+  export type VendorDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    /**
+     * Filter which Vendor to delete.
+     */
+    where: VendorWhereUniqueInput
+    relationLoadStrategy?: RelationLoadStrategy
+  }
+
+  /**
+   * Vendor deleteMany
+   */
+  export type VendorDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Vendors to delete
+     */
+    where?: VendorWhereInput
+    /**
+     * Limit how many Vendors to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Vendor.transactionInfos
+   */
+  export type Vendor$transactionInfosArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the TransactionInfo
+     */
+    select?: TransactionInfoSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the TransactionInfo
+     */
+    omit?: TransactionInfoOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TransactionInfoInclude<ExtArgs> | null
+    where?: TransactionInfoWhereInput
+    orderBy?: TransactionInfoOrderByWithRelationInput | TransactionInfoOrderByWithRelationInput[]
+    cursor?: TransactionInfoWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TransactionInfoScalarFieldEnum | TransactionInfoScalarFieldEnum[]
+  }
+
+  /**
+   * Vendor without action
+   */
+  export type VendorDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Model Worker
    */
 
@@ -18827,12 +19988,14 @@ export namespace Prisma {
     id: number | null
     partyId: number | null
     customerId: number | null
+    vendorId: number | null
   }
 
   export type TransactionInfoSumAggregateOutputType = {
     id: number | null
     partyId: number | null
     customerId: number | null
+    vendorId: number | null
   }
 
   export type TransactionInfoMinAggregateOutputType = {
@@ -18842,6 +20005,7 @@ export namespace Prisma {
     date: Date | null
     partyId: number | null
     customerId: number | null
+    vendorId: number | null
     voucherType: $Enums.VoucherType | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -18854,6 +20018,7 @@ export namespace Prisma {
     date: Date | null
     partyId: number | null
     customerId: number | null
+    vendorId: number | null
     voucherType: $Enums.VoucherType | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -18866,6 +20031,7 @@ export namespace Prisma {
     date: number
     partyId: number
     customerId: number
+    vendorId: number
     voucherType: number
     createdAt: number
     updatedAt: number
@@ -18877,12 +20043,14 @@ export namespace Prisma {
     id?: true
     partyId?: true
     customerId?: true
+    vendorId?: true
   }
 
   export type TransactionInfoSumAggregateInputType = {
     id?: true
     partyId?: true
     customerId?: true
+    vendorId?: true
   }
 
   export type TransactionInfoMinAggregateInputType = {
@@ -18892,6 +20060,7 @@ export namespace Prisma {
     date?: true
     partyId?: true
     customerId?: true
+    vendorId?: true
     voucherType?: true
     createdAt?: true
     updatedAt?: true
@@ -18904,6 +20073,7 @@ export namespace Prisma {
     date?: true
     partyId?: true
     customerId?: true
+    vendorId?: true
     voucherType?: true
     createdAt?: true
     updatedAt?: true
@@ -18916,6 +20086,7 @@ export namespace Prisma {
     date?: true
     partyId?: true
     customerId?: true
+    vendorId?: true
     voucherType?: true
     createdAt?: true
     updatedAt?: true
@@ -19015,6 +20186,7 @@ export namespace Prisma {
     date: Date | null
     partyId: number | null
     customerId: number | null
+    vendorId: number | null
     voucherType: $Enums.VoucherType
     createdAt: Date
     updatedAt: Date
@@ -19046,11 +20218,13 @@ export namespace Prisma {
     date?: boolean
     partyId?: boolean
     customerId?: boolean
+    vendorId?: boolean
     voucherType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     party?: boolean | TransactionInfo$partyArgs<ExtArgs>
     customer?: boolean | TransactionInfo$customerArgs<ExtArgs>
+    vendor?: boolean | TransactionInfo$vendorArgs<ExtArgs>
     bankTransaction?: boolean | TransactionInfo$bankTransactionArgs<ExtArgs>
     journal?: boolean | TransactionInfo$journalArgs<ExtArgs>
     logOrderItem?: boolean | TransactionInfo$logOrderItemArgs<ExtArgs>
@@ -19068,15 +20242,17 @@ export namespace Prisma {
     date?: boolean
     partyId?: boolean
     customerId?: boolean
+    vendorId?: boolean
     voucherType?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type TransactionInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "voucherNo" | "invoiceNo" | "date" | "partyId" | "customerId" | "voucherType" | "createdAt" | "updatedAt", ExtArgs["result"]["transactionInfo"]>
+  export type TransactionInfoOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "voucherNo" | "invoiceNo" | "date" | "partyId" | "customerId" | "vendorId" | "voucherType" | "createdAt" | "updatedAt", ExtArgs["result"]["transactionInfo"]>
   export type TransactionInfoInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     party?: boolean | TransactionInfo$partyArgs<ExtArgs>
     customer?: boolean | TransactionInfo$customerArgs<ExtArgs>
+    vendor?: boolean | TransactionInfo$vendorArgs<ExtArgs>
     bankTransaction?: boolean | TransactionInfo$bankTransactionArgs<ExtArgs>
     journal?: boolean | TransactionInfo$journalArgs<ExtArgs>
     logOrderItem?: boolean | TransactionInfo$logOrderItemArgs<ExtArgs>
@@ -19090,6 +20266,7 @@ export namespace Prisma {
     objects: {
       party: Prisma.$PartyPayload<ExtArgs> | null
       customer: Prisma.$CustomerPayload<ExtArgs> | null
+      vendor: Prisma.$VendorPayload<ExtArgs> | null
       bankTransaction: Prisma.$BankTransactionPayload<ExtArgs>[]
       journal: Prisma.$JournalPayload<ExtArgs>[]
       logOrderItem: Prisma.$LogOrderItemPayload<ExtArgs>[]
@@ -19103,6 +20280,7 @@ export namespace Prisma {
       date: Date | null
       partyId: number | null
       customerId: number | null
+      vendorId: number | null
       voucherType: $Enums.VoucherType
       createdAt: Date
       updatedAt: Date
@@ -19448,6 +20626,7 @@ export namespace Prisma {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     party<T extends TransactionInfo$partyArgs<ExtArgs> = {}>(args?: Subset<T, TransactionInfo$partyArgs<ExtArgs>>): Prisma__PartyClient<$Result.GetResult<Prisma.$PartyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     customer<T extends TransactionInfo$customerArgs<ExtArgs> = {}>(args?: Subset<T, TransactionInfo$customerArgs<ExtArgs>>): Prisma__CustomerClient<$Result.GetResult<Prisma.$CustomerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    vendor<T extends TransactionInfo$vendorArgs<ExtArgs> = {}>(args?: Subset<T, TransactionInfo$vendorArgs<ExtArgs>>): Prisma__VendorClient<$Result.GetResult<Prisma.$VendorPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     bankTransaction<T extends TransactionInfo$bankTransactionArgs<ExtArgs> = {}>(args?: Subset<T, TransactionInfo$bankTransactionArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BankTransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     journal<T extends TransactionInfo$journalArgs<ExtArgs> = {}>(args?: Subset<T, TransactionInfo$journalArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$JournalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     logOrderItem<T extends TransactionInfo$logOrderItemArgs<ExtArgs> = {}>(args?: Subset<T, TransactionInfo$logOrderItemArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$LogOrderItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -19488,6 +20667,7 @@ export namespace Prisma {
     readonly date: FieldRef<"TransactionInfo", 'DateTime'>
     readonly partyId: FieldRef<"TransactionInfo", 'Int'>
     readonly customerId: FieldRef<"TransactionInfo", 'Int'>
+    readonly vendorId: FieldRef<"TransactionInfo", 'Int'>
     readonly voucherType: FieldRef<"TransactionInfo", 'VoucherType'>
     readonly createdAt: FieldRef<"TransactionInfo", 'DateTime'>
     readonly updatedAt: FieldRef<"TransactionInfo", 'DateTime'>
@@ -19878,6 +21058,25 @@ export namespace Prisma {
      */
     include?: CustomerInclude<ExtArgs> | null
     where?: CustomerWhereInput
+  }
+
+  /**
+   * TransactionInfo.vendor
+   */
+  export type TransactionInfo$vendorArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Vendor
+     */
+    select?: VendorSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Vendor
+     */
+    omit?: VendorOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: VendorInclude<ExtArgs> | null
+    where?: VendorWhereInput
   }
 
   /**
@@ -26491,6 +27690,21 @@ export namespace Prisma {
   export type PartyScalarFieldEnum = (typeof PartyScalarFieldEnum)[keyof typeof PartyScalarFieldEnum]
 
 
+  export const VendorScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    contactNo: 'contactNo',
+    address: 'address',
+    openingDate: 'openingDate',
+    openingAmount: 'openingAmount',
+    isDeleted: 'isDeleted',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type VendorScalarFieldEnum = (typeof VendorScalarFieldEnum)[keyof typeof VendorScalarFieldEnum]
+
+
   export const WorkerScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -26616,6 +27830,7 @@ export namespace Prisma {
     date: 'date',
     partyId: 'partyId',
     customerId: 'customerId',
+    vendorId: 'vendorId',
     voucherType: 'voucherType',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -26795,6 +28010,15 @@ export namespace Prisma {
   };
 
   export type PartyOrderByRelevanceFieldEnum = (typeof PartyOrderByRelevanceFieldEnum)[keyof typeof PartyOrderByRelevanceFieldEnum]
+
+
+  export const VendorOrderByRelevanceFieldEnum: {
+    name: 'name',
+    contactNo: 'contactNo',
+    address: 'address'
+  };
+
+  export type VendorOrderByRelevanceFieldEnum = (typeof VendorOrderByRelevanceFieldEnum)[keyof typeof VendorOrderByRelevanceFieldEnum]
 
 
   export const WorkerOrderByRelevanceFieldEnum: {
@@ -27511,6 +28735,84 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"Party"> | Date | string
   }
 
+  export type VendorWhereInput = {
+    AND?: VendorWhereInput | VendorWhereInput[]
+    OR?: VendorWhereInput[]
+    NOT?: VendorWhereInput | VendorWhereInput[]
+    id?: IntFilter<"Vendor"> | number
+    name?: StringFilter<"Vendor"> | string
+    contactNo?: StringFilter<"Vendor"> | string
+    address?: StringFilter<"Vendor"> | string
+    openingDate?: DateTimeNullableFilter<"Vendor"> | Date | string | null
+    openingAmount?: FloatNullableFilter<"Vendor"> | number | null
+    isDeleted?: BoolFilter<"Vendor"> | boolean
+    createdAt?: DateTimeFilter<"Vendor"> | Date | string
+    updatedAt?: DateTimeFilter<"Vendor"> | Date | string
+    transactionInfos?: TransactionInfoListRelationFilter
+  }
+
+  export type VendorOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactNo?: SortOrder
+    address?: SortOrder
+    openingDate?: SortOrderInput | SortOrder
+    openingAmount?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    transactionInfos?: TransactionInfoOrderByRelationAggregateInput
+    _relevance?: VendorOrderByRelevanceInput
+  }
+
+  export type VendorWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: VendorWhereInput | VendorWhereInput[]
+    OR?: VendorWhereInput[]
+    NOT?: VendorWhereInput | VendorWhereInput[]
+    name?: StringFilter<"Vendor"> | string
+    contactNo?: StringFilter<"Vendor"> | string
+    address?: StringFilter<"Vendor"> | string
+    openingDate?: DateTimeNullableFilter<"Vendor"> | Date | string | null
+    openingAmount?: FloatNullableFilter<"Vendor"> | number | null
+    isDeleted?: BoolFilter<"Vendor"> | boolean
+    createdAt?: DateTimeFilter<"Vendor"> | Date | string
+    updatedAt?: DateTimeFilter<"Vendor"> | Date | string
+    transactionInfos?: TransactionInfoListRelationFilter
+  }, "id">
+
+  export type VendorOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactNo?: SortOrder
+    address?: SortOrder
+    openingDate?: SortOrderInput | SortOrder
+    openingAmount?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: VendorCountOrderByAggregateInput
+    _avg?: VendorAvgOrderByAggregateInput
+    _max?: VendorMaxOrderByAggregateInput
+    _min?: VendorMinOrderByAggregateInput
+    _sum?: VendorSumOrderByAggregateInput
+  }
+
+  export type VendorScalarWhereWithAggregatesInput = {
+    AND?: VendorScalarWhereWithAggregatesInput | VendorScalarWhereWithAggregatesInput[]
+    OR?: VendorScalarWhereWithAggregatesInput[]
+    NOT?: VendorScalarWhereWithAggregatesInput | VendorScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Vendor"> | number
+    name?: StringWithAggregatesFilter<"Vendor"> | string
+    contactNo?: StringWithAggregatesFilter<"Vendor"> | string
+    address?: StringWithAggregatesFilter<"Vendor"> | string
+    openingDate?: DateTimeNullableWithAggregatesFilter<"Vendor"> | Date | string | null
+    openingAmount?: FloatNullableWithAggregatesFilter<"Vendor"> | number | null
+    isDeleted?: BoolWithAggregatesFilter<"Vendor"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"Vendor"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"Vendor"> | Date | string
+  }
+
   export type WorkerWhereInput = {
     AND?: WorkerWhereInput | WorkerWhereInput[]
     OR?: WorkerWhereInput[]
@@ -28149,11 +29451,13 @@ export namespace Prisma {
     date?: DateTimeNullableFilter<"TransactionInfo"> | Date | string | null
     partyId?: IntNullableFilter<"TransactionInfo"> | number | null
     customerId?: IntNullableFilter<"TransactionInfo"> | number | null
+    vendorId?: IntNullableFilter<"TransactionInfo"> | number | null
     voucherType?: EnumVoucherTypeFilter<"TransactionInfo"> | $Enums.VoucherType
     createdAt?: DateTimeFilter<"TransactionInfo"> | Date | string
     updatedAt?: DateTimeFilter<"TransactionInfo"> | Date | string
     party?: XOR<PartyNullableScalarRelationFilter, PartyWhereInput> | null
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
+    vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
     bankTransaction?: BankTransactionListRelationFilter
     journal?: JournalListRelationFilter
     logOrderItem?: LogOrderItemListRelationFilter
@@ -28168,11 +29472,13 @@ export namespace Prisma {
     date?: SortOrderInput | SortOrder
     partyId?: SortOrderInput | SortOrder
     customerId?: SortOrderInput | SortOrder
+    vendorId?: SortOrderInput | SortOrder
     voucherType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     party?: PartyOrderByWithRelationInput
     customer?: CustomerOrderByWithRelationInput
+    vendor?: VendorOrderByWithRelationInput
     bankTransaction?: BankTransactionOrderByRelationAggregateInput
     journal?: JournalOrderByRelationAggregateInput
     logOrderItem?: LogOrderItemOrderByRelationAggregateInput
@@ -28191,11 +29497,13 @@ export namespace Prisma {
     date?: DateTimeNullableFilter<"TransactionInfo"> | Date | string | null
     partyId?: IntNullableFilter<"TransactionInfo"> | number | null
     customerId?: IntNullableFilter<"TransactionInfo"> | number | null
+    vendorId?: IntNullableFilter<"TransactionInfo"> | number | null
     voucherType?: EnumVoucherTypeFilter<"TransactionInfo"> | $Enums.VoucherType
     createdAt?: DateTimeFilter<"TransactionInfo"> | Date | string
     updatedAt?: DateTimeFilter<"TransactionInfo"> | Date | string
     party?: XOR<PartyNullableScalarRelationFilter, PartyWhereInput> | null
     customer?: XOR<CustomerNullableScalarRelationFilter, CustomerWhereInput> | null
+    vendor?: XOR<VendorNullableScalarRelationFilter, VendorWhereInput> | null
     bankTransaction?: BankTransactionListRelationFilter
     journal?: JournalListRelationFilter
     logOrderItem?: LogOrderItemListRelationFilter
@@ -28210,6 +29518,7 @@ export namespace Prisma {
     date?: SortOrderInput | SortOrder
     partyId?: SortOrderInput | SortOrder
     customerId?: SortOrderInput | SortOrder
+    vendorId?: SortOrderInput | SortOrder
     voucherType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -28230,6 +29539,7 @@ export namespace Prisma {
     date?: DateTimeNullableWithAggregatesFilter<"TransactionInfo"> | Date | string | null
     partyId?: IntNullableWithAggregatesFilter<"TransactionInfo"> | number | null
     customerId?: IntNullableWithAggregatesFilter<"TransactionInfo"> | number | null
+    vendorId?: IntNullableWithAggregatesFilter<"TransactionInfo"> | number | null
     voucherType?: EnumVoucherTypeWithAggregatesFilter<"TransactionInfo"> | $Enums.VoucherType
     createdAt?: DateTimeWithAggregatesFilter<"TransactionInfo"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"TransactionInfo"> | Date | string
@@ -29269,6 +30579,91 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type VendorCreateInput = {
+    name: string
+    contactNo: string
+    address: string
+    openingDate?: Date | string | null
+    openingAmount?: number | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactionInfos?: TransactionInfoCreateNestedManyWithoutVendorInput
+  }
+
+  export type VendorUncheckedCreateInput = {
+    id?: number
+    name: string
+    contactNo: string
+    address: string
+    openingDate?: Date | string | null
+    openingAmount?: number | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    transactionInfos?: TransactionInfoUncheckedCreateNestedManyWithoutVendorInput
+  }
+
+  export type VendorUpdateInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    contactNo?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    openingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openingAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactionInfos?: TransactionInfoUpdateManyWithoutVendorNestedInput
+  }
+
+  export type VendorUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contactNo?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    openingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openingAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transactionInfos?: TransactionInfoUncheckedUpdateManyWithoutVendorNestedInput
+  }
+
+  export type VendorCreateManyInput = {
+    id?: number
+    name: string
+    contactNo: string
+    address: string
+    openingDate?: Date | string | null
+    openingAmount?: number | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VendorUpdateManyMutationInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    contactNo?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    openingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openingAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contactNo?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    openingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openingAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type WorkerCreateInput = {
     name: string
     phone: string
@@ -29948,6 +31343,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     party?: PartyCreateNestedOneWithoutTransactionInfosInput
     customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
     journal?: JournalCreateNestedManyWithoutTransactionInfoInput
     logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
@@ -29962,6 +31358,7 @@ export namespace Prisma {
     date?: Date | string | null
     partyId?: number | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -29981,6 +31378,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     party?: PartyUpdateOneWithoutTransactionInfosNestedInput
     customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
     journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
     logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
@@ -29995,6 +31393,7 @@ export namespace Prisma {
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -30012,6 +31411,7 @@ export namespace Prisma {
     date?: Date | string | null
     partyId?: number | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -30033,6 +31433,7 @@ export namespace Prisma {
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -31192,6 +32593,58 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
+  export type VendorOrderByRelevanceInput = {
+    fields: VendorOrderByRelevanceFieldEnum | VendorOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type VendorCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactNo?: SortOrder
+    address?: SortOrder
+    openingDate?: SortOrder
+    openingAmount?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VendorAvgOrderByAggregateInput = {
+    id?: SortOrder
+    openingAmount?: SortOrder
+  }
+
+  export type VendorMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactNo?: SortOrder
+    address?: SortOrder
+    openingDate?: SortOrder
+    openingAmount?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VendorMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    contactNo?: SortOrder
+    address?: SortOrder
+    openingDate?: SortOrder
+    openingAmount?: SortOrder
+    isDeleted?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type VendorSumOrderByAggregateInput = {
+    id?: SortOrder
+    openingAmount?: SortOrder
+  }
+
   export type WorkerOrderByRelevanceInput = {
     fields: WorkerOrderByRelevanceFieldEnum | WorkerOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -31768,6 +33221,11 @@ export namespace Prisma {
     isNot?: CustomerWhereInput | null
   }
 
+  export type VendorNullableScalarRelationFilter = {
+    is?: VendorWhereInput | null
+    isNot?: VendorWhereInput | null
+  }
+
   export type LogOrderItemListRelationFilter = {
     every?: LogOrderItemWhereInput
     some?: LogOrderItemWhereInput
@@ -31801,6 +33259,7 @@ export namespace Prisma {
     date?: SortOrder
     partyId?: SortOrder
     customerId?: SortOrder
+    vendorId?: SortOrder
     voucherType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -31810,6 +33269,7 @@ export namespace Prisma {
     id?: SortOrder
     partyId?: SortOrder
     customerId?: SortOrder
+    vendorId?: SortOrder
   }
 
   export type TransactionInfoMaxOrderByAggregateInput = {
@@ -31819,6 +33279,7 @@ export namespace Prisma {
     date?: SortOrder
     partyId?: SortOrder
     customerId?: SortOrder
+    vendorId?: SortOrder
     voucherType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -31831,6 +33292,7 @@ export namespace Prisma {
     date?: SortOrder
     partyId?: SortOrder
     customerId?: SortOrder
+    vendorId?: SortOrder
     voucherType?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -31840,6 +33302,7 @@ export namespace Prisma {
     id?: SortOrder
     partyId?: SortOrder
     customerId?: SortOrder
+    vendorId?: SortOrder
   }
 
   export type EnumVoucherTypeWithAggregatesFilter<$PrismaModel = never> = {
@@ -32593,6 +34056,48 @@ export namespace Prisma {
     deleteMany?: TransactionInfoScalarWhereInput | TransactionInfoScalarWhereInput[]
   }
 
+  export type TransactionInfoCreateNestedManyWithoutVendorInput = {
+    create?: XOR<TransactionInfoCreateWithoutVendorInput, TransactionInfoUncheckedCreateWithoutVendorInput> | TransactionInfoCreateWithoutVendorInput[] | TransactionInfoUncheckedCreateWithoutVendorInput[]
+    connectOrCreate?: TransactionInfoCreateOrConnectWithoutVendorInput | TransactionInfoCreateOrConnectWithoutVendorInput[]
+    createMany?: TransactionInfoCreateManyVendorInputEnvelope
+    connect?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+  }
+
+  export type TransactionInfoUncheckedCreateNestedManyWithoutVendorInput = {
+    create?: XOR<TransactionInfoCreateWithoutVendorInput, TransactionInfoUncheckedCreateWithoutVendorInput> | TransactionInfoCreateWithoutVendorInput[] | TransactionInfoUncheckedCreateWithoutVendorInput[]
+    connectOrCreate?: TransactionInfoCreateOrConnectWithoutVendorInput | TransactionInfoCreateOrConnectWithoutVendorInput[]
+    createMany?: TransactionInfoCreateManyVendorInputEnvelope
+    connect?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+  }
+
+  export type TransactionInfoUpdateManyWithoutVendorNestedInput = {
+    create?: XOR<TransactionInfoCreateWithoutVendorInput, TransactionInfoUncheckedCreateWithoutVendorInput> | TransactionInfoCreateWithoutVendorInput[] | TransactionInfoUncheckedCreateWithoutVendorInput[]
+    connectOrCreate?: TransactionInfoCreateOrConnectWithoutVendorInput | TransactionInfoCreateOrConnectWithoutVendorInput[]
+    upsert?: TransactionInfoUpsertWithWhereUniqueWithoutVendorInput | TransactionInfoUpsertWithWhereUniqueWithoutVendorInput[]
+    createMany?: TransactionInfoCreateManyVendorInputEnvelope
+    set?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    disconnect?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    delete?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    connect?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    update?: TransactionInfoUpdateWithWhereUniqueWithoutVendorInput | TransactionInfoUpdateWithWhereUniqueWithoutVendorInput[]
+    updateMany?: TransactionInfoUpdateManyWithWhereWithoutVendorInput | TransactionInfoUpdateManyWithWhereWithoutVendorInput[]
+    deleteMany?: TransactionInfoScalarWhereInput | TransactionInfoScalarWhereInput[]
+  }
+
+  export type TransactionInfoUncheckedUpdateManyWithoutVendorNestedInput = {
+    create?: XOR<TransactionInfoCreateWithoutVendorInput, TransactionInfoUncheckedCreateWithoutVendorInput> | TransactionInfoCreateWithoutVendorInput[] | TransactionInfoUncheckedCreateWithoutVendorInput[]
+    connectOrCreate?: TransactionInfoCreateOrConnectWithoutVendorInput | TransactionInfoCreateOrConnectWithoutVendorInput[]
+    upsert?: TransactionInfoUpsertWithWhereUniqueWithoutVendorInput | TransactionInfoUpsertWithWhereUniqueWithoutVendorInput[]
+    createMany?: TransactionInfoCreateManyVendorInputEnvelope
+    set?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    disconnect?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    delete?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    connect?: TransactionInfoWhereUniqueInput | TransactionInfoWhereUniqueInput[]
+    update?: TransactionInfoUpdateWithWhereUniqueWithoutVendorInput | TransactionInfoUpdateWithWhereUniqueWithoutVendorInput[]
+    updateMany?: TransactionInfoUpdateManyWithWhereWithoutVendorInput | TransactionInfoUpdateManyWithWhereWithoutVendorInput[]
+    deleteMany?: TransactionInfoScalarWhereInput | TransactionInfoScalarWhereInput[]
+  }
+
   export type UnitCreateNestedOneWithoutProductInput = {
     create?: XOR<UnitCreateWithoutProductInput, UnitUncheckedCreateWithoutProductInput>
     connectOrCreate?: UnitCreateOrConnectWithoutProductInput
@@ -32955,6 +34460,12 @@ export namespace Prisma {
     connect?: CustomerWhereUniqueInput
   }
 
+  export type VendorCreateNestedOneWithoutTransactionInfosInput = {
+    create?: XOR<VendorCreateWithoutTransactionInfosInput, VendorUncheckedCreateWithoutTransactionInfosInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutTransactionInfosInput
+    connect?: VendorWhereUniqueInput
+  }
+
   export type BankTransactionCreateNestedManyWithoutTransactionInfoInput = {
     create?: XOR<BankTransactionCreateWithoutTransactionInfoInput, BankTransactionUncheckedCreateWithoutTransactionInfoInput> | BankTransactionCreateWithoutTransactionInfoInput[] | BankTransactionUncheckedCreateWithoutTransactionInfoInput[]
     connectOrCreate?: BankTransactionCreateOrConnectWithoutTransactionInfoInput | BankTransactionCreateOrConnectWithoutTransactionInfoInput[]
@@ -33047,6 +34558,16 @@ export namespace Prisma {
     delete?: CustomerWhereInput | boolean
     connect?: CustomerWhereUniqueInput
     update?: XOR<XOR<CustomerUpdateToOneWithWhereWithoutTransactionInfosInput, CustomerUpdateWithoutTransactionInfosInput>, CustomerUncheckedUpdateWithoutTransactionInfosInput>
+  }
+
+  export type VendorUpdateOneWithoutTransactionInfosNestedInput = {
+    create?: XOR<VendorCreateWithoutTransactionInfosInput, VendorUncheckedCreateWithoutTransactionInfosInput>
+    connectOrCreate?: VendorCreateOrConnectWithoutTransactionInfosInput
+    upsert?: VendorUpsertWithoutTransactionInfosInput
+    disconnect?: VendorWhereInput | boolean
+    delete?: VendorWhereInput | boolean
+    connect?: VendorWhereUniqueInput
+    update?: XOR<XOR<VendorUpdateToOneWithWhereWithoutTransactionInfosInput, VendorUpdateWithoutTransactionInfosInput>, VendorUncheckedUpdateWithoutTransactionInfosInput>
   }
 
   export type BankTransactionUpdateManyWithoutTransactionInfoNestedInput = {
@@ -34320,6 +35841,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
     journal?: JournalCreateNestedManyWithoutTransactionInfoInput
     logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
@@ -34333,6 +35855,7 @@ export namespace Prisma {
     invoiceNo?: string | null
     date?: Date | string | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34379,9 +35902,69 @@ export namespace Prisma {
     date?: DateTimeNullableFilter<"TransactionInfo"> | Date | string | null
     partyId?: IntNullableFilter<"TransactionInfo"> | number | null
     customerId?: IntNullableFilter<"TransactionInfo"> | number | null
+    vendorId?: IntNullableFilter<"TransactionInfo"> | number | null
     voucherType?: EnumVoucherTypeFilter<"TransactionInfo"> | $Enums.VoucherType
     createdAt?: DateTimeFilter<"TransactionInfo"> | Date | string
     updatedAt?: DateTimeFilter<"TransactionInfo"> | Date | string
+  }
+
+  export type TransactionInfoCreateWithoutVendorInput = {
+    voucherNo: string
+    invoiceNo?: string | null
+    date?: Date | string | null
+    voucherType: $Enums.VoucherType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    party?: PartyCreateNestedOneWithoutTransactionInfosInput
+    customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
+    journal?: JournalCreateNestedManyWithoutTransactionInfoInput
+    logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
+    logOrdByCategory?: LogOrdByCategoryCreateNestedManyWithoutTransactionInfoInput
+    inventory?: InventoryCreateNestedManyWithoutTransactionInfoInput
+  }
+
+  export type TransactionInfoUncheckedCreateWithoutVendorInput = {
+    id?: number
+    voucherNo: string
+    invoiceNo?: string | null
+    date?: Date | string | null
+    partyId?: number | null
+    customerId?: number | null
+    voucherType: $Enums.VoucherType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    bankTransaction?: BankTransactionUncheckedCreateNestedManyWithoutTransactionInfoInput
+    journal?: JournalUncheckedCreateNestedManyWithoutTransactionInfoInput
+    logOrderItem?: LogOrderItemUncheckedCreateNestedManyWithoutTransactionInfoInput
+    logOrdByCategory?: LogOrdByCategoryUncheckedCreateNestedManyWithoutTransactionInfoInput
+    inventory?: InventoryUncheckedCreateNestedManyWithoutTransactionInfoInput
+  }
+
+  export type TransactionInfoCreateOrConnectWithoutVendorInput = {
+    where: TransactionInfoWhereUniqueInput
+    create: XOR<TransactionInfoCreateWithoutVendorInput, TransactionInfoUncheckedCreateWithoutVendorInput>
+  }
+
+  export type TransactionInfoCreateManyVendorInputEnvelope = {
+    data: TransactionInfoCreateManyVendorInput | TransactionInfoCreateManyVendorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type TransactionInfoUpsertWithWhereUniqueWithoutVendorInput = {
+    where: TransactionInfoWhereUniqueInput
+    update: XOR<TransactionInfoUpdateWithoutVendorInput, TransactionInfoUncheckedUpdateWithoutVendorInput>
+    create: XOR<TransactionInfoCreateWithoutVendorInput, TransactionInfoUncheckedCreateWithoutVendorInput>
+  }
+
+  export type TransactionInfoUpdateWithWhereUniqueWithoutVendorInput = {
+    where: TransactionInfoWhereUniqueInput
+    data: XOR<TransactionInfoUpdateWithoutVendorInput, TransactionInfoUncheckedUpdateWithoutVendorInput>
+  }
+
+  export type TransactionInfoUpdateManyWithWhereWithoutVendorInput = {
+    where: TransactionInfoScalarWhereInput
+    data: XOR<TransactionInfoUpdateManyMutationInput, TransactionInfoUncheckedUpdateManyWithoutVendorInput>
   }
 
   export type UnitCreateWithoutProductInput = {
@@ -34673,6 +36256,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     party?: PartyCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
     journal?: JournalCreateNestedManyWithoutTransactionInfoInput
     logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
@@ -34686,6 +36270,7 @@ export namespace Prisma {
     invoiceNo?: string | null
     date?: Date | string | null
     partyId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34817,6 +36402,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     party?: PartyCreateNestedOneWithoutTransactionInfosInput
     customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     journal?: JournalCreateNestedManyWithoutTransactionInfoInput
     logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
     logOrdByCategory?: LogOrdByCategoryCreateNestedManyWithoutTransactionInfoInput
@@ -34830,6 +36416,7 @@ export namespace Prisma {
     date?: Date | string | null
     partyId?: number | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -34894,6 +36481,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     party?: PartyUpdateOneWithoutTransactionInfosNestedInput
     customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
     logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
     logOrdByCategory?: LogOrdByCategoryUpdateManyWithoutTransactionInfoNestedInput
@@ -34907,6 +36495,7 @@ export namespace Prisma {
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35030,6 +36619,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     party?: PartyCreateNestedOneWithoutTransactionInfosInput
     customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
     journal?: JournalCreateNestedManyWithoutTransactionInfoInput
     logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
@@ -35043,6 +36633,7 @@ export namespace Prisma {
     date?: Date | string | null
     partyId?: number | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -35196,6 +36787,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     party?: PartyUpdateOneWithoutTransactionInfosNestedInput
     customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
     journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
     logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
@@ -35209,6 +36801,7 @@ export namespace Prisma {
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35270,6 +36863,34 @@ export namespace Prisma {
   export type CustomerCreateOrConnectWithoutTransactionInfosInput = {
     where: CustomerWhereUniqueInput
     create: XOR<CustomerCreateWithoutTransactionInfosInput, CustomerUncheckedCreateWithoutTransactionInfosInput>
+  }
+
+  export type VendorCreateWithoutTransactionInfosInput = {
+    name: string
+    contactNo: string
+    address: string
+    openingDate?: Date | string | null
+    openingAmount?: number | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VendorUncheckedCreateWithoutTransactionInfosInput = {
+    id?: number
+    name: string
+    contactNo: string
+    address: string
+    openingDate?: Date | string | null
+    openingAmount?: number | null
+    isDeleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type VendorCreateOrConnectWithoutTransactionInfosInput = {
+    where: VendorWhereUniqueInput
+    create: XOR<VendorCreateWithoutTransactionInfosInput, VendorUncheckedCreateWithoutTransactionInfosInput>
   }
 
   export type BankTransactionCreateWithoutTransactionInfoInput = {
@@ -35515,6 +37136,40 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type VendorUpsertWithoutTransactionInfosInput = {
+    update: XOR<VendorUpdateWithoutTransactionInfosInput, VendorUncheckedUpdateWithoutTransactionInfosInput>
+    create: XOR<VendorCreateWithoutTransactionInfosInput, VendorUncheckedCreateWithoutTransactionInfosInput>
+    where?: VendorWhereInput
+  }
+
+  export type VendorUpdateToOneWithWhereWithoutTransactionInfosInput = {
+    where?: VendorWhereInput
+    data: XOR<VendorUpdateWithoutTransactionInfosInput, VendorUncheckedUpdateWithoutTransactionInfosInput>
+  }
+
+  export type VendorUpdateWithoutTransactionInfosInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    contactNo?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    openingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openingAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type VendorUncheckedUpdateWithoutTransactionInfosInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    contactNo?: StringFieldUpdateOperationsInput | string
+    address?: StringFieldUpdateOperationsInput | string
+    openingDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    openingAmount?: NullableFloatFieldUpdateOperationsInput | number | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BankTransactionUpsertWithWhereUniqueWithoutTransactionInfoInput = {
     where: BankTransactionWhereUniqueInput
     update: XOR<BankTransactionUpdateWithoutTransactionInfoInput, BankTransactionUncheckedUpdateWithoutTransactionInfoInput>
@@ -35636,6 +37291,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     party?: PartyCreateNestedOneWithoutTransactionInfosInput
     customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
     logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
     logOrdByCategory?: LogOrdByCategoryCreateNestedManyWithoutTransactionInfoInput
@@ -35649,6 +37305,7 @@ export namespace Prisma {
     date?: Date | string | null
     partyId?: number | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -35705,6 +37362,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     party?: PartyUpdateOneWithoutTransactionInfosNestedInput
     customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
     logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
     logOrdByCategory?: LogOrdByCategoryUpdateManyWithoutTransactionInfoNestedInput
@@ -35718,6 +37376,7 @@ export namespace Prisma {
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35978,6 +37637,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     party?: PartyCreateNestedOneWithoutTransactionInfosInput
     customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
     journal?: JournalCreateNestedManyWithoutTransactionInfoInput
     logOrdByCategory?: LogOrdByCategoryCreateNestedManyWithoutTransactionInfoInput
@@ -35991,6 +37651,7 @@ export namespace Prisma {
     date?: Date | string | null
     partyId?: number | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36053,6 +37714,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     party?: PartyUpdateOneWithoutTransactionInfosNestedInput
     customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
     journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
     logOrdByCategory?: LogOrdByCategoryUpdateManyWithoutTransactionInfoNestedInput
@@ -36066,6 +37728,7 @@ export namespace Prisma {
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36167,6 +37830,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     party?: PartyCreateNestedOneWithoutTransactionInfosInput
     customer?: CustomerCreateNestedOneWithoutTransactionInfosInput
+    vendor?: VendorCreateNestedOneWithoutTransactionInfosInput
     bankTransaction?: BankTransactionCreateNestedManyWithoutTransactionInfoInput
     journal?: JournalCreateNestedManyWithoutTransactionInfoInput
     logOrderItem?: LogOrderItemCreateNestedManyWithoutTransactionInfoInput
@@ -36180,6 +37844,7 @@ export namespace Prisma {
     date?: Date | string | null
     partyId?: number | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36258,6 +37923,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     party?: PartyUpdateOneWithoutTransactionInfosNestedInput
     customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
     journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
     logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
@@ -36271,6 +37937,7 @@ export namespace Prisma {
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36762,6 +38429,7 @@ export namespace Prisma {
     invoiceNo?: string | null
     date?: Date | string | null
     customerId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36775,6 +38443,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
     journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
     logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
@@ -36788,6 +38457,7 @@ export namespace Prisma {
     invoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36803,6 +38473,64 @@ export namespace Prisma {
     voucherNo?: StringFieldUpdateOperationsInput | string
     invoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type TransactionInfoCreateManyVendorInput = {
+    id?: number
+    voucherNo: string
+    invoiceNo?: string | null
+    date?: Date | string | null
+    partyId?: number | null
+    customerId?: number | null
+    voucherType: $Enums.VoucherType
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type TransactionInfoUpdateWithoutVendorInput = {
+    voucherNo?: StringFieldUpdateOperationsInput | string
+    invoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    party?: PartyUpdateOneWithoutTransactionInfosNestedInput
+    customer?: CustomerUpdateOneWithoutTransactionInfosNestedInput
+    bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
+    journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
+    logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
+    logOrdByCategory?: LogOrdByCategoryUpdateManyWithoutTransactionInfoNestedInput
+    inventory?: InventoryUpdateManyWithoutTransactionInfoNestedInput
+  }
+
+  export type TransactionInfoUncheckedUpdateWithoutVendorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNo?: StringFieldUpdateOperationsInput | string
+    invoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    partyId?: NullableIntFieldUpdateOperationsInput | number | null
+    customerId?: NullableIntFieldUpdateOperationsInput | number | null
+    voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    bankTransaction?: BankTransactionUncheckedUpdateManyWithoutTransactionInfoNestedInput
+    journal?: JournalUncheckedUpdateManyWithoutTransactionInfoNestedInput
+    logOrderItem?: LogOrderItemUncheckedUpdateManyWithoutTransactionInfoNestedInput
+    logOrdByCategory?: LogOrdByCategoryUncheckedUpdateManyWithoutTransactionInfoNestedInput
+    inventory?: InventoryUncheckedUpdateManyWithoutTransactionInfoNestedInput
+  }
+
+  export type TransactionInfoUncheckedUpdateManyWithoutVendorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    voucherNo?: StringFieldUpdateOperationsInput | string
+    invoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
+    date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    partyId?: NullableIntFieldUpdateOperationsInput | number | null
     customerId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36953,6 +38681,7 @@ export namespace Prisma {
     invoiceNo?: string | null
     date?: Date | string | null
     partyId?: number | null
+    vendorId?: number | null
     voucherType: $Enums.VoucherType
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -36966,6 +38695,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     party?: PartyUpdateOneWithoutTransactionInfosNestedInput
+    vendor?: VendorUpdateOneWithoutTransactionInfosNestedInput
     bankTransaction?: BankTransactionUpdateManyWithoutTransactionInfoNestedInput
     journal?: JournalUpdateManyWithoutTransactionInfoNestedInput
     logOrderItem?: LogOrderItemUpdateManyWithoutTransactionInfoNestedInput
@@ -36979,6 +38709,7 @@ export namespace Prisma {
     invoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -36995,6 +38726,7 @@ export namespace Prisma {
     invoiceNo?: NullableStringFieldUpdateOperationsInput | string | null
     date?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     partyId?: NullableIntFieldUpdateOperationsInput | number | null
+    vendorId?: NullableIntFieldUpdateOperationsInput | number | null
     voucherType?: EnumVoucherTypeFieldUpdateOperationsInput | $Enums.VoucherType
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

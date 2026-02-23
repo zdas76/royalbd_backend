@@ -24,6 +24,7 @@ import { VoucherRoute } from "../modules/TransctionVoucher/transction.route";
 import { UserRoute } from "../modules/User/user.route";
 
 import { workerRoute } from "../modules/worker/worker.route";
+import { VendorRoute } from "../modules/Vendor/vendor.route";
 
 const router = express.Router();
 
@@ -127,6 +128,10 @@ const moduleRoutes = [
   {
     path: "/user",
     route: UserRoute,
+  },
+  {
+    path: "/vendor",
+    route: VendorRoute,
   }
 ];
 
