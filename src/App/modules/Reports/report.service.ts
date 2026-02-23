@@ -1,3 +1,4 @@
+import { AccountsItem } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
@@ -83,27 +84,27 @@ const partyLedgerReport = async (payload: {
     throw new AppError(StatusCodes.BAD_REQUEST, "Party not found");
   }
 
-  let accountsItemId;
+  let accountsItemId: number | undefined;
 
   if (payload.partyType === 'SUPPLIER') {
-
-    const accountsItem = await prisma.accountsItem.findFirst({
+    const accountsItem: AccountsItem | null = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
-          contains: "accounts payable"
+          contains: "accounts payable",
         },
       },
     });
-    accountsItemId = accountsItem?.id;
+    accountsItemId = accountsItem?.id
   } else if (payload.partyType === 'VENDOR') {
-    const accountsItem = await prisma.accountsItem.findFirst({
+    const accountsItems: AccountsItem | null = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
-          contains: "accounts receivable"
+          contains: "accounts receivable",
         },
       },
     });
-    accountsItemId = accountsItem?.id;
+    accountsItemId = accountsItems?.id
+
   }
 
   if (!accountsItemId) {
@@ -112,38 +113,30 @@ const partyLedgerReport = async (payload: {
 
   const result = await prisma.journal.findMany({
     where: {
-      accountsItemId: accountsItemId,
       transactionInfo: {
         partyId: party.id,
       },
+      accountsItemId: accountsItemId,
+
       date: {
-        gte: startDate ? new Date(startDate) : party.openingDate || new Date(),
+        gte: startDate ? new Date(startDate) : (party.openingDate || new Date()),
         lte: endDate ? new Date(endDate) : new Date(),
+      },
+    },
+    include: {
+      transactionInfo: {
+        select: {
+          voucherNo: true,
+          partyId: true,
+          voucherType: true,
+        },
       },
     },
     orderBy: {
       date: "asc",
     },
-    select: {
-      transactionInfo: {
-        select: {
-          id: true,
-          voucherNo: true,
-          invoiceNo: true,
-          partyId: true,
-          voucherType: true,
-        },
-      },
-      accountsItemId: true,
-      date: true,
-      creditAmount: true,
-      debitAmount: true,
-      narration: true,
-    },
-
   });
 
-  console.log(result, party);
 
   return { party, result };
 
