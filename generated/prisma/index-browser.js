@@ -205,18 +205,6 @@ exports.Prisma.PartyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.VendorScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  contactNo: 'contactNo',
-  address: 'address',
-  openingDate: 'openingDate',
-  openingAmount: 'openingAmount',
-  isDeleted: 'isDeleted',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.WorkerScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -321,7 +309,6 @@ exports.Prisma.TransactionInfoScalarFieldEnum = {
   date: 'date',
   partyId: 'partyId',
   customerId: 'customerId',
-  vendorId: 'vendorId',
   voucherType: 'voucherType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -452,12 +439,6 @@ exports.Prisma.PartyOrderByRelevanceFieldEnum = {
   address: 'address'
 };
 
-exports.Prisma.VendorOrderByRelevanceFieldEnum = {
-  name: 'name',
-  contactNo: 'contactNo',
-  address: 'address'
-};
-
 exports.Prisma.WorkerOrderByRelevanceFieldEnum = {
   name: 'name',
   phone: 'phone',
@@ -534,7 +515,6 @@ exports.EmployeeType = exports.$Enums.EmployeeType = {
 exports.PartyType = exports.$Enums.PartyType = {
   VENDOR: 'VENDOR',
   CUSTOMER: 'CUSTOMER',
-  SUPPLIER: 'SUPPLIER',
   PARTY: 'PARTY'
 };
 
@@ -563,7 +543,6 @@ exports.Prisma.ModelName = {
   User: 'User',
   Employee: 'Employee',
   Party: 'Party',
-  Vendor: 'Vendor',
   Worker: 'Worker',
   Product: 'Product',
   RawMaterial: 'RawMaterial',
