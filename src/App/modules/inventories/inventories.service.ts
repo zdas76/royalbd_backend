@@ -84,14 +84,14 @@ const updateInventory = async (id: number, payload: Inventory) => {
   });
 };
 
-const deleteInventory = async (id: number, payload: Inventory) => {
-  return console.log("first");
-};
+// const deleteInventory = async (id: number, payload: Inventory) => {
+//   return console.log("first");
+// };
 
 export const InventoryService = {
   getInventory,
   getInventoryById,
   getInventoryAggValueById,
   updateInventory,
-  deleteInventory,
+  // deleteInventory,
 };
