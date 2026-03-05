@@ -8,10 +8,8 @@ import AppError from "../../errors/AppError";
 import { Party, Prisma } from "../../../../generated/prisma";
 
 const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
-  const { page, limit, skip } = paginationHelper.Pagination(paginat);
-
+  const { page, limit, skip } = paginationHelper.Pagination(paginat); 
   const { searchTerm, ...filterData } = params;
-
   const andCondition: Prisma.PartyWhereInput[] = [];
 
   if (params.searchTerm) {
@@ -65,7 +63,6 @@ const createParty = async (payload: Party) => {
       isDeleted: false,
     },
   });
-
   if (isExist) {
     throw new AppError(StatusCodes.BAD_REQUEST, "This User Already Exist");
   }

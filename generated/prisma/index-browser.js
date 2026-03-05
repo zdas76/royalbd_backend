@@ -515,7 +515,7 @@ exports.EmployeeType = exports.$Enums.EmployeeType = {
 exports.PartyType = exports.$Enums.PartyType = {
   VENDOR: 'VENDOR',
   CUSTOMER: 'CUSTOMER',
-  PARTY: 'PARTY'
+  SUPPLIER: 'SUPPLIER'
 };
 
 exports.ItemType = exports.$Enums.ItemType = {
