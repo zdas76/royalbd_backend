@@ -10,7 +10,6 @@ const getInventory = async () => {
     orderBy: [{ productId: "asc" }, { rawId: "asc" }],
   });
 };
-
 const getInventoryById = async (id: number) => {
   return await prisma.inventory.findFirst({
     where: {
