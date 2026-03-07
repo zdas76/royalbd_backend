@@ -10,10 +10,16 @@ import { Party, Prisma } from "../../../../generated/prisma";
 const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
   const { page, limit, skip } = paginationHelper.Pagination(paginat);
   const { searchTerm, ...filterData } = params;
+
   const andCondition: Prisma.TransactionInfoWhereInput[] = [];
   if (params.searchTerm) {
     andCondition.push({
       OR: [
+        {
+          party: {
+            partyType: params?.partyType,
+          },
+        },
         {
           voucherNo: {
             contains: params.searchTerm,
@@ -29,8 +35,6 @@ const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
       ],
     });
   }
-
-
   if (Object.keys(filterData).length > 0) {
     const filterConditions = Object.keys(filterData)
       .map((key) => {
@@ -57,7 +61,6 @@ const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
       });
     }
   }
-
   const whereConditions: Prisma.TransactionInfoWhereInput =
     andCondition.length > 0 ? { AND: andCondition } : {};
 
@@ -74,8 +77,6 @@ const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
           createdAt: "desc",
         },
   });
-
-
   return result;
 };
 
