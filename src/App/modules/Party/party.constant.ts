@@ -1,3 +1,3 @@
-export const PartySearchAbleFields: string[] = ["name, constact"];
+export const PartySearchAbleFields: string[] = ["name", "contactNo"];
 
 export const partyfiltersFields: string[] = ["partyType", "searchTerm"];
