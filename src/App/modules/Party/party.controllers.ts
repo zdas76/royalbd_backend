@@ -21,6 +21,7 @@ const getPartyLedger = catchAsync(async (req: Request, res: Response) => {
 });
 
 const createParty = catchAsync(async (req: Request, res: Response) => {
+
   const result = await PartyService.createParty(req.body);
 
   sendResponse(res, {

@@ -24,12 +24,12 @@ exports.Prisma = Prisma
 exports.$Enums = {}
 
 /**
- * Prisma Client JS version: 7.3.0
- * Query Engine version: 9d6ad21cbbceab97458517b147a6a09ff43aa735
+ * Prisma Client JS version: 7.2.0
+ * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
  */
 Prisma.prismaVersion = {
-  client: "7.3.0",
-  engine: "9d6ad21cbbceab97458517b147a6a09ff43aa735"
+  client: "7.2.0",
+  engine: "0c8ef2ce45c83248ab3df073180d5eda9e8be7a3"
 }
 
 Prisma.PrismaClientKnownRequestError = () => {
@@ -205,18 +205,6 @@ exports.Prisma.PartyScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.VendorScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
-  contactNo: 'contactNo',
-  address: 'address',
-  openingDate: 'openingDate',
-  openingAmount: 'openingAmount',
-  isDeleted: 'isDeleted',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.WorkerScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -321,7 +309,6 @@ exports.Prisma.TransactionInfoScalarFieldEnum = {
   date: 'date',
   partyId: 'partyId',
   customerId: 'customerId',
-  vendorId: 'vendorId',
   voucherType: 'voucherType',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -452,12 +439,6 @@ exports.Prisma.PartyOrderByRelevanceFieldEnum = {
   address: 'address'
 };
 
-exports.Prisma.VendorOrderByRelevanceFieldEnum = {
-  name: 'name',
-  contactNo: 'contactNo',
-  address: 'address'
-};
-
 exports.Prisma.WorkerOrderByRelevanceFieldEnum = {
   name: 'name',
   phone: 'phone',
@@ -534,8 +515,7 @@ exports.EmployeeType = exports.$Enums.EmployeeType = {
 exports.PartyType = exports.$Enums.PartyType = {
   VENDOR: 'VENDOR',
   CUSTOMER: 'CUSTOMER',
-  SUPPLIER: 'SUPPLIER',
-  PARTY: 'PARTY'
+  SUPPLIER: 'SUPPLIER'
 };
 
 exports.ItemType = exports.$Enums.ItemType = {
@@ -563,7 +543,6 @@ exports.Prisma.ModelName = {
   User: 'User',
   Employee: 'Employee',
   Party: 'Party',
-  Vendor: 'Vendor',
   Worker: 'Worker',
   Product: 'Product',
   RawMaterial: 'RawMaterial',

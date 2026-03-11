@@ -6,9 +6,6 @@ import { StatusCodes } from "http-status-codes";
 
 const getCustomer = catchAsync(async (req: Request, res: Response) => {
   const contactNumber = req.query.contact as string;
-
-  console.log(req.query);
-
   const result = await CustomerService.getCustomer(contactNumber);
 
   sendResponse(res, {

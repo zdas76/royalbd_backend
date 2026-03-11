@@ -10,7 +10,6 @@ const getInventory = async () => {
     orderBy: [{ productId: "asc" }, { rawId: "asc" }],
   });
 };
-
 const getInventoryById = async (id: number) => {
   return await prisma.inventory.findFirst({
     where: {
@@ -84,14 +83,14 @@ const updateInventory = async (id: number, payload: Inventory) => {
   });
 };
 
-const deleteInventory = async (id: number, payload: Inventory) => {
-  return console.log("first");
-};
+// const deleteInventory = async (id: number, payload: Inventory) => {
+//   return console.log("first");
+// };
 
 export const InventoryService = {
   getInventory,
   getInventoryById,
   getInventoryAggValueById,
   updateInventory,
-  deleteInventory,
+  // deleteInventory,
 };

@@ -230,7 +230,6 @@ const createSalesVoucher = async (payload: any) => {
     }
 
     // step 2: prepiar inventory data
-
     const inventoryData = payload.salseItem.map((item: any) => ({
       transactionId: createTransactionInfo.id,
       productId: item.rawOrProductId,
@@ -255,7 +254,6 @@ const createSalesVoucher = async (payload: any) => {
     }
 
     let journalItems = [];
-
     payload.debitItem.map((item: any) => journalItems.push({
       transectionId: createTransactionInfo.id,
       accountsItemId: item.accountsItemId,

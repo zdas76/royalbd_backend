@@ -9,54 +9,79 @@ import { Party, Prisma } from "../../../../generated/prisma";
 
 const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
   const { page, limit, skip } = paginationHelper.Pagination(paginat);
-
   const { searchTerm, ...filterData } = params;
 
-  const andCondition: Prisma.PartyWhereInput[] = [];
-
+  const andCondition: Prisma.TransactionInfoWhereInput[] = [];
   if (params.searchTerm) {
     andCondition.push({
-      OR: PartySearchAbleFields.map((field) => ({
-        [field]: {
-          contains: params.searchTerm,
-          mode: "insensitive",
+      OR: [
+        {
+          party: {
+            partyType: params?.partyType,
+          },
         },
-      })),
+        {
+          voucherNo: {
+            contains: params.searchTerm,
+          },
+        },
+        {
+          party: {
+            name: {
+              contains: params.searchTerm,
+            },
+          },
+        },
+      ],
     });
   }
-
   if (Object.keys(filterData).length > 0) {
-    andCondition.push({
-      AND: Object.keys(filterData).map((key) => ({
-        [key]: {
-          equals: filterData[key],
-        },
-      })),
-    });
-  }
+    const filterConditions = Object.keys(filterData)
+      .map((key) => {
+        if (key === "partyType") {
+          // Handle the invalid "PARTY" value from the error report if necessary
+          // or just ensure it's a valid enum value for the related Party model
+          return {
+            party: {
+              partyType: filterData[key] === "PARTY" ? undefined : filterData[key],
+            },
+          };
+        }
+        return {
+          [key]: {
+            equals: filterData[key],
+          },
+        };
+      })
+      .filter((condition) => Object.values(condition)[0] !== undefined);
 
-  const wehreConditions: Prisma.PartyWhereInput =
-    andCondition.length > 0 ? { AND: andCondition } : { isDeleted: false };
+    if (filterConditions.length > 0) {
+      andCondition.push({
+        AND: filterConditions as Prisma.TransactionInfoWhereInput[],
+      });
+    }
+  }
+  const whereConditions: Prisma.TransactionInfoWhereInput =
+    andCondition.length > 0 ? { AND: andCondition } : {};
 
   const result = await prisma.transactionInfo.findMany({
-    where: {},
-    // where: wehreConditions,
-    // skip,
-    // take: limit,
-    // orderBy:
-    //   paginat.sortBy && paginat.sortOrder
-    //     ? {
-    //         [paginat.sortBy]: paginat.sortOrder,
-    //       }
-    //     : {
-    //         createdAt: "desc",
-    //       },
+    where: whereConditions,
+    skip,
+    take: limit,
+    orderBy:
+      paginat.sortBy && paginat.sortOrder
+        ? {
+          [paginat.sortBy]: paginat.sortOrder,
+        }
+        : {
+          createdAt: "desc",
+        },
   });
-
   return result;
 };
 
 const createParty = async (payload: Party) => {
+  console.log(payload, "payload");
   const isExist = await prisma.party.findFirst({
     where: {
       name: payload.name,
@@ -65,7 +90,6 @@ const createParty = async (payload: Party) => {
       isDeleted: false,
     },
   });
-
   if (isExist) {
     throw new AppError(StatusCodes.BAD_REQUEST, "This User Already Exist");
   }
@@ -94,27 +118,40 @@ const getAllParty = async (params: any, paginat: IPaginationOptions) => {
       OR: PartySearchAbleFields.map((field) => ({
         [field]: {
           contains: params.searchTerm,
-          mode: "insensitive",
         },
       })),
     });
   }
 
   if (Object.keys(filterData).length > 0) {
-    andCondition.push({
-      AND: Object.keys(filterData).map((key) => ({
+    const filterConditions = Object.keys(filterData).map((key) => {
+      if (key === "partyType") {
+        return {
+          [key]: {
+            equals: filterData[key] === "PARTY" ? undefined : (filterData[key] as Prisma.EnumPartyTypeFilter),
+          },
+        };
+      }
+      return {
         [key]: {
           equals: filterData[key],
         },
-      })),
-    });
+      };
+    }).filter(condition => Object.values(condition)[0].equals !== undefined);
+
+    if (filterConditions.length > 0) {
+      andCondition.push({
+        AND: filterConditions as Prisma.PartyWhereInput[],
+      });
+    }
   }
 
-  const wehreConditions: Prisma.PartyWhereInput =
+
+  const whereConditions: Prisma.PartyWhereInput =
     andCondition.length > 0 ? { AND: andCondition } : { isDeleted: false };
 
   const result = await prisma.party.findMany({
-    where: wehreConditions,
+    where: whereConditions,
     skip,
     take: limit,
     orderBy:

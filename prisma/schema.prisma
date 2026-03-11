@@ -401,7 +401,7 @@ enum Status {
 enum PartyType {
   VENDOR
   CUSTOMER
-  PARTY
+  SUPPLIER
 }
 
 enum PaymentType {
