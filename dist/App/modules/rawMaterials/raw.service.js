@@ -49,6 +49,9 @@ const createRawMaterial = (payload) => __awaiter(void 0, void 0, void 0, functio
 });
 const getAllRawMaterial = () => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield prisma_1.default.rawMaterial.findMany({
+        where: {
+            isDeleted: false,
+        },
         include: {
             unit: true,
         },
@@ -79,6 +82,9 @@ const updateRawMaterial = (id, payload) => __awaiter(void 0, void 0, void 0, fun
             name: payload.name,
             unitId: payload.unitId,
             description: payload.description,
+            unitPrice: payload.unitPrice,
+            quantity: payload.quantity,
+            amount: payload.amount,
         },
     });
     return result;
