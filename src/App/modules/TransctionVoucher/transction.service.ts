@@ -258,8 +258,139 @@ const getVoucherByid = async (id: number) => {
   return voucher;
 };
 
+const getDailyReport = async (date: string) => {
+  const startOfDay = new Date(date);
+  startOfDay.setHours(0, 0, 0, 0);
+
+  const endOfDay = new Date(date);
+  endOfDay.setHours(23, 59, 59, 999);
+
+  const result = await prisma.transactionInfo.findMany({
+    where: {
+      date: {
+        gte: startOfDay,
+        lte: endOfDay,
+      },
+    },
+    include: {
+      party: {
+        select: {
+          name: true,
+          contactNo: true,
+          address: true,
+          partyType: true,
+        },
+      },
+      customer: {
+        select: {
+          name: true,
+          contactNumber: true,
+          address: true,
+          status: true,
+        },
+      },
+
+      bankTransaction: {
+        select: {
+          date: true,
+          debitAmount: true,
+          creditAmount: true,
+          bankAccount: {
+            select: {
+              bankName: true,
+              branceName: true,
+              accountNumber: true,
+              status: true,
+            },
+          },
+        },
+      },
+
+      journal: {
+        select: {
+          accountsItemId: true,
+          date: true,
+          creditAmount: true,
+          debitAmount: true,
+          narration: true,
+          accountsItem: {
+            select: {
+              accountsItemName: true,
+            },
+          },
+        },
+      },
+
+      logOrderItem: {
+        select: {
+          id: true,
+          radis: true,
+          height: true,
+          quantity: true,
+          u_price: true,
+          amount: true,
+          logGrades: {
+            select: {
+              gradeName: true,
+              logCategory: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      inventory: {
+        select: {
+          id: true,
+          productId: true,
+          rawId: true,
+          product: {
+            select: {
+              name: true,
+            },
+          },
+          raWMaterial: {
+            select: {
+              name: true,
+            },
+          },
+          date: true,
+          quantityAdd: true,
+          quantityLess: true,
+          debitAmount: true,
+          creditAmount: true,
+        },
+      },
+      logOrdByCategory: {
+        select: {
+          date: true,
+          unitPrice: true,
+          quantityAdd: true,
+          quantityLess: true,
+          debitAmount: true,
+          creditAmount: true,
+          logCategory: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+    orderBy: {
+      date: "desc",
+    },
+  });
+
+  return result;
+};
+
 export const VoucherService = {
   getAllVoucher,
   getVoucherByVoucherNo,
   getVoucherByid,
+  getDailyReport,
 };

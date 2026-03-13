@@ -6,6 +6,8 @@ const route = express.Router();
 route.get("/", VoucherController.getAllVoucher);
 
 route.get("/voucherNo/:voucherNo", VoucherController.getVoucherbyVoucherNo);
+// et daily report
+route.get("/dailyReport/:date", VoucherController.getDailyReport);
 
 route.get("/:id", VoucherController.getVoucherbyid);
 
