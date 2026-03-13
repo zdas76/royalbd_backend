@@ -52,8 +52,22 @@ const getVoucherbyid = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getDailyReport = catchAsync(async (req: Request, res: Response) => {
+  const date = req.params.date as string;
+
+  const result = await VoucherService.getDailyReport(date);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Daily Report retived Successfully",
+    data: result,
+  });
+});
+
 export const VoucherController = {
   getAllVoucher,
   getVoucherbyVoucherNo,
   getVoucherbyid,
+  getDailyReport,
 };
