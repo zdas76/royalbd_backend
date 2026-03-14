@@ -40,7 +40,9 @@ const createAccountsItemtoDB = async (payLoad: AccountsItem) => {
 };
 
 const getAccountsItemFromDB = async (payLoad: string) => {
-  let filerValue = {};
+  let filerValue = {
+
+  };
 
   if (payLoad) {
     const filer = JSON.parse(payLoad).map((id: string) => {
@@ -59,6 +61,7 @@ const getAccountsItemFromDB = async (payLoad: string) => {
     include: {
       accountsPiler: true,
     },
+
   });
   return result;
 };
