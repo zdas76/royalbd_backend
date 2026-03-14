@@ -7,10 +7,14 @@ import pick from "../../../shared/pick";
 import { partyfiltersFields } from "./party.constant";
 
 const getPartyLedger = catchAsync(async (req: Request, res: Response) => {
+  const startDate = req.query.startDate as string;
+  const endDate = req.query.endDate as string;
+  const id = parseInt(req.params.id);
   const filters = pick(req.query, partyfiltersFields);
+
   const paginat = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
 
-  const result = await PartyService.getPertyLedgerInfo(filters, paginat);
+  const result = await PartyService.getPertyLedgerInfo(id, startDate, endDate);
 
   sendResponse(res, {
     statusCode: StatusCodes.OK,
@@ -86,9 +90,11 @@ const deletePartyById = catchAsync(async (req: Request, res: Response) => {
 });
 
 export const PartyControllers = {
+  getPartyLedger,
   createParty,
   getAllParty,
   getPartyById,
   updatePartyById,
   deletePartyById,
+
 };

@@ -29,7 +29,6 @@ const getVoucherbyVoucherNo = catchAsync(
     const voucherNo = req.params.voucherNo as string;
 
     const result = await VoucherService.getVoucherByVoucherNo(voucherNo);
-
     sendResponse(res, {
       statusCode: StatusCodes.OK,
       success: true,

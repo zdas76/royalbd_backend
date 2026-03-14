@@ -7,7 +7,6 @@ import { LogOrderItem, PartyType, VoucherType } from "../../../../generated/pris
 
 const getAllOrder = async ({ startDate, endDate, searchTerm }: { startDate?: Date, endDate?: Date, searchTerm?: string }) => {
 
-
   if (startDate) {
     startDate.setHours(0, 0, 0, 0);
   }
@@ -21,7 +20,6 @@ const getAllOrder = async ({ startDate, endDate, searchTerm }: { startDate?: Dat
         gte: startDate ? startDate : undefined,
         lte: endDate ? endDate : undefined,
       },
-
       OR: [
         {
           voucherNo: {
@@ -157,7 +155,6 @@ const createGradesOrder = async (payLoad: any) => {
         partyId: payLoad.supplierId,
       },
     });
-
     const orderItem = payLoad.logOrderItem.map((item: TlogOrderItems) => ({
       transectionId: transactionInfo.id,
       logGradeId: item.logGradeId,
@@ -171,28 +168,52 @@ const createGradesOrder = async (payLoad: any) => {
     await tx.logOrderItem.createMany({
       data: orderItem,
     });
-
-    if (!Array.isArray(payLoad.creditItem) || payLoad.creditItem.length === 0) {
+    if (!Array.isArray(payLoad.creditItem) || payLoad.creditItem.length < 1) {
       throw new Error("Invalid data: Credit item must be a non-empty");
     }
-
-    const creditJournalItem = payLoad.creditItem.map(
+    let journalEntries: any[] = []
+    await payLoad.creditItem.map(
       (item: {
         logOrderId: number;
         accountsItemId: number;
         creditAmount: number;
         narration: string;
-      }) => ({
-        transectionId: transactionInfo.id,
-        accountsItemId: item.accountsItemId,
-        date: payLoad.date,
-        creditAmount: item.creditAmount,
-        narration: item?.narration || "",
-      })
+      }) => {
+        journalEntries.push({
+          transectionId: transactionInfo.id,
+          accountsItemId: item.accountsItemId,
+          date: payLoad.date,
+          creditAmount: item.creditAmount,
+          narration: item?.narration || "",
+        })
+      }
     );
+    const inventoryLedgerItem = await prisma.accountsItem.findFirst({
+      where: {
+        accountsItemName: {
+          contains: "inventory",
+        }
+      }
+    })
+    if (!inventoryLedgerItem) {
+      throw new AppError(StatusCodes.NOT_FOUND, "Inventory ledger item not found");
+    }
+    journalEntries.push({
+      transectionId: transactionInfo.id,
+      accountsItemId: inventoryLedgerItem.id,
+      date: payLoad.date,
+      debitAmount: payLoad.logOrderTotalAmount,
+      narration: payLoad.narration || "inventory",
+    })
+    const debitAmount = journalEntries.reduce((acc: number, item: any) => acc + item.debitAmount, 0);
+    const creditAmount = journalEntries.reduce((acc: number, item: any) => acc + item.creditAmount, 0);
+
+    if (debitAmount !== creditAmount) {
+      throw new AppError(StatusCodes.BAD_REQUEST, "Debit and credit amount does not match");
+    }
 
     await tx.journal.createMany({
-      data: creditJournalItem,
+      data: journalEntries,
     });
 
     const logItemByCategoryData = payLoad.logItemsByCategory.map(
