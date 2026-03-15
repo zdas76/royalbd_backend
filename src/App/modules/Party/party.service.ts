@@ -81,7 +81,6 @@ const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
 };
 
 const createParty = async (payload: Party) => {
-  console.log(payload, "payload");
   const isExist = await prisma.party.findFirst({
     where: {
       name: payload.name,

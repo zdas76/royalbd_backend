@@ -120,15 +120,15 @@ const getLogOrderById = async (payload: any) => {
 
 const createGradesOrder = async (payLoad: any) => {
   const creadtOrder = await prisma.$transaction(async (tx) => {
-    const isSupplierExistd = await tx.party.findFirst({
+    const ispartyExistd = await tx.party.findFirst({
       where: {
-        id: payLoad.supplierId,
-        partyType: PartyType.SUPPLIER,
+        id: payLoad.partyId,
+        partyType: PartyType.PARTY,
       },
     });
 
-    if (!isSupplierExistd) {
-      throw new AppError(StatusCodes.NOT_FOUND, "Supplier not found");
+    if (!ispartyExistd) {
+      throw new AppError(StatusCodes.NOT_FOUND, "PARTY not found");
     }
 
     const isLogGradesExisted = await Promise.all(
@@ -152,7 +152,7 @@ const createGradesOrder = async (payLoad: any) => {
         voucherNo: payLoad.voucherNo,
         date: payLoad.date,
         voucherType: VoucherType.LOGORDERS,
-        partyId: payLoad.supplierId,
+        partyId: payLoad.partyId,
       },
     });
     const orderItem = payLoad.logOrderItem.map((item: TlogOrderItems) => ({

@@ -333,7 +333,7 @@ const createPaymentVoucher = async (payload: any) => {
   const createVoucher = await prisma.$transaction(async (tx) => {
     let isParty: Party | null = null;
 
-    if (payload.partyType === "VENDOR" || "SUPPLIER") {
+    if (payload.partyType === "VENDOR" || "PARTY") {
       isParty = await tx.party.findFirst({
         where: {
           id: payload.partyId,
@@ -444,7 +444,7 @@ const createReceiptVoucher = async (payload: any) => {
   const createVoucher = await prisma.$transaction(async (tx) => {
     let isParty: Party | null = null;
 
-    if (payload.partyType === "VENDOR" || "SUPPLIER") {
+    if (payload.partyType === "VENDOR" || "PARTY") {
       isParty = await tx.party.findFirst({
         where: {
           id: payload.partyId,

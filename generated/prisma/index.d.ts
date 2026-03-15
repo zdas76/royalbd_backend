@@ -176,7 +176,7 @@ export type Status = (typeof Status)[keyof typeof Status]
 export const PartyType: {
   VENDOR: 'VENDOR',
   CUSTOMER: 'CUSTOMER',
-  SUPPLIER: 'SUPPLIER'
+  PARTY: 'PARTY'
 };
 
 export type PartyType = (typeof PartyType)[keyof typeof PartyType]
