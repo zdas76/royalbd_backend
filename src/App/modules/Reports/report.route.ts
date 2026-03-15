@@ -7,6 +7,7 @@ route.get("/ledger", ReportControllers.ladgerReport);
 
 route.get("/party/:partyId", ReportControllers.partyReport);
 
+
 route.get("/raw", ReportControllers.rawReport);
 
 route.get("/raw/:id", ReportControllers.rawReportById);

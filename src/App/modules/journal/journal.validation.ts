@@ -5,7 +5,7 @@ const CreatePurchestSchema = z.object({
   body: z.object({
     date: z.date(),
     invoiceNo: z.string().min(1, "Invoice number is required"),
-    partyType: z.enum(["SUPPLIER", "CUSTOMER"]).nullable(),
+    partyType: z.enum(["PARTY", "CUSTOMER"]).nullable(),
     partyOrcustomerId: z.number().int().positive().nullable(),
     debitAccountsItemId: z.number().int().positive().nullable(),
     creditAccountsItemId: z.number().int().positive().nullable(),

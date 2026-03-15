@@ -20,7 +20,7 @@ const Pagination = (option:IOptions ):IOptionResult => {
     const skip:number = (Number(page)-1)*limit
     const sortBy:string = option.sortBy || 'createdAt';
     const sortOrder: string = option.sortOrder || 'desc';
-    const partyType = option.partyType || 'SUPPLIER';
+    const partyType = option.partyType || 'PARTY';
     return {
         page, limit, skip, sortBy, sortOrder, partyType
     }

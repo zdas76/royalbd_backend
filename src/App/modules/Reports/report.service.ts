@@ -86,7 +86,7 @@ const partyLedgerReport = async (payload: {
 
   let accountsItemId: number | undefined;
 
-  if (payload.partyType === 'SUPPLIER') {
+  if (payload.partyType === 'PARTY') {
     const accountsItem: AccountsItem | null = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
