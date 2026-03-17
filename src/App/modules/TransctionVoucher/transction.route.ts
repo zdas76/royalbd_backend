@@ -7,8 +7,9 @@ route.get("/", VoucherController.getAllVoucher);
 
 route.get("/voucherNo/:voucherNo", VoucherController.getVoucherbyVoucherNo);
 // et daily report
-route.get("/dailyReport/:date", VoucherController.getDailyReport);
+route.get("/dailyReport", VoucherController.getDailyReport);
 
 route.get("/:id", VoucherController.getVoucherbyid);
 
 export const VoucherRoute = route;
+
