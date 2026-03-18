@@ -16,4 +16,6 @@ route.get("/product", ReportControllers.productReport);
 
 route.get("/product/:id", ReportControllers.productReportById);
 
+route.get("/balance-sheet", ReportControllers.balanceSheet);
+
 export const ReportRouter = route;
