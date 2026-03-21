@@ -121,6 +121,11 @@ const getAllParty = async (params: any, paginat: IPaginationOptions) => {
       })),
     });
   }
+  if (params?.partyType) {
+    andCondition.push({
+      partyType: params.partyType,
+    })
+  }
 
   if (Object.keys(filterData).length > 0) {
     const filterConditions = Object.keys(filterData).map((key) => {
@@ -199,7 +204,6 @@ const updatePartyById = async (id: number, payload: Partial<Party>) => {
 };
 
 const deletePartyById = async (id: number) => {
-
   const isExist = await prisma.party.findFirst({
     where: {
       id: id,

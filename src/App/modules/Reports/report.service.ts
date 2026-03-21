@@ -300,7 +300,6 @@ const getBalanceSheet = async (date: string | null) => {
     });
 
     if (!account) return { debit: 0, credit: 0, accountId: 0 };
-
     const result = await prisma.journal.aggregate({
       _sum: {
         debitAmount: true,
