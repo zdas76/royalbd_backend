@@ -205,8 +205,9 @@ const createGradesOrder = async (payLoad: any) => {
       debitAmount: payLoad.logOrderTotalAmount,
       narration: payLoad.narration || "inventory",
     })
-    const debitAmount = journalEntries.reduce((acc: number, item: any) => acc + item.debitAmount, 0);
-    const creditAmount = journalEntries.reduce((acc: number, item: any) => acc + item.creditAmount, 0);
+
+    const debitAmount = Number(journalEntries.reduce((acc: number, item: any) => acc + (item?.debitAmount || 0), 0));
+    const creditAmount = Number(journalEntries.reduce((acc: number, item: any) => acc + (item?.creditAmount || 0), 0));
 
     if (debitAmount !== creditAmount) {
       throw new AppError(StatusCodes.BAD_REQUEST, "Debit and credit amount does not match");
