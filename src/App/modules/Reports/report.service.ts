@@ -164,19 +164,14 @@ const rawReport = async (payload: {
         quantityLess: true,
       },
       where: {
-        AND: [
-          {
-            rawId: rawMaterial.id
-          },
-          {
-            date: {
-              gte: new Date(payload?.startDate || ""),
-              lte: new Date(payload?.endDate || "")
-            }
-          }
-        ]
+        rawId: rawMaterial.id,
+        date: {
+          gte: new Date(rawMaterial?.openingDate ?? "") || new Date(payload?.startDate ?? "") || new Date(),
+          lte: new Date(payload.endDate || new Date())
+        }
       },
     })
+
     return { rawMaterial, total }
   }))
 
@@ -202,10 +197,9 @@ const getRawReportById = async (id: number, payload: {
     where: {
       rawId: rawMaterial.id,
       date: {
-        gte: rawMaterial.openingDate || new Date(payload?.startDate || ""),
+        gte: new Date(rawMaterial.openingDate) || new Date(payload?.startDate ?? ""),
         lte: new Date(payload?.endDate || new Date())
       }
-
     },
     select: {
       transactionInfo: {
@@ -242,17 +236,13 @@ const productReport = async (payload: {
         quantityLess: true,
       },
       where: {
-        AND: [
-          {
-            productId: product.id
-          },
-          {
-            date: {
-              gte: product.openingDate || new Date(payload?.startDate || ""),
-              lte: new Date(payload?.endDate || new Date())
-            }
-          }
-        ]
+        productId: product.id,
+        date: {
+          gte: new Date(product.openingDate) || new Date(payload?.startDate ?? "") || "",
+          lte: new Date(payload?.endDate ?? "") || new Date()
+        }
+
+
       },
     })
     return { product, total }
