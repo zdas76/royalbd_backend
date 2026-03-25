@@ -85,54 +85,47 @@ const partyLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, functio
         const accountsItem = yield prisma_1.default.accountsItem.findFirst({
             where: {
                 accountsItemName: {
-                    contains: "accounts payable"
+                    contains: "accounts payable",
                 },
             },
         });
         accountsItemId = accountsItem === null || accountsItem === void 0 ? void 0 : accountsItem.id;
     }
     else if (payload.partyType === 'VENDOR') {
-        const accountsItem = yield prisma_1.default.accountsItem.findFirst({
+        const accountsItems = yield prisma_1.default.accountsItem.findFirst({
             where: {
                 accountsItemName: {
-                    contains: "accounts receivable"
+                    contains: "accounts receivable",
                 },
             },
         });
-        accountsItemId = accountsItem === null || accountsItem === void 0 ? void 0 : accountsItem.id;
+        accountsItemId = accountsItems === null || accountsItems === void 0 ? void 0 : accountsItems.id;
     }
     if (!accountsItemId) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts Item not found");
     }
     const result = yield prisma_1.default.journal.findMany({
         where: {
-            accountsItemId: accountsItemId,
             transactionInfo: {
                 partyId: party.id,
             },
+            accountsItemId: accountsItemId,
             date: {
-                gte: startDate ? new Date(startDate) : party.openingDate || new Date(),
+                gte: startDate ? new Date(startDate) : (party.openingDate || new Date()),
                 lte: endDate ? new Date(endDate) : new Date(),
             },
         },
-        orderBy: {
-            date: "asc",
-        },
-        select: {
+        include: {
             transactionInfo: {
                 select: {
-                    id: true,
                     voucherNo: true,
-                    invoiceNo: true,
                     partyId: true,
                     voucherType: true,
                 },
             },
-            accountsItemId: true,
-            date: true,
-            creditAmount: true,
-            debitAmount: true,
-            narration: true,
+        },
+        orderBy: {
+            date: "asc",
         },
     });
     return { party, result };
