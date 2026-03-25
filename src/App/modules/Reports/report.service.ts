@@ -291,6 +291,145 @@ const getProductReportById = async (id: number, payload: {
 };
 
 
+const getBalanceSheet = async (date: string | null) => {
+  const targetDate = date ? new Date(date) : new Date();
+  // Helper to get total debit/credit for an account name up to the target date
+  const getAccountBalance = async (accountNameContains: string) => {
+    const account = await prisma.accountsItem.findFirst({
+      where: { accountsItemName: { contains: accountNameContains } },
+    });
+
+    if (!account) return { debit: 0, credit: 0, accountId: 0 };
+    const result = await prisma.journal.aggregate({
+      _sum: {
+        debitAmount: true,
+        creditAmount: true,
+      },
+      where: {
+        accountsItemId: account.id,
+        date: {
+          lte: targetDate,
+        },
+      },
+    });
+
+    const debit = result._sum.debitAmount || 0;
+    const credit = result._sum.creditAmount || 0;
+
+    // Most asset accounts: Debit - Credit
+    // Most liability accounts: Credit - Debit
+    return { debit, credit, accountId: account.id };
+  };
+
+  // 1. Assets
+
+  // Cash in Hand (Asset: Debit - Credit)
+  const cashInHandData = await getAccountBalance("cash in hand");
+  const cashInHand = cashInHandData.debit - cashInHandData.credit;
+
+  // Cash at Bank (Asset: Debit - Credit)
+  const cashAtBankData = await getAccountBalance("cash at bank");
+  let cashAtBank = cashAtBankData.debit - cashAtBankData.credit;
+
+  // If "cash at bank" isn't a single account, we can alternatively aggregate BankTransaction
+  const bankTransactions = await prisma.bankTransaction.aggregate({
+    _sum: {
+      debitAmount: true,
+      creditAmount: true,
+    },
+    where: {
+      date: { lte: targetDate },
+    },
+  });
+  const bankBalance = (bankTransactions._sum.debitAmount || 0) - (bankTransactions._sum.creditAmount || 0);
+
+  // Prefer ledger balance, fallback to bank transactions logic depending on system usage
+  if (!cashAtBankData.accountId) {
+    cashAtBank = bankBalance;
+  }
+
+  // Accounts Receivable (Asset: Debit - Credit)
+  const accountsReceivableData = await getAccountBalance("accounts receivable");
+  const accountsReceivable = accountsReceivableData.debit - accountsReceivableData.credit;
+
+  // Closing Stock / Inventory (Asset: value of stock)
+  // Value = (quantityAdd * unitPrice) - (quantityLess * unitPrice)
+  const inventoryData = await prisma.inventory.findMany({
+    where: {
+      date: { lte: targetDate },
+      status: "ACTIVE"
+    },
+  });
+
+  let closingStock = 0;
+  for (const inv of inventoryData) {
+    const qtyAdded = inv.quantityAdd || 0;
+    const qtyLess = inv.quantityLess || 0;
+    const price = inv.unitPrice || 0;
+
+    // We assume unitPrice is the value per unit for both addition and deduction
+    closingStock += (qtyAdded * price) - (qtyLess * price);
+  }
+
+  // Fallback if inventory logic is simpler in aggregate
+  const inventoryAggregate = await prisma.inventory.aggregate({
+    _sum: {
+      debitAmount: true,
+      creditAmount: true,
+    },
+    where: { date: { lte: targetDate } }
+  });
+
+  // If the system tracks stock value via debit/credit in Inventory
+  const inventoryValueViaLedger = (inventoryAggregate._sum.debitAmount || 0) - (inventoryAggregate._sum.creditAmount || 0);
+  if (closingStock === 0 && inventoryValueViaLedger !== 0) {
+    closingStock = inventoryValueViaLedger;
+  }
+
+
+  const totalAssets = cashInHand + cashAtBank + accountsReceivable + closingStock;
+
+  // 2. Liabilities
+
+  // Accounts Payable (Liability: Credit - Debit)
+  const accountsPayableData = await getAccountBalance("accounts payable");
+  const accountsPayable = accountsPayableData.credit - accountsPayableData.debit;
+
+  const totalLiabilities = accountsPayable;
+
+  // 3. Equity
+  // Simplest equity formula: Equity = Assets - Liabilities
+  // Alternatively, query a "Capital" account
+  const capitalData = await getAccountBalance("capital");
+  let equity = capitalData.credit - capitalData.debit;
+
+  if (equity === 0) {
+    equity = totalAssets - totalLiabilities;
+  }
+
+  return {
+    asOfDate: targetDate,
+    assets: {
+      cashInHand,
+      cashAtBank,
+      accountsReceivable,
+      closingStock,
+    },
+    liabilities: {
+      accountsPayable,
+    },
+    equity: {
+      calculateEquity: totalAssets - totalLiabilities,
+      capitalAccount: capitalData.credit - capitalData.debit,
+      totalEquity: equity
+    },
+    totals: {
+      totalAssets,
+      totalLiabilities,
+    }
+  };
+};
+
 export const ReportService = {
   getAccountLedgerReport,
   partyLedgerReport,
@@ -298,4 +437,5 @@ export const ReportService = {
   getRawReportById,
   productReport,
   getProductReportById,
+  getBalanceSheet,
 };

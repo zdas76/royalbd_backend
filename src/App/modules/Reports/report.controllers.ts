@@ -129,6 +129,19 @@ const productReportById = catchAsync(async (req: Request, res: Response) => {
 });
 
 
+const balanceSheet = catchAsync(async (req: Request, res: Response) => {
+  const date = req.query.date ? String(req.query.date) : null;
+
+  const result = await ReportService.getBalanceSheet(date);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Balance sheet retrieved successfully",
+    data: result,
+  });
+});
+
 export const ReportControllers = {
   ladgerReport,
   partyReport,
@@ -136,4 +149,5 @@ export const ReportControllers = {
   rawReportById,
   productReport,
   productReportById,
+  balanceSheet,
 };

@@ -11,8 +11,7 @@ const getPartyLedger = catchAsync(async (req: Request, res: Response) => {
   const endDate = req.query.endDate as string;
   const id = parseInt(req.params.id);
 
-  const result = await PartyService.getPertyLedgerInfo(id, startDate, endDate);
-
+  const result = await PartyService.getPertyLedgerInfo(id, { startDate, endDate });
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,
@@ -38,7 +37,6 @@ const getAllParty = catchAsync(async (req: Request, res: Response) => {
   const paginat = pick(req.query, ["page", "limit", "sortBy", "sortOrder"]);
 
   const result = await PartyService.getAllParty(filters, paginat);
-
   sendResponse(res, {
     statusCode: StatusCodes.OK,
     success: true,

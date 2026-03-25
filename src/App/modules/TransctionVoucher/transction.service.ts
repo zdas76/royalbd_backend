@@ -180,10 +180,12 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
 };
 
 const getVoucherByid = async (id: number) => {
-
+  if (!id) {
+    throw new Error("Invalid Voucher ID");
+  }
   const voucher = await prisma.transactionInfo.findFirst({
     where: {
-      id,
+      id: id
     },
     include: {
       party: {
