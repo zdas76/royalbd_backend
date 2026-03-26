@@ -26,7 +26,6 @@ const ladgerReport = catchAsync(async (req: Request, res: Response) => {
 });
 
 const partyReport = catchAsync(async (req: Request, res: Response) => {
-
   const partyId = Number(req.params.partyId);
   const startDate = req.query.startDate ? String(req.query.startDate) : null;
   const endDate = req.query.endDate ? String(req.query.endDate) : null;
@@ -108,9 +107,7 @@ const productReport = catchAsync(async (req: Request, res: Response) => {
 
 // ----------------------------------------- raw report By Id -----------------------------
 const productReportById = catchAsync(async (req: Request, res: Response) => {
-
   const id = Number(req.params.id);
-
   const startDate = req.query.startDate ? String(req.query.startDate) : null;
   const endDate = req.query.endDate ? String(req.query.endDate) : null;
 
