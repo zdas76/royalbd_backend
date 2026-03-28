@@ -71,10 +71,8 @@ const partyLedgerReport = async (payload: {
   endDate: string | null;
   partyType: string;
 }) => {
-
   const partyId = Number(payload.partyId);
   const { startDate, endDate } = payload;
-
   if (!partyId) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Party Id is required");
   }
@@ -86,9 +84,7 @@ const partyLedgerReport = async (payload: {
   if (!party) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Party not found");
   }
-
   let accountsItemId: number | undefined;
-
   if (payload.partyType === 'PARTY') {
     const accountsItem: AccountsItem | null = await prisma.accountsItem.findFirst({
       where: {
@@ -120,7 +116,6 @@ const partyLedgerReport = async (payload: {
         partyId: party.id,
       },
       accountsItemId: accountsItemId,
-
       date: {
         gte: startDate ? new Date(startDate) : (party.openingDate || new Date()),
         lte: endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)) : new Date(),
@@ -197,7 +192,6 @@ const getRawReportById = async (id: number, payload: {
       id: id,
     },
   });
-
   if (!rawMaterial) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
   }
@@ -206,7 +200,6 @@ const getRawReportById = async (id: number, payload: {
   const endDate = payload?.endDate ? payload?.endDate : new Date();
 
   const report = await prisma.inventory.findMany({
-
     where: {
       rawId: rawMaterial.id,
       date: {
@@ -224,7 +217,6 @@ const getRawReportById = async (id: number, payload: {
       },
     }
   })
-
   return { rawMaterial, report };
 };
 
