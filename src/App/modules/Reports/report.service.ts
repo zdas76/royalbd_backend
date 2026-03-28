@@ -20,13 +20,16 @@ const getAccountLedgerReport = async (payload: {
   if (!isExisted) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Accounts Item not found");
   }
-  if (startDate && endDate) {
+  const start = startDate ? new Date(startDate) : undefined;
+  const end = endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)) : undefined;
+
+  if (start && end) {
     const result = await prisma.journal.findMany({
       where: {
         accountsItemId: accountsItemId,
         date: {
-          gte: new Date(startDate),
-          lte: new Date(endDate),
+          gte: start,
+          lte: end,
         },
       },
       orderBy: {
@@ -115,7 +118,7 @@ const partyLedgerReport = async (payload: {
       accountsItemId: accountsItemId,
       date: {
         gte: startDate ? new Date(startDate) : (party.openingDate || new Date()),
-        lte: endDate ? new Date(endDate) : new Date(),
+        lte: endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)) : new Date(),
       },
     },
     include: {
@@ -142,6 +145,8 @@ const rawReport = async (payload: {
   startDate?: string | null;
   endDate?: string | null;
 }) => {
+
+
   const allrawMaterial = await prisma.rawMaterial.findMany({
     where: {
       isDeleted: false
@@ -151,6 +156,11 @@ const rawReport = async (payload: {
     throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
   }
   const result = Promise.all(allrawMaterial.map(async (rawMaterial) => {
+
+    const startDate = payload?.startDate ? payload?.startDate : rawMaterial?.openingDate;
+    const endDate = payload?.endDate ? payload?.endDate : new Date();
+
+    console.log(startDate, endDate)
     const total = await prisma.inventory.aggregate({
       _sum: {
         debitAmount: true,
@@ -161,8 +171,8 @@ const rawReport = async (payload: {
       where: {
         rawId: rawMaterial.id,
         date: {
-          gte: new Date(rawMaterial?.openingDate ?? "") || new Date(payload?.startDate ?? "") || new Date(),
-          lte: new Date(payload.endDate || new Date())
+          gte: new Date(startDate),
+          lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
         }
       },
     })
@@ -185,12 +195,16 @@ const getRawReportById = async (id: number, payload: {
   if (!rawMaterial) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
   }
+
+  const startDate = payload?.startDate ? payload?.startDate : rawMaterial?.openingDate;
+  const endDate = payload?.endDate ? payload?.endDate : new Date();
+
   const report = await prisma.inventory.findMany({
     where: {
       rawId: rawMaterial.id,
       date: {
-        gte: new Date(rawMaterial.openingDate) || new Date(payload?.startDate ?? ""),
-        lte: new Date(payload?.endDate || new Date())
+        gte: new Date(startDate),
+        lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
       }
     },
     select: {
@@ -219,6 +233,10 @@ const productReport = async (payload: {
     throw new AppError(StatusCodes.BAD_REQUEST, "Product not found");
   }
   const result = Promise.all(allProduct.map(async (product) => {
+
+    const startDate = payload?.startDate ? payload?.startDate : product?.openingDate;
+    const endDate = payload?.endDate ? payload?.endDate : new Date();
+
     const total = await prisma.inventory.aggregate({
       _sum: {
         debitAmount: true,
@@ -229,10 +247,9 @@ const productReport = async (payload: {
       where: {
         productId: product.id,
         date: {
-          gte: new Date(product.openingDate) || new Date(payload?.startDate ?? "") || "",
-          lte: new Date(payload?.endDate ?? "") || new Date()
+          gte: new Date(startDate),
+          lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
         }
-
 
       },
     })
@@ -262,7 +279,7 @@ const getProductReportById = async (id: number, payload: {
       productId: product.id,
       date: {
         gte: product.openingDate || new Date(payload?.startDate || ""),
-        lte: new Date(payload?.endDate || new Date())
+        lte: payload?.endDate ? new Date(new Date(payload.endDate).setHours(23, 59, 59, 999)) : new Date()
       }
 
     },
@@ -273,7 +290,7 @@ const getProductReportById = async (id: number, payload: {
 
 
 const getBalanceSheet = async (date: string | null) => {
-  const targetDate = date ? new Date(date) : new Date();
+  const targetDate = date ? new Date(new Date(date).setHours(23, 59, 59, 999)) : new Date();
   // Helper to get total debit/credit for an account name up to the target date
   const getAccountBalance = async (accountNameContains: string) => {
     const account = await prisma.accountsItem.findFirst({
