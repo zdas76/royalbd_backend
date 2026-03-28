@@ -182,13 +182,10 @@ const getRawReportById = async (id: number, payload: {
       id: id,
     },
   });
-
   if (!rawMaterial) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
   }
-
   const report = await prisma.inventory.findMany({
-
     where: {
       rawId: rawMaterial.id,
       date: {
@@ -206,7 +203,6 @@ const getRawReportById = async (id: number, payload: {
       },
     }
   })
-
   return { rawMaterial, report };
 };
 
