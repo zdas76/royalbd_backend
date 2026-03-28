@@ -89,7 +89,7 @@ const partyLedgerReport = async (payload: {
     const accountsItem: AccountsItem | null = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
-          contains: "accounts payable",
+          contains: "accounts receivable",
         },
       },
     });
@@ -98,7 +98,7 @@ const partyLedgerReport = async (payload: {
     const accountsItems: AccountsItem | null = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
-          contains: "accounts receivable",
+          contains: "accounts payable",
         },
       },
     });
