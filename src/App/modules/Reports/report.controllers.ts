@@ -6,7 +6,6 @@ import { StatusCodes } from "http-status-codes";
 import { Query } from "mysql2";
 
 const ladgerReport = catchAsync(async (req: Request, res: Response) => {
-
   const accountsItemId = Number(req.query.accountsItemId);
   const startDate = req.query.startDate ? String(req.query.startDate) : null;
   const endDate = req.query.endDate ? String(req.query.endDate) : null;
