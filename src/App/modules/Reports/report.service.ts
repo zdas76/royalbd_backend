@@ -1,4 +1,3 @@
-import { AccountsItem } from "../../../../generated/prisma";
 import prisma from "../../../shared/prisma";
 import AppError from "../../errors/AppError";
 import { StatusCodes } from "http-status-codes";
@@ -71,10 +70,8 @@ const partyLedgerReport = async (payload: {
   endDate: string | null;
   partyType: string;
 }) => {
-
   const partyId = Number(payload.partyId);
   const { startDate, endDate } = payload;
-
   if (!partyId) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Party Id is required");
   }
@@ -86,32 +83,37 @@ const partyLedgerReport = async (payload: {
   if (!party) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Party not found");
   }
-
+  // For PARTY type, filter by "accounts receivable" to show only the receivable side
+  // For VENDOR type, show all journal entries since vendors use various accounts
   let accountsItemId: number | undefined;
-
   if (payload.partyType === 'PARTY') {
-    const accountsItem: AccountsItem | null = await prisma.accountsItem.findFirst({
+    const accountsItem = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
           contains: "accounts receivable",
         },
       },
     });
-    accountsItemId = accountsItem?.id
+    accountsItemId = accountsItem?.id;
   } else if (payload.partyType === 'VENDOR') {
-    const accountsItems: AccountsItem | null = await prisma.accountsItem.findFirst({
+    const accountsItem = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
           contains: "accounts payable",
         },
       },
     });
-    accountsItemId = accountsItems?.id
-
+    accountsItemId = accountsItem?.id;
   }
-
-  if (!accountsItemId) {
-    throw new AppError(StatusCodes.BAD_REQUEST, "Accounts Item not found");
+  // Build date filter only if dates are provided or party has openingDate
+  const dateFilter: any = {};
+  if (startDate) {
+    dateFilter.gte = new Date(startDate);
+  } else if (party.openingDate) {
+    dateFilter.gte = new Date(party.openingDate);
+  }
+  if (endDate) {
+    dateFilter.lte = new Date(new Date(endDate).setHours(23, 59, 59, 999));
   }
 
   const result = await prisma.journal.findMany({
@@ -119,12 +121,8 @@ const partyLedgerReport = async (payload: {
       transactionInfo: {
         partyId: party.id,
       },
-      accountsItemId: accountsItemId,
-
-      date: {
-        gte: startDate ? new Date(startDate) : (party.openingDate || new Date()),
-        lte: endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)) : new Date(),
-      },
+      ...(accountsItemId ? { accountsItemId } : {}),
+      ...(Object.keys(dateFilter).length > 0 ? { date: dateFilter } : {}),
     },
     include: {
       transactionInfo: {
@@ -139,10 +137,7 @@ const partyLedgerReport = async (payload: {
       date: "asc",
     },
   });
-
-
   return { party, result };
-
 }
 
 // raw report
@@ -197,7 +192,6 @@ const getRawReportById = async (id: number, payload: {
       id: id,
     },
   });
-
   if (!rawMaterial) {
     throw new AppError(StatusCodes.BAD_REQUEST, "Raw Material not found");
   }
@@ -206,7 +200,6 @@ const getRawReportById = async (id: number, payload: {
   const endDate = payload?.endDate ? payload?.endDate : new Date();
 
   const report = await prisma.inventory.findMany({
-
     where: {
       rawId: rawMaterial.id,
       date: {
@@ -224,7 +217,6 @@ const getRawReportById = async (id: number, payload: {
       },
     }
   })
-
   return { rawMaterial, report };
 };
 
