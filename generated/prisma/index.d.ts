@@ -234,9 +234,7 @@ export const EmployeeType: typeof $Enums.EmployeeType
  * Type-safe database client for TypeScript & Node.js
  * @example
  * ```
- * const prisma = new PrismaClient({
- *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
- * })
+ * const prisma = new PrismaClient()
  * // Fetch zero or more Categories
  * const categories = await prisma.category.findMany()
  * ```
@@ -257,9 +255,7 @@ export class PrismaClient<
    * Type-safe database client for TypeScript & Node.js
    * @example
    * ```
-   * const prisma = new PrismaClient({
-   *   adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL })
-   * })
+   * const prisma = new PrismaClient()
    * // Fetch zero or more Categories
    * const categories = await prisma.category.findMany()
    * ```
@@ -339,7 +335,7 @@ export class PrismaClient<
    * ])
    * ```
    * 
-   * Read more in our [docs](https://www.prisma.io/docs/orm/prisma-client/queries/transactions).
+   * Read more in our [docs](https://www.prisma.io/docs/concepts/components/prisma-client/transactions).
    */
   $transaction<P extends Prisma.PrismaPromise<any>[]>(arg: [...P], options?: { isolationLevel?: Prisma.TransactionIsolationLevel }): $Utils.JsPromise<runtime.Types.Utils.UnwrapTuple<P>>
 
@@ -618,8 +614,8 @@ export namespace Prisma {
   export import Exact = $Public.Exact
 
   /**
-   * Prisma Client JS version: 7.6.0
-   * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+   * Prisma Client JS version: 7.2.0
+   * Query Engine version: 0c8ef2ce45c83248ab3df073180d5eda9e8be7a3
    */
   export type PrismaVersion = {
     client: string
@@ -4016,11 +4012,6 @@ export namespace Prisma {
      * Skip the first `n` Categories.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Categories.
-     */
     distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -5027,11 +5018,6 @@ export namespace Prisma {
      * Skip the first `n` SubCategories.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SubCategories.
-     */
     distinct?: SubCategoryScalarFieldEnum | SubCategoryScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -6023,11 +6009,6 @@ export namespace Prisma {
      * Skip the first `n` Units.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Units.
-     */
     distinct?: UnitScalarFieldEnum | UnitScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -7050,11 +7031,6 @@ export namespace Prisma {
      * Skip the first `n` AccountMainPillers.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of AccountMainPillers.
-     */
     distinct?: AccountMainPillerScalarFieldEnum | AccountMainPillerScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -8068,11 +8044,6 @@ export namespace Prisma {
      * Skip the first `n` AccountsItems.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of AccountsItems.
-     */
     distinct?: AccountsItemScalarFieldEnum | AccountsItemScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -9086,11 +9057,6 @@ export namespace Prisma {
      * Skip the first `n` Users.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Users.
-     */
     distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -10104,11 +10070,6 @@ export namespace Prisma {
      * Skip the first `n` Employees.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Employees.
-     */
     distinct?: EmployeeScalarFieldEnum | EmployeeScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -11122,11 +11083,6 @@ export namespace Prisma {
      * Skip the first `n` Parties.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Parties.
-     */
     distinct?: PartyScalarFieldEnum | PartyScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -12140,11 +12096,6 @@ export namespace Prisma {
      * Skip the first `n` Workers.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Workers.
-     */
     distinct?: WorkerScalarFieldEnum | WorkerScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -13252,11 +13203,6 @@ export namespace Prisma {
      * Skip the first `n` Products.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Products.
-     */
     distinct?: ProductScalarFieldEnum | ProductScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -14363,11 +14309,6 @@ export namespace Prisma {
      * Skip the first `n` RawMaterials.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of RawMaterials.
-     */
     distinct?: RawMaterialScalarFieldEnum | RawMaterialScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -15388,11 +15329,6 @@ export namespace Prisma {
      * Skip the first `n` Customers.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Customers.
-     */
     distinct?: CustomerScalarFieldEnum | CustomerScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -16413,11 +16349,6 @@ export namespace Prisma {
      * Skip the first `n` BankAccounts.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of BankAccounts.
-     */
     distinct?: BankAccountScalarFieldEnum | BankAccountScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -17478,11 +17409,6 @@ export namespace Prisma {
      * Skip the first `n` BankTransactions.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of BankTransactions.
-     */
     distinct?: BankTransactionScalarFieldEnum | BankTransactionScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -18634,11 +18560,6 @@ export namespace Prisma {
      * Skip the first `n` Inventories.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Inventories.
-     */
     distinct?: InventoryScalarFieldEnum | InventoryScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -19770,11 +19691,6 @@ export namespace Prisma {
      * Skip the first `n` TransactionInfos.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of TransactionInfos.
-     */
     distinct?: TransactionInfoScalarFieldEnum | TransactionInfoScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -20980,11 +20896,6 @@ export namespace Prisma {
      * Skip the first `n` Journals.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Journals.
-     */
     distinct?: JournalScalarFieldEnum | JournalScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -22001,11 +21912,6 @@ export namespace Prisma {
      * Skip the first `n` LogCategories.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of LogCategories.
-     */
     distinct?: LogCategoryScalarFieldEnum | LogCategoryScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -23092,11 +22998,6 @@ export namespace Prisma {
      * Skip the first `n` LogGrades.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of LogGrades.
-     */
     distinct?: LogGradesScalarFieldEnum | LogGradesScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -24158,11 +24059,6 @@ export namespace Prisma {
      * Skip the first `n` LogOrderItems.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of LogOrderItems.
-     */
     distinct?: LogOrderItemScalarFieldEnum | LogOrderItemScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -25250,11 +25146,6 @@ export namespace Prisma {
      * Skip the first `n` LogOrdByCategories.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of LogOrdByCategories.
-     */
     distinct?: LogOrdByCategoryScalarFieldEnum | LogOrdByCategoryScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
@@ -26304,11 +26195,6 @@ export namespace Prisma {
      * Skip the first `n` LogToRaws.
      */
     skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of LogToRaws.
-     */
     distinct?: LogToRawScalarFieldEnum | LogToRawScalarFieldEnum[]
     relationLoadStrategy?: RelationLoadStrategy
   }
