@@ -81,6 +81,7 @@ const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
 };
 
 const createParty = async (payload: Party) => {
+
   const isExist = await prisma.party.findFirst({
     where: {
       name: payload.name,
@@ -152,7 +153,7 @@ const getAllParty = async (params: any, paginat: IPaginationOptions) => {
 
 
   const whereConditions: Prisma.PartyWhereInput =
-    andCondition.length > 0 ? { AND: andCondition } : { isDeleted: false };
+    andCondition.length > 0 ? { AND: andCondition } : {};
 
   const result = await prisma.party.findMany({
     where: whereConditions,
