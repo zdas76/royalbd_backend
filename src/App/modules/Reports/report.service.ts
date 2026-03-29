@@ -99,7 +99,7 @@ const partyLedgerReport = async (payload: {
     const accountsItem = await prisma.accountsItem.findFirst({
       where: {
         accountsItemName: {
-          contains: "Accounts payable",
+          contains: "accounts payable",
         },
       },
     });
