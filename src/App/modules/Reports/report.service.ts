@@ -214,7 +214,7 @@ const getRawReportById = async (id: number, payload: {
         lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
       }
     },
-    select: {
+    include: {
       transactionInfo: {
         select: {
           id: true,
