@@ -5,7 +5,7 @@ import { paginationHelper } from "../../../helpars/paginationHelpers";
 import { IPaginationOptions } from "../../interfaces/pagination";
 import { PartySearchAbleFields } from "./party.constant";
 import AppError from "../../errors/AppError";
-import { Party, Prisma } from "../../../../generated/prisma";
+import { Party, PartyType, Prisma } from "../../../../generated/prisma";
 
 const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
   const { page, limit, skip } = paginationHelper.Pagination(paginat);
@@ -133,7 +133,7 @@ const getAllParty = async (params: any, paginat: IPaginationOptions) => {
       if (key === "partyType") {
         return {
           [key]: {
-            equals: filterData[key] === "PARTY" ? undefined : (filterData[key] as Prisma.EnumPartyTypeFilter),
+            equals: filterData[key] === PartyType.PARTY ? undefined : (filterData[key] as Prisma.EnumPartyTypeFilter),
           },
         };
       }
@@ -153,7 +153,7 @@ const getAllParty = async (params: any, paginat: IPaginationOptions) => {
 
 
   const whereConditions: Prisma.PartyWhereInput =
-    andCondition.length > 0 ? { AND: andCondition } : {};
+    andCondition.length > 0 ? { AND: andCondition } : { isDeleted: false };
 
   const result = await prisma.party.findMany({
     where: whereConditions,
