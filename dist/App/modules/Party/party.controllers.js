@@ -20,9 +20,10 @@ const party_service_1 = require("./party.service");
 const pick_1 = __importDefault(require("../../../shared/pick"));
 const party_constant_1 = require("./party.constant");
 const getPartyLedger = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const filters = (0, pick_1.default)(req.query, party_constant_1.partyfiltersFields);
-    const paginat = (0, pick_1.default)(req.query, ["page", "limit", "sortBy", "sortOrder"]);
-    const result = yield party_service_1.PartyService.getPertyLedgerInfo(filters, paginat);
+    const startDate = req.query.startDate;
+    const endDate = req.query.endDate;
+    const id = parseInt(req.params.id);
+    const result = yield party_service_1.PartyService.getPertyLedgerInfo(id, { startDate, endDate });
     (0, sendResponse_1.default)(res, {
         statusCode: http_status_codes_1.StatusCodes.OK,
         success: true,
@@ -81,6 +82,7 @@ const deletePartyById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0
     });
 }));
 exports.PartyControllers = {
+    getPartyLedger,
     createParty,
     getAllParty,
     getPartyById,

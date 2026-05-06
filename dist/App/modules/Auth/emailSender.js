@@ -34,6 +34,5 @@ const emailSender = (email, html) => __awaiter(void 0, void 0, void 0, function*
         text: "Hello world?",
         html
     });
-    console.log("Message sent: %s", info.messageId);
 });
 exports.default = emailSender;

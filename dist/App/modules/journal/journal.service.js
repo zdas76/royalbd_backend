@@ -264,7 +264,7 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
 const createPaymentVoucher = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const createVoucher = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
         let isParty = null;
-        if (payload.partyType === "VENDOR" || "SUPPLIER") {
+        if (payload.partyType === "VENDOR" || "PARTY") {
             isParty = yield tx.party.findFirst({
                 where: {
                     id: payload.partyId,
@@ -339,7 +339,7 @@ const createPaymentVoucher = (payload) => __awaiter(void 0, void 0, void 0, func
 const createReceiptVoucher = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const createVoucher = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
         let isParty = null;
-        if (payload.partyType === "VENDOR" || "SUPPLIER") {
+        if (payload.partyType === "VENDOR" || "PARTY") {
             isParty = yield tx.party.findFirst({
                 where: {
                     id: payload.partyId,

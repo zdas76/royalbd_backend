@@ -121,14 +121,14 @@ const getLogOrderById = (payload) => __awaiter(void 0, void 0, void 0, function*
 });
 const createGradesOrder = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
     const creadtOrder = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
-        const isSupplierExistd = yield tx.party.findFirst({
+        const ispartyExistd = yield tx.party.findFirst({
             where: {
-                id: payLoad.supplierId,
-                partyType: prisma_2.PartyType.SUPPLIER,
+                id: payLoad.partyId,
+                partyType: prisma_2.PartyType.PARTY,
             },
         });
-        if (!isSupplierExistd) {
-            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Supplier not found");
+        if (!ispartyExistd) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "PARTY not found");
         }
         const isLogGradesExisted = yield Promise.all(payLoad.logOrderItem.map((item) => __awaiter(void 0, void 0, void 0, function* () {
             if (item.logGradeId && item.quantity) {
@@ -147,7 +147,7 @@ const createGradesOrder = (payLoad) => __awaiter(void 0, void 0, void 0, functio
                 voucherNo: payLoad.voucherNo,
                 date: payLoad.date,
                 voucherType: prisma_2.VoucherType.LOGORDERS,
-                partyId: payLoad.supplierId,
+                partyId: payLoad.partyId,
             },
         });
         const orderItem = payLoad.logOrderItem.map((item) => ({
@@ -162,18 +162,43 @@ const createGradesOrder = (payLoad) => __awaiter(void 0, void 0, void 0, functio
         yield tx.logOrderItem.createMany({
             data: orderItem,
         });
-        if (!Array.isArray(payLoad.creditItem) || payLoad.creditItem.length === 0) {
+        if (!Array.isArray(payLoad.creditItem) || payLoad.creditItem.length < 1) {
             throw new Error("Invalid data: Credit item must be a non-empty");
         }
-        const creditJournalItem = payLoad.creditItem.map((item) => ({
+        let journalEntries = [];
+        yield payLoad.creditItem.map((item) => {
+            journalEntries.push({
+                transectionId: transactionInfo.id,
+                accountsItemId: item.accountsItemId,
+                date: payLoad.date,
+                creditAmount: item.creditAmount,
+                narration: (item === null || item === void 0 ? void 0 : item.narration) || "",
+            });
+        });
+        const inventoryLedgerItem = yield prisma_1.default.accountsItem.findFirst({
+            where: {
+                accountsItemName: {
+                    contains: "inventory",
+                }
+            }
+        });
+        if (!inventoryLedgerItem) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.NOT_FOUND, "Inventory ledger item not found");
+        }
+        journalEntries.push({
             transectionId: transactionInfo.id,
-            accountsItemId: item.accountsItemId,
+            accountsItemId: inventoryLedgerItem.id,
             date: payLoad.date,
-            creditAmount: item.creditAmount,
-            narration: (item === null || item === void 0 ? void 0 : item.narration) || "",
-        }));
+            debitAmount: payLoad.logOrderTotalAmount,
+            narration: payLoad.narration || "inventory",
+        });
+        const debitAmount = Number(journalEntries.reduce((acc, item) => acc + ((item === null || item === void 0 ? void 0 : item.debitAmount) || 0), 0));
+        const creditAmount = Number(journalEntries.reduce((acc, item) => acc + ((item === null || item === void 0 ? void 0 : item.creditAmount) || 0), 0));
+        if (debitAmount !== creditAmount) {
+            throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Debit and credit amount does not match");
+        }
         yield tx.journal.createMany({
-            data: creditJournalItem,
+            data: journalEntries,
         });
         const logItemByCategoryData = payLoad.logItemsByCategory.map((item) => ({
             transectionId: transactionInfo.id,

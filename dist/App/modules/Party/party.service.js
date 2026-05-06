@@ -29,43 +29,71 @@ const http_status_codes_1 = require("http-status-codes");
 const paginationHelpers_1 = require("../../../helpars/paginationHelpers");
 const party_constant_1 = require("./party.constant");
 const AppError_1 = __importDefault(require("../../errors/AppError"));
+const prisma_2 = require("../../../../generated/prisma");
 const getPertyLedgerInfo = (params, paginat) => __awaiter(void 0, void 0, void 0, function* () {
     const { page, limit, skip } = paginationHelpers_1.paginationHelper.Pagination(paginat);
     const { searchTerm } = params, filterData = __rest(params, ["searchTerm"]);
     const andCondition = [];
     if (params.searchTerm) {
         andCondition.push({
-            OR: party_constant_1.PartySearchAbleFields.map((field) => ({
-                [field]: {
-                    contains: params.searchTerm,
-                    mode: "insensitive",
+            OR: [
+                {
+                    party: {
+                        partyType: params === null || params === void 0 ? void 0 : params.partyType,
+                    },
                 },
-            })),
+                {
+                    voucherNo: {
+                        contains: params.searchTerm,
+                    },
+                },
+                {
+                    party: {
+                        name: {
+                            contains: params.searchTerm,
+                        },
+                    },
+                },
+            ],
         });
     }
     if (Object.keys(filterData).length > 0) {
-        andCondition.push({
-            AND: Object.keys(filterData).map((key) => ({
+        const filterConditions = Object.keys(filterData)
+            .map((key) => {
+            if (key === "partyType") {
+                // Handle the invalid "PARTY" value from the error report if necessary
+                // or just ensure it's a valid enum value for the related Party model
+                return {
+                    party: {
+                        partyType: filterData[key] === "PARTY" ? undefined : filterData[key],
+                    },
+                };
+            }
+            return {
                 [key]: {
                     equals: filterData[key],
                 },
-            })),
-        });
+            };
+        })
+            .filter((condition) => Object.values(condition)[0] !== undefined);
+        if (filterConditions.length > 0) {
+            andCondition.push({
+                AND: filterConditions,
+            });
+        }
     }
-    const wehreConditions = andCondition.length > 0 ? { AND: andCondition } : { isDeleted: false };
+    const whereConditions = andCondition.length > 0 ? { AND: andCondition } : {};
     const result = yield prisma_1.default.transactionInfo.findMany({
-        where: {},
-        // where: wehreConditions,
-        // skip,
-        // take: limit,
-        // orderBy:
-        //   paginat.sortBy && paginat.sortOrder
-        //     ? {
-        //         [paginat.sortBy]: paginat.sortOrder,
-        //       }
-        //     : {
-        //         createdAt: "desc",
-        //       },
+        where: whereConditions,
+        skip,
+        take: limit,
+        orderBy: paginat.sortBy && paginat.sortOrder
+            ? {
+                [paginat.sortBy]: paginat.sortOrder,
+            }
+            : {
+                createdAt: "desc",
+            },
     });
     return result;
 });
@@ -100,23 +128,39 @@ const getAllParty = (params, paginat) => __awaiter(void 0, void 0, void 0, funct
             OR: party_constant_1.PartySearchAbleFields.map((field) => ({
                 [field]: {
                     contains: params.searchTerm,
-                    mode: "insensitive",
                 },
             })),
+        });
+    }
+    if (params === null || params === void 0 ? void 0 : params.partyType) {
+        andCondition.push({
+            partyType: params.partyType,
         });
     }
     if (Object.keys(filterData).length > 0) {
-        andCondition.push({
-            AND: Object.keys(filterData).map((key) => ({
+        const filterConditions = Object.keys(filterData).map((key) => {
+            if (key === "partyType") {
+                return {
+                    [key]: {
+                        equals: filterData[key] === prisma_2.PartyType.PARTY ? undefined : filterData[key],
+                    },
+                };
+            }
+            return {
                 [key]: {
                     equals: filterData[key],
                 },
-            })),
-        });
+            };
+        }).filter(condition => Object.values(condition)[0].equals !== undefined);
+        if (filterConditions.length > 0) {
+            andCondition.push({
+                AND: filterConditions,
+            });
+        }
     }
-    const wehreConditions = andCondition.length > 0 ? { AND: andCondition } : { isDeleted: false };
+    const whereConditions = andCondition.length > 0 ? { AND: andCondition } : { isDeleted: false };
     const result = yield prisma_1.default.party.findMany({
-        where: wehreConditions,
+        where: whereConditions,
         skip,
         take: limit,
         orderBy: paginat.sortBy && paginat.sortOrder
