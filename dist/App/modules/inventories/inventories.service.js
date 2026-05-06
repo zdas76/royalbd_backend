@@ -83,13 +83,13 @@ const updateInventory = (id, payload) => __awaiter(void 0, void 0, void 0, funct
         data: {},
     });
 });
-const deleteInventory = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    return console.log("first");
-});
+// const deleteInventory = async (id: number, payload: Inventory) => {
+//   return console.log("first");
+// };
 exports.InventoryService = {
     getInventory,
     getInventoryById,
     getInventoryAggValueById,
     updateInventory,
-    deleteInventory,
+    // deleteInventory,
 };

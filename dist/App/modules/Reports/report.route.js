@@ -13,4 +13,5 @@ route.get("/raw", report_controllers_1.ReportControllers.rawReport);
 route.get("/raw/:id", report_controllers_1.ReportControllers.rawReportById);
 route.get("/product", report_controllers_1.ReportControllers.productReport);
 route.get("/product/:id", report_controllers_1.ReportControllers.productReportById);
+route.get("/balance-sheet", report_controllers_1.ReportControllers.balanceSheet);
 exports.ReportRouter = route;

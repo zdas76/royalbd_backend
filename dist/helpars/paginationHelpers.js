@@ -7,8 +7,9 @@ const Pagination = (option) => {
     const skip = (Number(page) - 1) * limit;
     const sortBy = option.sortBy || 'createdAt';
     const sortOrder = option.sortOrder || 'desc';
+    const partyType = option.partyType || 'PARTY';
     return {
-        page, limit, skip, sortBy, sortOrder
+        page, limit, skip, sortBy, sortOrder, partyType
     };
 };
 exports.paginationHelper = {

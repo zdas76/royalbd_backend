@@ -27,13 +27,15 @@ const getAccountLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, fu
     if (!isExisted) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Accounts Item not found");
     }
-    if (startDate && endDate) {
+    const start = startDate ? new Date(startDate) : undefined;
+    const end = endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)) : undefined;
+    if (start && end) {
         const result = yield prisma_1.default.journal.findMany({
             where: {
                 accountsItemId: accountsItemId,
                 date: {
-                    gte: new Date(startDate),
-                    lte: new Date(endDate),
+                    gte: start,
+                    lte: end,
                 },
             },
             orderBy: {
@@ -81,11 +83,11 @@ const partyLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, functio
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Party not found");
     }
     let accountsItemId;
-    if (payload.partyType === 'SUPPLIER') {
+    if (payload.partyType === 'PARTY') {
         const accountsItem = yield prisma_1.default.accountsItem.findFirst({
             where: {
                 accountsItemName: {
-                    contains: "accounts payable",
+                    contains: "accounts receivable",
                 },
             },
         });
@@ -95,7 +97,7 @@ const partyLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, functio
         const accountsItems = yield prisma_1.default.accountsItem.findFirst({
             where: {
                 accountsItemName: {
-                    contains: "accounts receivable",
+                    contains: "accounts payable",
                 },
             },
         });
@@ -112,7 +114,7 @@ const partyLedgerReport = (payload) => __awaiter(void 0, void 0, void 0, functio
             accountsItemId: accountsItemId,
             date: {
                 gte: startDate ? new Date(startDate) : (party.openingDate || new Date()),
-                lte: endDate ? new Date(endDate) : new Date(),
+                lte: endDate ? new Date(new Date(endDate).setHours(23, 59, 59, 999)) : new Date(),
             },
         },
         include: {
@@ -141,6 +143,9 @@ const rawReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Raw Material not found");
     }
     const result = Promise.all(allrawMaterial.map((rawMaterial) => __awaiter(void 0, void 0, void 0, function* () {
+        const startDate = (payload === null || payload === void 0 ? void 0 : payload.startDate) ? payload === null || payload === void 0 ? void 0 : payload.startDate : rawMaterial === null || rawMaterial === void 0 ? void 0 : rawMaterial.openingDate;
+        const endDate = (payload === null || payload === void 0 ? void 0 : payload.endDate) ? payload === null || payload === void 0 ? void 0 : payload.endDate : new Date();
+        console.log(startDate, endDate);
         const total = yield prisma_1.default.inventory.aggregate({
             _sum: {
                 debitAmount: true,
@@ -149,17 +154,11 @@ const rawReport = (payload) => __awaiter(void 0, void 0, void 0, function* () {
                 quantityLess: true,
             },
             where: {
-                AND: [
-                    {
-                        rawId: rawMaterial.id
-                    },
-                    {
-                        date: {
-                            gte: new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
-                            lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || "")
-                        }
-                    }
-                ]
+                rawId: rawMaterial.id,
+                date: {
+                    gte: new Date(startDate),
+                    lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
+                }
             },
         });
         return { rawMaterial, total };
@@ -175,15 +174,17 @@ const getRawReportById = (id, payload) => __awaiter(void 0, void 0, void 0, func
     if (!rawMaterial) {
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Raw Material not found");
     }
+    const startDate = (payload === null || payload === void 0 ? void 0 : payload.startDate) ? payload === null || payload === void 0 ? void 0 : payload.startDate : rawMaterial === null || rawMaterial === void 0 ? void 0 : rawMaterial.openingDate;
+    const endDate = (payload === null || payload === void 0 ? void 0 : payload.endDate) ? payload === null || payload === void 0 ? void 0 : payload.endDate : new Date();
     const report = yield prisma_1.default.inventory.findMany({
         where: {
             rawId: rawMaterial.id,
             date: {
-                gte: rawMaterial.openingDate || new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
-                lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || new Date())
+                gte: new Date(startDate),
+                lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
             }
         },
-        select: {
+        include: {
             transactionInfo: {
                 select: {
                     id: true,
@@ -205,6 +206,8 @@ const productReport = (payload) => __awaiter(void 0, void 0, void 0, function* (
         throw new AppError_1.default(http_status_codes_1.StatusCodes.BAD_REQUEST, "Product not found");
     }
     const result = Promise.all(allProduct.map((product) => __awaiter(void 0, void 0, void 0, function* () {
+        const startDate = (payload === null || payload === void 0 ? void 0 : payload.startDate) ? payload === null || payload === void 0 ? void 0 : payload.startDate : (product === null || product === void 0 ? void 0 : product.openingDate) || "";
+        const endDate = (payload === null || payload === void 0 ? void 0 : payload.endDate) ? payload === null || payload === void 0 ? void 0 : payload.endDate : new Date();
         const total = yield prisma_1.default.inventory.aggregate({
             _sum: {
                 debitAmount: true,
@@ -213,17 +216,11 @@ const productReport = (payload) => __awaiter(void 0, void 0, void 0, function* (
                 quantityLess: true,
             },
             where: {
-                AND: [
-                    {
-                        productId: product.id
-                    },
-                    {
-                        date: {
-                            gte: product.openingDate || new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
-                            lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || new Date())
-                        }
-                    }
-                ]
+                productId: product.id,
+                date: {
+                    gte: new Date(startDate),
+                    lte: new Date(new Date(endDate).setHours(23, 59, 59, 999))
+                }
             },
         });
         return { product, total };
@@ -244,11 +241,128 @@ const getProductReportById = (id, payload) => __awaiter(void 0, void 0, void 0, 
             productId: product.id,
             date: {
                 gte: product.openingDate || new Date((payload === null || payload === void 0 ? void 0 : payload.startDate) || ""),
-                lte: new Date((payload === null || payload === void 0 ? void 0 : payload.endDate) || new Date())
+                lte: (payload === null || payload === void 0 ? void 0 : payload.endDate) ? new Date(new Date(payload.endDate).setHours(23, 59, 59, 999)) : new Date()
             }
         },
     });
     return { product, report };
+});
+const getBalanceSheet = (date) => __awaiter(void 0, void 0, void 0, function* () {
+    const targetDate = date ? new Date(new Date(date).setHours(23, 59, 59, 999)) : new Date();
+    // Helper to get total debit/credit for an account name up to the target date
+    const getAccountBalance = (accountNameContains) => __awaiter(void 0, void 0, void 0, function* () {
+        const account = yield prisma_1.default.accountsItem.findFirst({
+            where: { accountsItemName: { contains: accountNameContains } },
+        });
+        if (!account)
+            return { debit: 0, credit: 0, accountId: 0 };
+        const result = yield prisma_1.default.journal.aggregate({
+            _sum: {
+                debitAmount: true,
+                creditAmount: true,
+            },
+            where: {
+                accountsItemId: account.id,
+                date: {
+                    lte: targetDate,
+                },
+            },
+        });
+        const debit = result._sum.debitAmount || 0;
+        const credit = result._sum.creditAmount || 0;
+        // Most asset accounts: Debit - Credit
+        // Most liability accounts: Credit - Debit
+        return { debit, credit, accountId: account.id };
+    });
+    // 1. Assets
+    // Cash in Hand (Asset: Debit - Credit)
+    const cashInHandData = yield getAccountBalance("cash in hand");
+    const cashInHand = cashInHandData.debit - cashInHandData.credit;
+    // Cash at Bank (Asset: Debit - Credit)
+    const cashAtBankData = yield getAccountBalance("cash at bank");
+    let cashAtBank = cashAtBankData.debit - cashAtBankData.credit;
+    // If "cash at bank" isn't a single account, we can alternatively aggregate BankTransaction
+    const bankTransactions = yield prisma_1.default.bankTransaction.aggregate({
+        _sum: {
+            debitAmount: true,
+            creditAmount: true,
+        },
+        where: {
+            date: { lte: targetDate },
+        },
+    });
+    const bankBalance = (bankTransactions._sum.debitAmount || 0) - (bankTransactions._sum.creditAmount || 0);
+    // Prefer ledger balance, fallback to bank transactions logic depending on system usage
+    if (!cashAtBankData.accountId) {
+        cashAtBank = bankBalance;
+    }
+    // Accounts Receivable (Asset: Debit - Credit)
+    const accountsReceivableData = yield getAccountBalance("accounts receivable");
+    const accountsReceivable = accountsReceivableData.debit - accountsReceivableData.credit;
+    // Closing Stock / Inventory (Asset: value of stock)
+    // Value = (quantityAdd * unitPrice) - (quantityLess * unitPrice)
+    const inventoryData = yield prisma_1.default.inventory.findMany({
+        where: {
+            date: { lte: targetDate },
+            status: "ACTIVE"
+        },
+    });
+    let closingStock = 0;
+    for (const inv of inventoryData) {
+        const qtyAdded = inv.quantityAdd || 0;
+        const qtyLess = inv.quantityLess || 0;
+        const price = inv.unitPrice || 0;
+        // We assume unitPrice is the value per unit for both addition and deduction
+        closingStock += (qtyAdded * price) - (qtyLess * price);
+    }
+    // Fallback if inventory logic is simpler in aggregate
+    const inventoryAggregate = yield prisma_1.default.inventory.aggregate({
+        _sum: {
+            debitAmount: true,
+            creditAmount: true,
+        },
+        where: { date: { lte: targetDate } }
+    });
+    // If the system tracks stock value via debit/credit in Inventory
+    const inventoryValueViaLedger = (inventoryAggregate._sum.debitAmount || 0) - (inventoryAggregate._sum.creditAmount || 0);
+    if (closingStock === 0 && inventoryValueViaLedger !== 0) {
+        closingStock = inventoryValueViaLedger;
+    }
+    const totalAssets = cashInHand + cashAtBank + accountsReceivable + closingStock;
+    // 2. Liabilities
+    // Accounts Payable (Liability: Credit - Debit)
+    const accountsPayableData = yield getAccountBalance("accounts payable");
+    const accountsPayable = accountsPayableData.credit - accountsPayableData.debit;
+    const totalLiabilities = accountsPayable;
+    // 3. Equity
+    // Simplest equity formula: Equity = Assets - Liabilities
+    // Alternatively, query a "Capital" account
+    const capitalData = yield getAccountBalance("capital");
+    let equity = capitalData.credit - capitalData.debit;
+    if (equity === 0) {
+        equity = totalAssets - totalLiabilities;
+    }
+    return {
+        asOfDate: targetDate,
+        assets: {
+            cashInHand,
+            cashAtBank,
+            accountsReceivable,
+            closingStock,
+        },
+        liabilities: {
+            accountsPayable,
+        },
+        equity: {
+            calculateEquity: totalAssets - totalLiabilities,
+            capitalAccount: capitalData.credit - capitalData.debit,
+            totalEquity: equity
+        },
+        totals: {
+            totalAssets,
+            totalLiabilities,
+        }
+    };
 });
 exports.ReportService = {
     getAccountLedgerReport,
@@ -257,4 +371,5 @@ exports.ReportService = {
     getRawReportById,
     productReport,
     getProductReportById,
+    getBalanceSheet,
 };

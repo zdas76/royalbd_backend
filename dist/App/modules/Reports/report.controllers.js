@@ -113,6 +113,16 @@ const productReportById = (0, catchAsync_1.default)((req, res) => __awaiter(void
         data: result,
     });
 }));
+const balanceSheet = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const date = req.query.date ? String(req.query.date) : null;
+    const result = yield report_service_1.ReportService.getBalanceSheet(date);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Balance sheet retrieved successfully",
+        data: result,
+    });
+}));
 exports.ReportControllers = {
     ladgerReport,
     partyReport,
@@ -120,4 +130,5 @@ exports.ReportControllers = {
     rawReportById,
     productReport,
     productReportById,
+    balanceSheet,
 };
