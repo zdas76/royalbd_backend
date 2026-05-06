@@ -8,32 +8,25 @@ const getAllVoucher = async (payload: {
   searchTerm?: string | null;
 }) => {
   const { startDate, endDate, voucherType, searchTerm } = payload;
-
   const where: any = {};
-
   // Voucher Type
   if (voucherType) {
     where.voucherType = voucherType;
   }
-
   // Date Range (only if valid)
   if (startDate || endDate) {
     where.date = {};
-
     if (startDate && !isNaN(Date.parse(startDate))) {
       where.date.gte = new Date(startDate);
     }
-
     if (endDate && !isNaN(Date.parse(endDate))) {
       where.date.lte = new Date(endDate);
     }
-
     // remove empty date object
     if (Object.keys(where.date).length === 0) {
       delete where.date;
     }
   }
-
   // Search Term (ignore undefined / empty)
   if (searchTerm && searchTerm !== "undefined") {
     where.OR = [
@@ -49,17 +42,18 @@ const getAllVoucher = async (payload: {
       },
     ];
   }
-
   const voucher = await prisma.transactionInfo.findMany({
     where,
     orderBy: {
       date: "desc",
     },
+    include: {
+      party: true,
+      customer: true,
+    }
   });
-
   return voucher;
 };
-
 
 const getVoucherByVoucherNo = async (voucherNo: string) => {
   const voucher = await prisma.transactionInfo.findFirst({
@@ -83,7 +77,6 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           status: true,
         },
       },
-
       bankTransaction: {
         select: {
           date: true,
@@ -99,7 +92,6 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           },
         },
       },
-
       journal: {
         select: {
           accountsItemId: true,
@@ -114,7 +106,6 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
           },
         },
       },
-
       logOrderItem: {
         select: {
           id: true,
@@ -175,7 +166,7 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
       },
     },
   });
-
+  console.log(voucher, "voucher")
   return voucher;
 };
 
@@ -256,17 +247,13 @@ const getVoucherByid = async (id: number) => {
       },
     },
   });
-
   return voucher;
 };
-
 const getDailyReport = async (date: string) => {
   const startOfDay = new Date(date);
   startOfDay.setHours(0, 0, 0, 0);
-
   const endOfDay = new Date(date);
   endOfDay.setHours(23, 59, 59, 999);
-
   const result = await prisma.transactionInfo.findMany({
     where: {
       date: {
@@ -291,7 +278,6 @@ const getDailyReport = async (date: string) => {
           status: true,
         },
       },
-
       bankTransaction: {
         select: {
           date: true,
@@ -307,7 +293,6 @@ const getDailyReport = async (date: string) => {
           },
         },
       },
-
       journal: {
         select: {
           accountsItemId: true,
@@ -322,7 +307,6 @@ const getDailyReport = async (date: string) => {
           },
         },
       },
-
       logOrderItem: {
         select: {
           id: true,

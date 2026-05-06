@@ -119,11 +119,11 @@ const getLogOrderById = async (payload: any) => {
 };
 
 const createGradesOrder = async (payLoad: any) => {
+  console.log(payLoad, "payload ")
   const creadtOrder = await prisma.$transaction(async (tx) => {
     const ispartyExistd = await tx.party.findFirst({
       where: {
         id: payLoad.partyId,
-        partyType: PartyType.PARTY,
       },
     });
 
