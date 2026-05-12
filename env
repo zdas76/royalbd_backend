@@ -1,17 +1,23 @@
 
 
-# DATABASE_URL="mysql://royalbdgroup_zdas76:Bangladesh1971@131.153.48.202:3306/royalbdgroup_node_server"
+DATABASE_URL="mysql://royalbdgroup_zdas76:Bangladesh1971@131.153.48.202:3306/royalbdgroup_node_server"
 
 # DATABASE_URL="mysql://mymendba_user:Bangladesh1971@82.180.144.207:3306/mymendba_royalbd"
 
 # DATABASE_URL= "mysql://royalbdgroup_zdas76:Bangladesh1971@131.153.48.202:3306/royalbdgroup_node_server"
 
-DATABASE_URL="mysql://zdas76:126431@localhost:3306/royalbdgroup_node_server"
+# DATABASE_URL="mysql://zdas76:126431@localhost:3306/royalbdgroup_node_server"
 
-DATABASE_USER="zdas76"
-DATABASE_PASSWORD="126431"
+# DATABASE_USER="zdas76"
+# DATABASE_PASSWORD="126431"
+# DATABASE_NAME="royalbdgroup_node_server"
+# DATABASE_HOST="localhost"
+# DATABASE_PORT=3306
+
+DATABASE_USER="royalbdgroup_zdas76"
+DATABASE_PASSWORD="Bangladesh1971"
 DATABASE_NAME="royalbdgroup_node_server"
-DATABASE_HOST="localhost"
+DATABASE_HOST="131.153.48.202"
 DATABASE_PORT=3306
 
 
