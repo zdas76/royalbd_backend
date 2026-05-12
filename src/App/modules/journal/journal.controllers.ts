@@ -25,6 +25,16 @@ const createSalseVoucher = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const createMaterialSaleVoucher = catchAsync(async (req: Request, res: Response) => {
+  const result = await JurnalService.createMaterialSaleVoucher(req.body);
+
+  sendResponse(res, {
+    statusCode: StatusCodes.OK,
+    success: true,
+    message: "Salse created successfully",
+    data: result,
+  });
+});
 
 const createReceiptdVoucher = catchAsync(
   async (req: Request, res: Response) => {
@@ -88,6 +98,7 @@ const getTotalByAccountId = catchAsync(async (req: Request, res: Response) => {
 export const JournalControllers = {
   addPurcherReceived,
   createSalseVoucher,
+  createMaterialSaleVoucher,
   createReceiptdVoucher,
   createPaymentdVoucher,
   createJournalVoucher,

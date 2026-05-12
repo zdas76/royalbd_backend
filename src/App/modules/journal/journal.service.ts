@@ -328,6 +328,182 @@ const createSalesVoucher = async (payload: any) => {
   return createSalseVoucher;
 };
 
+const createMaterialSaleVoucher = async (payload: any) => {
+  const createSalseVoucher = await prisma.$transaction(async (tx) => {
+    let isCustomer: Customer | null = null;
+    if (payload.partyType === "CUSTOMER") {
+      const customerExists = await tx.customer.findFirst({
+        where: { contactNumber: payload?.contactNumber },
+      });
+
+      if (customerExists) {
+        isCustomer = customerExists;
+      } else {
+        isCustomer = await tx.customer.create({
+          data: {
+            name: payload.name || "",
+            contactNumber: payload.contactNumber,
+            address: payload.address || "",
+          },
+        });
+      }
+    }
+
+    let isParty: Party | null = null;
+
+    if (payload.partyType === "VENDOR") {
+      isParty = await tx.party.findFirst({
+        where: {
+          id: payload.partyOrcustomerId,
+          isDeleted: false,
+        },
+      });
+
+      if (!isParty) {
+        throw new Error(
+          `Invalid Vendor`
+        );
+      }
+    }
+
+    // step 1. create transaction entries
+    const createTransactionInfo: TransactionInfo =
+      await tx.transactionInfo.create({
+        data: {
+          voucherNo: payload.voucherNo,
+          voucherType: VoucherType.SALES,
+          partyId: isParty?.id || null,
+          customerId: isCustomer?.id || null,
+          date: payload.date,
+        },
+      });
+
+    // 2. create bank transaction
+    const BankTXData: {
+      transectionId: number;
+      bankAccountId: number;
+      debitAmount: number;
+      date: Date;
+    }[] = [];
+
+    for (const item of payload.debitItem) {
+      if (item.bankAccountId) {
+        BankTXData.push({
+          transectionId: createTransactionInfo.id,
+          bankAccountId: item.bankAccountId,
+          date: payload.date,
+          debitAmount: item?.debitAmount,
+        });
+      }
+    }
+
+    if (BankTXData && BankTXData.length > 0) {
+      await tx.bankTransaction.createMany({
+        data: BankTXData,
+      });
+    }
+
+    if (!Array.isArray(payload.salseItem) || payload.salseItem.length === 0) {
+      throw new Error("Invalid data: salseItem must be a non-empty array");
+    }
+    // step 2: prepiar inventory data
+    const inventoryData = payload.salseItem.map((item: any) => ({
+      transactionId: createTransactionInfo.id,
+      rawId: item.rawOrProductId,
+      date: payload.date,
+      unitPrice: item.unitPrice || 0,
+      quantityLess: item.quantity || 0,
+      discount: item.discount || 0,
+      creditAmount: item.creditAmount,
+    }));
+
+    //Step 3: Insert Inventory Records
+    await Promise.all(
+      inventoryData.map((item: any) =>
+        tx.inventory.create({
+          data: item,
+        })
+      )
+    );
+
+    if (!Array.isArray(payload.debitItem) || payload.debitItem.length === 0) {
+      throw new Error("Invalid data: items must be a non-empty array");
+    }
+
+    let journalItems = [];
+    payload.debitItem.map((item: any) => journalItems.push({
+      transectionId: createTransactionInfo.id,
+      accountsItemId: item.accountsItemId,
+      date: payload.date,
+      debitAmount: item.debitAmount,
+      narration: item?.narration || "",
+    }));
+
+    if (payload.totalDiscount && payload.totalDiscount > 0) {
+      const discountItem: AccountsItem | any = await tx.accountsItem.findFirst({
+        where: {
+          accountsItemName: {
+            contains: "discount",
+          },
+        },
+      });
+
+      if (payload.totalDiscount && discountItem) {
+        journalItems.push({
+          transectionId: createTransactionInfo.id,
+          accountsItemId: parseInt(discountItem.id!),
+          debitAmount: payload.totalDiscount,
+          narration: "Discount",
+          date: payload.date,
+        });
+      }
+    }
+
+    const debiteAccountsId = await tx.accountsItem.findFirst({
+      where: {
+        accountsItemName: {
+          contains: "inventory"
+        },
+      },
+    });
+
+    if (!debiteAccountsId) {
+      throw new Error("Inventory Accounts Item not found");
+    }
+
+    journalItems.push({
+      transectionId: createTransactionInfo.id,
+      accountsItemId: debiteAccountsId.id,
+      creditAmount: payload.grandTotal,
+      narration: "Purchase Inventory Received",
+      date: new Date(payload.date),
+
+    });
+
+    const debitAmount = journalItems.reduce(
+      (total: number, item: any) => total + (Number(item.debitAmount) || 0),
+      0
+    );
+
+    const creditAmount = journalItems.reduce(
+      (total: number, item: any) => total + (Number(item.creditAmount) || 0),
+      0
+    );
+
+
+    if (debitAmount !== creditAmount) {
+      throw new Error("Debit and Credit amounts do not match");
+    }
+
+
+    await tx.journal.createMany({
+      data: journalItems,
+    });
+    return createTransactionInfo;
+  });
+
+  return createSalseVoucher;
+};
 // Create Payment Voucher
 const createPaymentVoucher = async (payload: any) => {
   const createVoucher = await prisma.$transaction(async (tx) => {
@@ -733,6 +909,7 @@ j.accountsItemId,
 export const JurnalService = {
   createPurchestReceivedIntoDB,
   createSalesVoucher,
+  createMaterialSaleVoucher,
   createPaymentVoucher,
   createReceiptVoucher,
   createJournalVoucher,

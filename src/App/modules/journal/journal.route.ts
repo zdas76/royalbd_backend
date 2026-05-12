@@ -7,6 +7,9 @@ route.post("/purchase", JournalControllers.addPurcherReceived);
 
 route.post("/sales", JournalControllers.createSalseVoucher);
 
+route.post("/material-sale", JournalControllers.createMaterialSaleVoucher);
+
+
 route.post("/received", JournalControllers.createReceiptdVoucher);
 
 route.post("/payment", JournalControllers.createPaymentdVoucher);
