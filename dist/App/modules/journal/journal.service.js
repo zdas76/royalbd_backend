@@ -260,6 +260,140 @@ const createSalesVoucher = (payload) => __awaiter(void 0, void 0, void 0, functi
     }));
     return createSalseVoucher;
 });
+const createMaterialSaleVoucher = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const createSalseVoucher = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+        let isCustomer = null;
+        if (payload.partyType === "CUSTOMER") {
+            const customerExists = yield tx.customer.findFirst({
+                where: { contactNumber: payload === null || payload === void 0 ? void 0 : payload.contactNumber },
+            });
+            if (customerExists) {
+                isCustomer = customerExists;
+            }
+            else {
+                isCustomer = yield tx.customer.create({
+                    data: {
+                        name: payload.name || "",
+                        contactNumber: payload.contactNumber,
+                        address: payload.address || "",
+                    },
+                });
+            }
+        }
+        let isParty = null;
+        if (payload.partyType === "VENDOR") {
+            isParty = yield tx.party.findFirst({
+                where: {
+                    id: payload.partyOrcustomerId,
+                    isDeleted: false,
+                },
+            });
+            if (!isParty) {
+                throw new Error(`Invalid Vendor`);
+            }
+        }
+        // step 1. create transaction entries
+        const createTransactionInfo = yield tx.transactionInfo.create({
+            data: {
+                voucherNo: payload.voucherNo,
+                voucherType: prisma_2.VoucherType.SALES,
+                partyId: (isParty === null || isParty === void 0 ? void 0 : isParty.id) || null,
+                customerId: (isCustomer === null || isCustomer === void 0 ? void 0 : isCustomer.id) || null,
+                date: payload.date,
+            },
+        });
+        // 2. create bank transaction
+        const BankTXData = [];
+        for (const item of payload.debitItem) {
+            if (item.bankAccountId) {
+                BankTXData.push({
+                    transectionId: createTransactionInfo.id,
+                    bankAccountId: item.bankAccountId,
+                    date: payload.date,
+                    debitAmount: item === null || item === void 0 ? void 0 : item.debitAmount,
+                });
+            }
+        }
+        if (BankTXData && BankTXData.length > 0) {
+            yield tx.bankTransaction.createMany({
+                data: BankTXData,
+            });
+        }
+        if (!Array.isArray(payload.salseItem) || payload.salseItem.length === 0) {
+            throw new Error("Invalid data: salseItem must be a non-empty array");
+        }
+        // step 2: prepiar inventory data
+        const inventoryData = payload.salseItem.map((item) => ({
+            transactionId: createTransactionInfo.id,
+            rawId: item.rawOrProductId,
+            date: payload.date,
+            unitPrice: item.unitPrice || 0,
+            quantityLess: item.quantity || 0,
+            discount: item.discount || 0,
+            creditAmount: item.creditAmount,
+        }));
+        //Step 3: Insert Inventory Records
+        yield Promise.all(inventoryData.map((item) => tx.inventory.create({
+            data: item,
+        })));
+        if (!Array.isArray(payload.debitItem) || payload.debitItem.length === 0) {
+            throw new Error("Invalid data: items must be a non-empty array");
+        }
+        let journalItems = [];
+        payload.debitItem.map((item) => journalItems.push({
+            transectionId: createTransactionInfo.id,
+            accountsItemId: item.accountsItemId,
+            date: payload.date,
+            debitAmount: item.debitAmount,
+            narration: (item === null || item === void 0 ? void 0 : item.narration) || "",
+        }));
+        if (payload.totalDiscount && payload.totalDiscount > 0) {
+            const discountItem = yield tx.accountsItem.findFirst({
+                where: {
+                    accountsItemName: {
+                        contains: "discount",
+                    },
+                },
+            });
+            if (payload.totalDiscount && discountItem) {
+                journalItems.push({
+                    transectionId: createTransactionInfo.id,
+                    accountsItemId: parseInt(discountItem.id),
+                    debitAmount: payload.totalDiscount,
+                    narration: "Discount",
+                    date: payload.date,
+                });
+            }
+        }
+        const debiteAccountsId = yield tx.accountsItem.findFirst({
+            where: {
+                accountsItemName: {
+                    contains: "inventory"
+                },
+            },
+        });
+        if (!debiteAccountsId) {
+            throw new Error("Inventory Accounts Item not found");
+        }
+        journalItems.push({
+            transectionId: createTransactionInfo.id,
+            accountsItemId: debiteAccountsId.id,
+            creditAmount: payload.grandTotal,
+            narration: "Purchase Inventory Received",
+            date: new Date(payload.date),
+        });
+        const debitAmount = journalItems.reduce((total, item) => total + (Number(item.debitAmount) || 0), 0);
+        const creditAmount = journalItems.reduce((total, item) => total + (Number(item.creditAmount) || 0), 0);
+        if (debitAmount !== creditAmount) {
+            throw new Error("Debit and Credit amounts do not match");
+        }
+        yield tx.journal.createMany({
+            data: journalItems,
+        });
+        return createTransactionInfo;
+    }));
+    return createSalseVoucher;
+});
 // Create Payment Voucher
 const createPaymentVoucher = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const createVoucher = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
@@ -572,6 +706,7 @@ j.accountsItemId,
 exports.JurnalService = {
     createPurchestReceivedIntoDB,
     createSalesVoucher,
+    createMaterialSaleVoucher,
     createPaymentVoucher,
     createReceiptVoucher,
     createJournalVoucher,

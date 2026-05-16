@@ -35,6 +35,15 @@ const createSalseVoucher = (0, catchAsync_1.default)((req, res) => __awaiter(voi
         data: result,
     });
 }));
+const createMaterialSaleVoucher = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield journal_service_1.JurnalService.createMaterialSaleVoucher(req.body);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Salse created successfully",
+        data: result,
+    });
+}));
 const createReceiptdVoucher = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield journal_service_1.JurnalService.createReceiptVoucher(req.body);
     (0, sendResponse_1.default)(res, {
@@ -83,6 +92,7 @@ const getTotalByAccountId = (0, catchAsync_1.default)((req, res) => __awaiter(vo
 exports.JournalControllers = {
     addPurcherReceived,
     createSalseVoucher,
+    createMaterialSaleVoucher,
     createReceiptdVoucher,
     createPaymentdVoucher,
     createJournalVoucher,

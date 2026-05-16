@@ -120,11 +120,11 @@ const getLogOrderById = (payload) => __awaiter(void 0, void 0, void 0, function*
     return result;
 });
 const createGradesOrder = (payLoad) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(payLoad, "payload ");
     const creadtOrder = yield prisma_1.default.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
         const ispartyExistd = yield tx.party.findFirst({
             where: {
                 id: payLoad.partyId,
-                partyType: prisma_2.PartyType.PARTY,
             },
         });
         if (!ispartyExistd) {

@@ -55,6 +55,10 @@ const getAllVoucher = (payload) => __awaiter(void 0, void 0, void 0, function* (
         orderBy: {
             date: "desc",
         },
+        include: {
+            party: true,
+            customer: true,
+        }
     });
     return voucher;
 });
@@ -169,6 +173,7 @@ const getVoucherByVoucherNo = (voucherNo) => __awaiter(void 0, void 0, void 0, f
             },
         },
     });
+    console.log(voucher, "voucher");
     return voucher;
 });
 const getVoucherByid = (id) => __awaiter(void 0, void 0, void 0, function* () {
