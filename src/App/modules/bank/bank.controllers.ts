@@ -52,9 +52,30 @@ const updateBankAccountById = catchAsync(
   }
 );
 
+const getBankLedger = catchAsync(
+  async (req: Request, res: Response) => {
+    const { accountId, fromDate, toDate } = req.query;
+
+    const accountIdNumber = parseInt(accountId as string, 10);
+    const result = await BankAccountService.getBankLedger(
+      accountIdNumber,
+      fromDate as string,
+      toDate as string,
+    );
+
+    sendResponse(res, {
+      statusCode: StatusCodes.OK,
+      success: true,
+      message: "Bank ledger retrives successfully",
+      data: result,
+    });
+  },
+);
+
 export const BankControllers = {
   createBankAccount,
   getAllBankAccount,
   getBankAccountById,
   updateBankAccountById,
+  getBankLedger,
 };

@@ -10,5 +10,6 @@ route.get("/", BankControllers.getAllBankAccount);
 route.get("/:id", BankControllers.getAllBankAccount);
 
 route.put("/:id", BankControllers.updateBankAccountById);
+route.get("/bank-ledger", BankControllers.getBankLedger);
 
 export const BankRoute = route;
