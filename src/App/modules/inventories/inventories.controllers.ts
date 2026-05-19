@@ -17,7 +17,7 @@ const getnventory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getInventoryById = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id as string);
 
   const result = await InventoryService.getInventoryById(id);
 

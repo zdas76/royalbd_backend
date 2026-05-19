@@ -509,17 +509,17 @@ const createPaymentVoucher = async (payload: any) => {
   const createVoucher = await prisma.$transaction(async (tx) => {
     let isParty: Party | null = null;
 
-    if (payload.partyType === "VENDOR" || "PARTY") {
+    if (payload.partyType === "VENDOR" || payload.partyType === "PARTY") {
       isParty = await tx.party.findFirst({
         where: {
-          id: payload.partyId,
+          id: Number(payload.partyId || payload.partyOrcustomerId),
           isDeleted: false,
         },
       });
 
       if (!isParty) {
         throw new Error(
-          `Invalid partyId: ${payload.partyOrcustomerId}. No matching Party or Customer found.`
+          `Invalid partyId: ${payload.partyId || payload.partyOrcustomerId}. No matching Party or Customer found.`
         );
       }
     }
@@ -620,17 +620,17 @@ const createReceiptVoucher = async (payload: any) => {
   const createVoucher = await prisma.$transaction(async (tx) => {
     let isParty: Party | null = null;
 
-    if (payload.partyType === "VENDOR" || "PARTY") {
+    if (payload.partyType === "VENDOR" || payload.partyType === "PARTY") {
       isParty = await tx.party.findFirst({
         where: {
-          id: payload.partyId,
+          id: Number(payload.partyId || payload.partyOrcustomerId),
           isDeleted: false,
         },
       });
 
       if (!isParty) {
         throw new Error(
-          `Invalid partyId: ${payload.partyOrcustomerId}. No matching Party or Customer found.`
+          `Invalid partyId: ${payload.partyId || payload.partyOrcustomerId}. No matching Party or Customer found.`
         );
       }
     }
@@ -729,9 +729,9 @@ const createJournalVoucher = async (payload: any) => {
     let partyExists;
 
     //check party
-    if (payload.party) {
+    if (payload.party || payload.partyId) {
       partyExists = await tx.party.findFirst({
-        where: { id: payload.partyId },
+        where: { id: Number(payload.party || payload.partyId) },
       });
     }
 
@@ -807,9 +807,9 @@ const createQantaVoucher = async (payload: any) => {
   const createJournal = await prisma.$transaction(async (tx) => {
     let partyExists;
     //check party
-    if (payload.party) {
+    if (payload.party || payload.partyId) {
       partyExists = await tx.party.findFirst({
-        where: { id: payload.partyId },
+        where: { id: Number(payload.party || payload.partyId) },
       });
     }
 

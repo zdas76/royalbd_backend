@@ -27,7 +27,7 @@ const getWorker = catchAsync(
 );
 const getWorkerById = catchAsync(
     async (req, res) => {
-        const result = await workerServices.getWorkerByIddb(Number(req.params.id))
+        const result = await workerServices.getWorkerByIddb(Number(req.params.id as string))
         sendResponse(res, {
             statusCode: StatusCodes.OK,
             success: true,
@@ -39,7 +39,7 @@ const getWorkerById = catchAsync(
 )
 const updateWorker = catchAsync(
     async (req, res) => {
-        const result = await workerServices.updateWorkerDb(Number(req.params.id), req.body)
+        const result = await workerServices.updateWorkerDb(Number(req.params.id as string), req.body)
         sendResponse(res, {
             statusCode: StatusCodes.OK,
             success: true,
@@ -49,7 +49,7 @@ const updateWorker = catchAsync(
     }
 )
 const deleteWorker = catchAsync(async (req, res) => {
-    const id = Number(req.params.id);
+    const id = Number(req.params.id as string);
     if (isNaN(id)) {
         return sendResponse(res, {
             statusCode: StatusCodes.BAD_REQUEST,

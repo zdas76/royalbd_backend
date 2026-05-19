@@ -27,7 +27,7 @@ const getAllLogGrades = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getLogGradesById = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id as string);
   const result = await GradesService.getGradeFromToDBById(id);
 
   sendResponse(res, {
@@ -39,7 +39,7 @@ const getLogGradesById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateLogGradesById = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id as string);
   const result = await GradesService.updateGradeFromToDBById(id, req.body);
 
   sendResponse(res, {

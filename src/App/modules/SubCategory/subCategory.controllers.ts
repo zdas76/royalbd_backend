@@ -37,7 +37,7 @@ const getSubCategoryById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateSubCategory = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
   const result = await SubCagetoryService.subCategoryUpdate(req.body, id);
 
   sendResponse(res, {
@@ -49,7 +49,7 @@ const updateSubCategory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteSubCategory = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id)
+  const id = Number(req.params.id as string)
   const result = await SubCagetoryService.deleteSubService(id);
 
   sendResponse(res, {

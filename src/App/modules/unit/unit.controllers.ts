@@ -27,7 +27,7 @@ const getAllUnit = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getUnitById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
   const result = await UnitService.getUnitById(id);
 
   sendResponse(res, {
@@ -39,7 +39,7 @@ const getUnitById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateUnit = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
   const result = await UnitService.updateUnit(id, req.body);
 
   sendResponse(res, {
@@ -52,7 +52,7 @@ const updateUnit = catchAsync(async (req: Request, res: Response) => {
 
 // delete unit controller
 const deleteUnit = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id as string);
   await UnitService.deleteUnit(id);
   sendResponse(res, {
     statusCode: StatusCodes.OK,

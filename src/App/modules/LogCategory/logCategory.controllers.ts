@@ -27,7 +27,7 @@ const getLogCagetory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getLogCagetoryById = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id as string);
   const result = await LogCategoryService.getLogCategoryById(id);
 
   sendResponse(res, {
@@ -40,7 +40,7 @@ const getLogCagetoryById = catchAsync(async (req: Request, res: Response) => {
 
 const updateLogCagetoryById = catchAsync(
   async (req: Request, res: Response) => {
-    const id = Number(req.params.id);
+    const id = Number(req.params.id as string);
     const result = await LogCategoryService.updateLogCategoryById(id, req.body);
 
     sendResponse(res, {

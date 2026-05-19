@@ -27,7 +27,7 @@ const getAllRawMaterial = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getRawMaterialById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
 
   const result = await RowMaterialsService.getRawMaterialById(id);
 
@@ -41,7 +41,7 @@ const getRawMaterialById = catchAsync(async (req: Request, res: Response) => {
 
 const updateRawMaterialById = catchAsync(
   async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const result = await RowMaterialsService.updateRawMaterial(id, req.body);
 
     sendResponse(res, {
@@ -55,7 +55,7 @@ const updateRawMaterialById = catchAsync(
 
 const deleteRawMaterialById = catchAsync(
   async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const result = await RowMaterialsService.deleteRawMaterial(id);
 
     sendResponse(res, {
@@ -68,7 +68,7 @@ const deleteRawMaterialById = catchAsync(
 );
 
 const creatLogToRaw = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
 
   const result = await RowMaterialsService.createLogtoRaw(req.body);
 
