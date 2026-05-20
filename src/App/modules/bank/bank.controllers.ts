@@ -54,11 +54,11 @@ const updateBankAccountById = catchAsync(
 
 const getBankLedger = catchAsync(
   async (req: Request, res: Response) => {
-    const { accountId, fromDate, toDate } = req.query;
+    const { bankId, fromDate, toDate } = req.query;
 
-    const accountIdNumber = parseInt(accountId as string, 10);
+    const bankIdNumber = parseInt(bankId as string, 10);
     const result = await BankAccountService.getBankLedger(
-      accountIdNumber,
+      bankIdNumber,
       fromDate as string,
       toDate as string,
     );

@@ -7,9 +7,11 @@ route.post("/", BankControllers.createBankAccount);
 
 route.get("/", BankControllers.getAllBankAccount);
 
+route.get("/bank-ledger", BankControllers.getBankLedger);
+
 route.get("/:id", BankControllers.getAllBankAccount);
 
 route.put("/:id", BankControllers.updateBankAccountById);
-route.get("/bank-ledger", BankControllers.getBankLedger);
 
 export const BankRoute = route;
+

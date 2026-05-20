@@ -7,6 +7,7 @@ const getAllVoucher = async (payload: {
   voucherType?: VoucherType;
   searchTerm?: string | null;
 }) => {
+  console.log(payload, "payload")
   const { startDate, endDate, voucherType, searchTerm } = payload;
   const where: any = {};
   // Voucher Type
@@ -54,7 +55,7 @@ const getAllVoucher = async (payload: {
   });
   return voucher;
 };
-
+// get voucher by voucher no
 const getVoucherByVoucherNo = async (voucherNo: string) => {
   const voucher = await prisma.transactionInfo.findFirst({
     where: {
@@ -166,7 +167,6 @@ const getVoucherByVoucherNo = async (voucherNo: string) => {
       },
     },
   });
-  console.log(voucher, "voucher")
   return voucher;
 };
 
@@ -187,7 +187,6 @@ const getVoucherByid = async (id: number) => {
           partyType: true,
         },
       },
-
       bankTransaction: {
         select: {
           date: true,

@@ -74,8 +74,8 @@ const updateAccountInfo = async (id: number, payload: Partial<BankAccount>) => {
 
 const getBankLedger = async (
   accountId: number,
-  fromDate: string,
-  toDate: string,
+  fromDate?: string,
+  toDate?: string,
 ) => {
   const accountIdObj = await prisma.bankAccount.findFirst({
     where: { id: accountId },
@@ -83,11 +83,28 @@ const getBankLedger = async (
   if (!accountIdObj) {
     throw new AppError(StatusCodes.BAD_REQUEST, "No Account Found");
   }
-  const fromDateObj = new Date(fromDate);
-  const toDateObj = new Date(toDate);
+
+  // Parse dates only if provided
+  const fromDateObj = fromDate ? new Date(fromDate) : undefined;
+  const toDateObj = toDate ? new Date(toDate) : undefined;
+
+  if (fromDateObj && isNaN(fromDateObj.getTime())) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid fromDate format");
+  }
+  if (toDateObj && isNaN(toDateObj.getTime())) {
+    throw new AppError(StatusCodes.BAD_REQUEST, "Invalid toDate format");
+  }
+
   // Adjust toDate to include the whole day
-  toDateObj.setHours(23, 59, 59, 999);
-  // Get initial balance (sum of all previous debit transactions)
+  if (toDateObj) {
+    toDateObj.setHours(23, 59, 59, 999);
+  }
+  // Build date filter conditionally
+  const dateFilter: any = {};
+  if (fromDateObj) dateFilter.gte = fromDateObj;
+  if (toDateObj) dateFilter.lte = toDateObj;
+
+  // Get initial balance (sum of all transactions before fromDate)
   const initialBalance = await prisma.bankTransaction.aggregate({
     _sum: {
       debitAmount: true,
@@ -95,20 +112,14 @@ const getBankLedger = async (
     },
     where: {
       bankAccountId: accountId,
-      date: {
-        lt: fromDateObj,
-      },
+      ...(fromDateObj ? { date: { lt: fromDateObj } } : {}),
     },
   });
-
-  // Get all transactions within the date range
+  // Get all transactions (with optional date range)
   const transactions = await prisma.bankTransaction.findMany({
     where: {
       bankAccountId: accountId,
-      date: {
-        gte: fromDateObj,
-        lte: toDateObj,
-      },
+      ...(Object.keys(dateFilter).length > 0 ? { date: dateFilter } : {}),
     },
     orderBy: {
       date: "asc",
@@ -128,8 +139,8 @@ const getBankLedger = async (
 
   return {
     accountId,
-    fromDate: fromDateObj.toISOString().split("T")[0],
-    toDate: toDateObj.toISOString().split("T")[0],
+    fromDate: fromDateObj ? fromDateObj.toISOString().split("T")[0] : null,
+    toDate: toDateObj ? toDateObj.toISOString().split("T")[0] : null,
     initialBalance: (initialBalance._sum.debitAmount || 0) - (initialBalance._sum.creditAmount || 0),
     transactions: ledgerTransactions,
     closingBalance: ledgerBalance,
