@@ -28,7 +28,7 @@ const getLogCagetory = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getLogCagetoryById = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id as string);
   const result = await LogToRawService.getLogToRawById(id);
 
   sendResponse(res, {
@@ -44,3 +44,4 @@ export const LogtoRawControllers = {
   getLogCagetory,
   getLogCagetoryById,
 };
+

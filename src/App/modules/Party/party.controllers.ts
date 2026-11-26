@@ -9,7 +9,7 @@ import { partyfiltersFields } from "./party.constant";
 const getPartyLedger = catchAsync(async (req: Request, res: Response) => {
   const startDate = req.query.startDate as string;
   const endDate = req.query.endDate as string;
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
 
   const result = await PartyService.getPertyLedgerInfo(id, { startDate, endDate });
   sendResponse(res, {
@@ -46,7 +46,7 @@ const getAllParty = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getPartyById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
 
   const result = await PartyService.getPartyById(id);
 
@@ -59,7 +59,7 @@ const getPartyById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updatePartyById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
 
   const result = await PartyService.updatePartyById(id, req.body);
 
@@ -72,7 +72,7 @@ const updatePartyById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deletePartyById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
 
   const result = await PartyService.deletePartyById(id);
 

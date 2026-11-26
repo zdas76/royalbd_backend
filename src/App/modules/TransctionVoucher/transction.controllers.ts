@@ -39,7 +39,7 @@ const getVoucherbyVoucherNo = catchAsync(
 );
 
 const getVoucherbyid = catchAsync(async (req: Request, res: Response) => {
-  const id = Number(req.params.id);
+  const id = Number(req.params.id as string);
 
   const result = await VoucherService.getVoucherByid(id);
 

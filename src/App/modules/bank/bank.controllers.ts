@@ -27,7 +27,7 @@ const getAllBankAccount = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getBankAccountById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
   const result = await BankAccountService.getBankAccountById(id);
 
   sendResponse(res, {
@@ -40,7 +40,7 @@ const getBankAccountById = catchAsync(async (req: Request, res: Response) => {
 
 const updateBankAccountById = catchAsync(
   async (req: Request, res: Response) => {
-    const id = parseInt(req.params.id);
+    const id = parseInt(req.params.id as string);
     const result = await BankAccountService.updateAccountInfo(id, req.body);
 
     sendResponse(res, {
@@ -54,11 +54,11 @@ const updateBankAccountById = catchAsync(
 
 const getBankLedger = catchAsync(
   async (req: Request, res: Response) => {
-    const { accountId, fromDate, toDate } = req.query;
+    const { bankId, fromDate, toDate } = req.query;
 
-    const accountIdNumber = parseInt(accountId as string, 10);
+    const bankIdNumber = parseInt(bankId as string, 10);
     const result = await BankAccountService.getBankLedger(
-      accountIdNumber,
+      bankIdNumber,
       fromDate as string,
       toDate as string,
     );

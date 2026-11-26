@@ -32,7 +32,7 @@ const getEmployee = catchAsync(async (req: Request, res: Response) => {
 });
 
 const getEmployeeById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
   const result = await EmployeeService.getEmployeeById(id);
 
   sendResponse(res, {
@@ -44,7 +44,7 @@ const getEmployeeById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const updateEmployeeById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
   const result = await EmployeeService.updateEmployeeById(id, req.body);
 
   sendResponse(res, {
@@ -56,7 +56,7 @@ const updateEmployeeById = catchAsync(async (req: Request, res: Response) => {
 });
 
 const deleteEmployeeById = catchAsync(async (req: Request, res: Response) => {
-  const id = parseInt(req.params.id);
+  const id = parseInt(req.params.id as string);
   const result = await EmployeeService.deleteEmployeeById(id);
 
   sendResponse(res, {

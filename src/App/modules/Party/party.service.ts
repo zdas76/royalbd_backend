@@ -39,8 +39,6 @@ const getPertyLedgerInfo = async (params: any, paginat: IPaginationOptions) => {
     const filterConditions = Object.keys(filterData)
       .map((key) => {
         if (key === "partyType") {
-          // Handle the invalid "PARTY" value from the error report if necessary
-          // or just ensure it's a valid enum value for the related Party model
           return {
             party: {
               partyType: filterData[key] === "PARTY" ? undefined : filterData[key],

@@ -1,0 +1,134 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ReportControllers = void 0;
+const catchAsync_1 = __importDefault(require("../../../shared/catchAsync"));
+const report_service_1 = require("./report.service");
+const sendResponse_1 = __importDefault(require("../../../shared/sendResponse"));
+const http_status_codes_1 = require("http-status-codes");
+const ladgerReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const accountsItemId = Number(req.query.accountsItemId);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.getAccountLedgerReport({
+        accountsItemId,
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+const partyReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const partyId = Number(req.params.partyId);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const partyType = req.query.partyType;
+    const result = yield report_service_1.ReportService.partyLedgerReport({
+        partyId,
+        partyType,
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+// ----------------------------------------- raw report -----------------------------
+const rawReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.rawReport({
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+// ----------------------------------------- raw report By Id -----------------------------
+const rawReportById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.getRawReportById(id, {
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+// ----------------------------------------- raw report -----------------------------
+const productReport = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.productReport({
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+// ----------------------------------------- raw report By Id -----------------------------
+const productReportById = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = Number(req.params.id);
+    const startDate = req.query.startDate ? String(req.query.startDate) : null;
+    const endDate = req.query.endDate ? String(req.query.endDate) : null;
+    const result = yield report_service_1.ReportService.getProductReportById(id, {
+        startDate,
+        endDate,
+    });
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Ladger report retrived successfully",
+        data: result,
+    });
+}));
+const balanceSheet = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const date = req.query.date ? String(req.query.date) : null;
+    const result = yield report_service_1.ReportService.getBalanceSheet(date);
+    (0, sendResponse_1.default)(res, {
+        statusCode: http_status_codes_1.StatusCodes.OK,
+        success: true,
+        message: "Balance sheet retrieved successfully",
+        data: result,
+    });
+}));
+exports.ReportControllers = {
+    ladgerReport,
+    partyReport,
+    rawReport,
+    rawReportById,
+    productReport,
+    productReportById,
+    balanceSheet,
+};
